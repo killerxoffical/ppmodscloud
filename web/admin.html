@@ -1768,16 +1768,9 @@
                     class="w-4 h-4"></i>Users</button>
 
             <p class="sgroup">Content</p>
-            <button data-nav="scrOf" style="display:none !important;" onclick="showAdminScreen('scrOf')" class="snav"><i data-lucide="gamepad-2"
-                    class="w-4 h-4"></i>Offers</button>
             <button data-nav="scrEarn" onclick="showAdminScreen('scrEarn')" class="snav"><i data-lucide="zap"
                     class="w-4 h-4 text-amber-500"></i>Earn Tasks <span
                     class="nbadge ml-auto bg-amber-100 text-amber-800" id="earnTasksCount"
-                    style="display:none">0</span></button>
-            <button data-nav="scrStore" style="display:none !important;" onclick="showAdminScreen('scrStore')" class="snav"><i data-lucide="shopping-bag"
-                    class="w-4 h-4"></i>Store Items</button>
-            <button data-nav="scrP2P" style="display:none !important;" onclick="showAdminScreen('scrP2P')" class="snav"><i data-lucide="arrow-left-right"
-                    class="w-4 h-4"></i>P2P Deals <span id="p2pDisputeBadge" class="nbadge ml-auto"
                     style="display:none">0</span></button>
             <button data-nav="scrCode" onclick="showAdminScreen('scrCode')" class="snav"><i data-lucide="ticket"
                     class="w-4 h-4"></i>Codes</button>
@@ -1937,9 +1930,6 @@
                         class="nbadge ordCount" style="display:none">0</span></button>
                 <button data-nav="scrTx" onclick="showAdminScreen('scrTx')" class="tnav">Transactions</button>
                 <button data-nav="scrUsr" onclick="showAdminScreen('scrUsr')" class="tnav">Users</button>
-                <button data-nav="scrOf" style="display:none !important;" onclick="showAdminScreen('scrOf')" class="tnav">Offers</button>
-                <!-- scrStore removed -->
-                <button data-nav="scrP2P" style="display:none !important;" onclick="showAdminScreen('scrP2P')" class="tnav">P2P Deals</button>
                 <button data-nav="scrCode" onclick="showAdminScreen('scrCode')" class="tnav">Codes</button>
                 <button data-nav="scrExt" onclick="showAdminScreen('scrExt')" class="tnav">Extension</button>
                 <button data-nav="scrBc" onclick="showAdminScreen('scrBc')" class="tnav">Broadcast</button>
@@ -9256,6 +9246,7 @@
                         deviceId: u.device_id || u.deviceId || '',
                         createdAt: u.created_at ? new Date(Number(u.created_at)) : (u.createdAt ? new Date(u.createdAt) : new Date())
                     }));
+                    S.users = users;
 
                     // ইউজার পেজের সামারি ব্যাজ আপডেট
                     const tCntEl = document.getElementById('usrTotalCount');

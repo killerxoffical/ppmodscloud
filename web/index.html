@@ -51,6 +51,39 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <!-- Firebase Authentication Gateway (Project: ppcloudmods - Zero Firestore, Pure Auth Engine) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { 
+            getAuth, 
+            createUserWithEmailAndPassword, 
+            signInWithEmailAndPassword, 
+            sendPasswordResetEmail, 
+            signOut, 
+            onAuthStateChanged 
+        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyB8RJnowiwLPKq2NyEF4rFHmgklPpw0M4A",
+            authDomain: "ppcloudmods.firebaseapp.com",
+            projectId: "ppcloudmods",
+            storageBucket: "ppcloudmods.firebasestorage.app",
+            messagingSenderId: "1089038738208",
+            appId: "1:1089038738208:web:985040f21a3d11f303ad45",
+            measurementId: "G-JDR1CRPRHQ"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        window.auth = auth;
+        window.fbCreateUser = (email, pass) => createUserWithEmailAndPassword(auth, email, pass);
+        window.fbSignIn = (email, pass) => signInWithEmailAndPassword(auth, email, pass);
+        window.fbResetPassword = (email) => sendPasswordResetEmail(auth, email);
+        window.fbSignOut = () => signOut(auth);
+        window.fbOnAuthStateChanged = (cb) => onAuthStateChanged(auth, cb);
+    </script>
     <script>
         // Protibar page refresh / load e Play Points brand color shift (Orange -> Green -> Blue -> Purple -> Gold -> Coral)
         (function initAvatarRefreshColor() {
@@ -7869,7 +7902,7 @@
 
             if (!name) { emMsg('আপনার নাম লিখুন', false); return; }
             if (!email || !email.includes('@')) { emMsg('সঠিক ইমেইল এড্রেস লিখুন', false); return; }
-            if (pass.length < 4) { emMsg('পাসওয়ার্ড কমপক্ষে ৪ অক্ষরের হতে হবে', false); return; }
+            if (pass.length < 6) { emMsg('পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে', false); return; }
 
             const popup = document.getElementById('authSharpPopup');
             const loadState = document.getElementById('sharpLoadingState');
@@ -7885,12 +7918,40 @@
             if (errState) errState.classList.add('hidden');
 
             try {
-                const res = await fetch(`${CF_API}/api/auth/register`, {
+                let fbUid = '';
+                if (window.fbCreateUser) {
+                    try {
+                        const userCred = await window.fbCreateUser(email, pass);
+                        fbUid = (userCred && userCred.user && userCred.user.uid) || '';
+                    } catch(fbErr) {
+                        let errMsg = fbErr.message || 'Firebase Auth error';
+                        if (fbErr.code === 'auth/email-already-in-use') {
+                            errMsg = 'এই ইমেইল দিয়ে ইতিমধ্যে একাউন্ট খোলা আছে! দয়া করে Login করুন।';
+                        } else if (fbErr.code === 'auth/weak-password') {
+                            errMsg = 'পাসওয়ার্ড অত্যন্ত দুর্বল! কমপক্ষে ৬ অক্ষর দিন।';
+                        } else if (fbErr.code === 'auth/invalid-email') {
+                            errMsg = 'ইমেইল এড্রেস সঠিক নয়।';
+                        }
+                        throw new Error(errMsg);
+                    }
+                }
+
+                // Cloudflare D1 এ ইউনিক ৮-সংখ্যার PP ID সহ ইউজার তৈরি
+                let res = await fetch(`${CF_API}/api/auth/register`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email, password: pass })
+                    body: JSON.stringify({ email: email, password: pass, name: name })
                 });
-                const data = await res.json();
+                let data = await res.json();
+                if (!data.ok && data.error && (data.error.includes('ইতিমধ্যে') || data.error.includes('exists') || data.error.includes('already'))) {
+                    // যদি ইতিমধ্যে CF এ একাউন্ট থাকে, তাহলে সরাসরি লগইন ডেটা ফেচ করব
+                    res = await fetch(`${CF_API}/api/auth/login`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email: email, password: pass })
+                    });
+                    data = await res.json();
+                }
                 if (data.ok && data.user) {
                     localStorage.setItem('ppm_user', JSON.stringify(data.user));
                     localStorage.removeItem('pp_logged_out');
@@ -7908,14 +7969,11 @@
                     if (loadState) loadState.classList.add('hidden');
                     if (succState) succState.classList.remove('hidden');
                 } else {
-                    const errMsg = document.getElementById('sharpErrorMsg');
-                    if (errMsg) errMsg.innerText = data.error || 'Registration failed';
-                    if (loadState) loadState.classList.add('hidden');
-                    if (errState) errState.classList.remove('hidden');
+                    throw new Error(data.error || 'Registration failed');
                 }
             } catch (err) {
                 const errMsg = document.getElementById('sharpErrorMsg');
-                if (errMsg) errMsg.innerText = 'সার্ভারের সাথে কানেক্ট করা যাচ্ছে না';
+                if (errMsg) errMsg.innerText = err.message || 'রেজিস্ট্রেশন সম্পন্ন করা যায়নি';
                 if (loadState) loadState.classList.add('hidden');
                 if (errState) errState.classList.remove('hidden');
             }
@@ -7928,12 +7986,40 @@
 
             const orig = emBusy('btnEmLogin', true);
             try {
-                const res = await fetch(`${CF_API}/api/auth/login`, {
+                let fbUid = '';
+                if (window.fbSignIn) {
+                    try {
+                        const userCred = await window.fbSignIn(email, pass);
+                        fbUid = (userCred && userCred.user && userCred.user.uid) || '';
+                    } catch(fbErr) {
+                        let errMsg = 'ভুল ইমেইল বা পাসওয়ার্ড!';
+                        if (fbErr.code === 'auth/user-not-found') {
+                            errMsg = 'এই ইমেইল দিয়ে কোনো অ্যাকাউন্ট পাওয়া যায়নি! Register করুন।';
+                        } else if (fbErr.code === 'auth/wrong-password' || fbErr.code === 'auth/invalid-credential') {
+                            errMsg = 'ভুল পাসওয়ার্ড! অনুগ্রহ করে সঠিক পাসওয়ার্ড দিন।';
+                        } else if (fbErr.code === 'auth/too-many-requests') {
+                            errMsg = 'অতিরিক্ত চেষ্টার কারণে সাময়িক ব্লক হয়েছে। কিছুক্ষণ পর চেষ্টা করুন বা পাসওয়ার্ড রিসেট করুন।';
+                        }
+                        throw new Error(errMsg);
+                    }
+                }
+
+                // Cloudflare D1 থেকে ডাটা লোড ও পাসওয়ার্ড নিশ্চিতকরণ
+                let res = await fetch(`${CF_API}/api/auth/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password: pass })
+                    body: JSON.stringify({ email: email, password: pass })
                 });
-                const data = await res.json();
+                let data = await res.json();
+                if (!data.ok && data.error && (data.error.includes('সঠিক তথ্য') || data.error.includes('নয়') || data.error.includes('not found') || data.error.includes('ভুল'))) {
+                    // Firebase এ একাউন্ট আছে কিন্তু CF D1 এ এখনো তৈরি হয়নি -> অটো প্রভিশন
+                    res = await fetch(`${CF_API}/api/auth/register`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email: email, password: pass, name: email.split('@')[0] })
+                    });
+                    data = await res.json();
+                }
                 if (data.ok && data.user) {
                     localStorage.setItem('ppm_user', JSON.stringify(data.user));
                     localStorage.removeItem('pp_logged_out');
@@ -7946,7 +8032,7 @@
                 }
             } catch (err) {
                 emBusy('btnEmLogin', false, orig);
-                emMsg('সার্ভারে সমস্যা হয়েছে', false);
+                emMsg(err.message || 'লগইন ব্যর্থ হয়েছে', false);
             }
         };
 
@@ -7954,7 +8040,30 @@
         function emailRegGo() { window.executeSharpRegister(); }
 
         window.emailResetGo = async function () {
-            emMsg('আপনার পাসওয়ার্ড নিরাপদে অ্যাডমিন প্যানেলে সংরক্ষিত আছে। পাসওয়ার্ড রিকভারির জন্য অ্যাডমিনকে মেসেজ দিন।', true);
+            const email = (document.getElementById('emForgotEmail').value || '').trim().toLowerCase();
+            if (!email || !email.includes('@')) {
+                emMsg('দয়া করে আপনার সঠিক ইমেইল এড্রেস লিখুন', false);
+                return;
+            }
+            const orig = emBusy('btnEmReset', true);
+            try {
+                if (window.fbResetPassword) {
+                    await window.fbResetPassword(email);
+                    emBusy('btnEmReset', false, orig);
+                    emMsg(`✅ আপনার ইমেইলে (${email}) পাসওয়ার্ড রিসেট লিংক পাঠানো হয়েছে! ইনবক্স অথবা স্প্যাম ফোল্ডার চেক করুন।`, true);
+                } else {
+                    throw new Error('Firebase Auth লোড হয়নি');
+                }
+            } catch (err) {
+                emBusy('btnEmReset', false, orig);
+                let msg = 'পাসওয়ার্ড রিসেট লিংক পাঠাতে সমস্যা হয়েছে';
+                if (err.code === 'auth/user-not-found') {
+                    msg = 'এই ইমেইল দিয়ে কোনো অ্যাকাউন্ট পাওয়া যায়নি!';
+                } else if (err.code === 'auth/invalid-email') {
+                    msg = 'ইমেইল এড্রেসটি সঠিক নয়!';
+                }
+                emMsg(msg, false);
+            }
         };
 
         /* ===== Full Screen Profile & Telegram Sync Manager ===== */
@@ -12432,7 +12541,15 @@
             const email = u.email || '';
             let photo = u.avatar_url || u.photoURL || u.avatar || '';
             if (!photo || photo.includes('dicebear')) {
-                photo = (window.AVATAR_PRESETS && window.AVATAR_PRESETS[0]) || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzn6uplqxLbkia4Sy_PoGkzeqrCFqHgEJaGjCBG1nSkg&s=10';
+                const list = window.AVATAR_PRESETS || [];
+                if (list.length > 0) {
+                    let hash = 0;
+                    const seed = email || ppId || displayName || 'user';
+                    for (let i = 0; i < seed.length; i++) hash = (hash * 31 + seed.charCodeAt(i)) % list.length;
+                    photo = list[Math.abs(hash)];
+                } else {
+                    photo = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzn6uplqxLbkia4Sy_PoGkzeqrCFqHgEJaGjCBG1nSkg&s=10';
+                }
             }
             const coins = Number(u.coins !== undefined ? u.coins : (u.balance !== undefined ? u.balance : 0)) || 0;
 
@@ -12494,8 +12611,13 @@
         window.ppfb.registerEmail = () => window.executeSharpRegister();
         window.ppfb.loginEmail = () => window.executeSharpLogin();
 
-        // COMPLETE LOGOUT (Session Clear + Screen Login)
-        window.ppfb.logout = () => {
+        // COMPLETE LOGOUT (Firebase Auth SignOut + Session Clear + Screen Login)
+        window.ppfb.logout = async () => {
+            try {
+                if (window.fbSignOut) {
+                    await window.fbSignOut();
+                }
+            } catch (e) { }
             try {
                 localStorage.removeItem('ppm_user');
                 localStorage.removeItem('ppm_user_uid');
