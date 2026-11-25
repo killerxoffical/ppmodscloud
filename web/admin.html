@@ -5121,30 +5121,271 @@
         });
     </script>
 
-    <!-- ===================== FIREBASE CORE SCRIPT ===================== -->
+    <!-- ===================== 100% PURE CLOUDFLARE D1 CORE SCRIPT (ZERO FIREBASE) ===================== -->
     <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-        import { getFirestore, doc, getDoc, setDoc, addDoc, deleteDoc, updateDoc, collection, query, where, limit, getDocs, serverTimestamp, runTransaction, onSnapshot, orderBy, startAfter, increment } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
-        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
-
+        const CF_BASE = "https://ppmodscloud.profitking34.workers.dev";
         const ADMIN_EMAIL = "admin@gmail.com";
         const ADMIN_PASS = "nayem544";
         const ADMIN_CODE = "5449";
-        window.ADMIN_BUILD = "2026-11-06-v4";
+        window.ADMIN_BUILD = "2026-PURE-CLOUDFLARE-D1-v5";
         let entering = false;
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyAQmiWD9fP0nFpl7ShPjE51udtyFWo6jpA",
-            authDomain: "ppmod1.firebaseapp.com",
-            projectId: "ppmod1",
-            storageBucket: "ppmod1.firebasestorage.app",
-            messagingSenderId: "826595248931",
-            appId: "1:826595248931:web:d55b761c1b9e245437da96",
-            measurementId: "G-CN9LJ502BL"
+        // Pure Cloudflare In-Memory / Cloud Store Cache
+        const CF_STORE_CACHE = {};
+
+        // Pure Auth Object & Functions
+        const auth = {
+            currentUser: { email: ADMIN_EMAIL, uid: "admin" }
         };
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
+        async function signInWithEmailAndPassword(authObj, email, pass) {
+            return { user: { email: ADMIN_EMAIL, uid: "admin" } };
+        }
+        async function signOut(authObj) {
+            return true;
+        }
+        function onAuthStateChanged(authObj, cb) {
+            try { cb({ email: ADMIN_EMAIL, uid: "admin" }); } catch (e) {}
+            return () => {};
+        }
+
+        // Pure Cloudflare D1 Driver for Firestore Queries
+        function doc(db, ...args) {
+            let col = args[0] || '';
+            let id = args[1] || '';
+            if (args.length === 1 && typeof col === 'string' && col.includes('/')) {
+                const parts = col.split('/');
+                col = parts[0];
+                id = parts[1];
+            }
+            return { col, id, _type: 'doc' };
+        }
+
+        function collection(db, colName) {
+            return { col: colName, _type: 'collection' };
+        }
+
+        function query(ref, ...constraints) {
+            return { ...ref, constraints };
+        }
+
+        function limit(n) { return { type: 'limit', val: n }; }
+        function where(f, op, v) { return { type: 'where', field: f, op, val: v }; }
+        function orderBy(f, dir) { return { type: 'orderBy', field: f, dir }; }
+        function startAfter(doc) { return { type: 'startAfter', doc }; }
+        function serverTimestamp() { return new Date(); }
+        function increment(n) { return n; }
+        function runTransaction(db, fn) { return fn({ get: getDoc, set: setDoc, update: updateDoc, delete: deleteDoc }); }
+        function writeBatch(db) {
+            return {
+                set: setDoc,
+                update: updateDoc,
+                delete: deleteDoc,
+                commit: async () => true
+            };
+        }
+
+        async function getDoc(dRef) {
+            const col = dRef.col;
+            const id = dRef.id;
+            if (col === 'config') {
+                const key = id === 'app' ? 'portal-config' : ('config-' + id);
+                try {
+                    const res = await fetch(`${CF_BASE}/api/cloud/${key}?_t=${Date.now()}`);
+                    const json = await res.json();
+                    const data = (json && json.ok && json.data) ? json.data : (CF_STORE_CACHE[key] || {});
+                    return { id, exists: () => Boolean(data && Object.keys(data).length), data: () => data };
+                } catch {
+                    return { id, exists: () => Boolean(CF_STORE_CACHE[key]), data: () => CF_STORE_CACHE[key] || {} };
+                }
+            }
+            if (col === 'users') {
+                try {
+                    const res = await fetch(`${CF_BASE}/api/wallet?uid=${encodeURIComponent(id)}`);
+                    const json = await res.json();
+                    if (json && json.ok && json.wallet) {
+                        return { id, exists: () => true, data: () => json.wallet };
+                    }
+                } catch {}
+            }
+            return { id, exists: () => false, data: () => ({}) };
+        }
+
+        async function getDocs(qRef) {
+            const col = qRef.col;
+            if (col === 'users') {
+                try {
+                    const res = await fetch(`${CF_BASE}/api/admin/users?limit=200&_t=${Date.now()}`);
+                    const json = await res.json();
+                    if (json && json.ok && Array.isArray(json.users)) {
+                        return {
+                            empty: json.users.length === 0,
+                            size: json.users.length,
+                            docs: json.users.map(u => ({ id: u.pp_id || u.uid, data: () => u })),
+                            forEach: function(fn) { this.docs.forEach(fn); }
+                        };
+                    }
+                } catch (e) {
+                    console.warn('[CF getDocs users error]:', e);
+                }
+                return { empty: true, size: 0, docs: [], forEach: () => {} };
+            }
+            if (col === 'deposits') {
+                try {
+                    const res = await fetch(`${CF_BASE}/api/admin/deposits?_t=${Date.now()}`);
+                    const json = await res.json();
+                    if (json && json.ok && Array.isArray(json.deposits)) {
+                        return {
+                            empty: json.deposits.length === 0,
+                            size: json.deposits.length,
+                            docs: json.deposits.map(d => ({ id: d.id, data: () => d })),
+                            forEach: function(fn) { this.docs.forEach(fn); }
+                        };
+                    }
+                } catch {}
+                return { empty: true, size: 0, docs: [], forEach: () => {} };
+            }
+            if (col === 'orders') {
+                try {
+                    const res = await fetch(`${CF_BASE}/api/admin/orders?_t=${Date.now()}`);
+                    const json = await res.json();
+                    if (json && json.ok && Array.isArray(json.orders)) {
+                        return {
+                            empty: json.orders.length === 0,
+                            size: json.orders.length,
+                            docs: json.orders.map(o => ({ id: o.id, data: () => o })),
+                            forEach: function(fn) { this.docs.forEach(fn); }
+                        };
+                    }
+                } catch {}
+                return { empty: true, size: 0, docs: [], forEach: () => {} };
+            }
+            const key = `col-${col}`;
+            try {
+                const res = await fetch(`${CF_BASE}/api/cloud/${key}?_t=${Date.now()}`);
+                const json = await res.json();
+                const list = (json && json.ok && Array.isArray(json.data)) ? json.data : (CF_STORE_CACHE[key] || []);
+                return {
+                    empty: list.length === 0,
+                    size: list.length,
+                    docs: list.map(item => ({ id: item.id || 'id_' + Math.random().toString(36).slice(2, 8), data: () => item })),
+                    forEach: function(fn) { this.docs.forEach(fn); }
+                };
+            } catch {
+                return { empty: true, size: 0, docs: [], forEach: () => {} };
+            }
+        }
+
+        async function setDoc(dRef, data, opts = {}) {
+            const col = dRef.col;
+            const id = dRef.id;
+            if (col === 'config') {
+                const key = id === 'app' ? 'portal-config' : ('config-' + id);
+                CF_STORE_CACHE[key] = { ...(CF_STORE_CACHE[key] || {}), ...data };
+                await fetch(`${CF_BASE}/api/cloud/${key}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ data: CF_STORE_CACHE[key] })
+                }).catch(() => {});
+                return true;
+            }
+            if (col === 'users') {
+                if (data.balance !== undefined || data.coins !== undefined) {
+                    const coinsVal = data.balance !== undefined ? data.balance : data.coins;
+                    await fetch(`${CF_BASE}/api/wallet/set-balance`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ uid: id, coins: coinsVal })
+                    }).catch(() => {});
+                }
+                if (data.banned !== undefined) {
+                    await fetch(`${CF_BASE}/api/user/ban`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ uid: id, banned: Boolean(data.banned), reason: data.banReason || '' })
+                    }).catch(() => {});
+                }
+                return true;
+            }
+            const key = `col-${col}`;
+            const list = CF_STORE_CACHE[key] || [];
+            const idx = list.findIndex(x => x.id === id);
+            if (idx >= 0) {
+                list[idx] = opts.merge ? { ...list[idx], ...data, id } : { ...data, id };
+            } else {
+                list.push({ ...data, id });
+            }
+            CF_STORE_CACHE[key] = list;
+            await fetch(`${CF_BASE}/api/cloud/${key}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ data: list })
+            }).catch(() => {});
+            return true;
+        }
+
+        async function updateDoc(dRef, data) {
+            const col = dRef.col;
+            const id = dRef.id;
+            if (col === 'deposits') {
+                const action = data.status === 'approved' ? 'approve' : 'reject';
+                await fetch(`${CF_BASE}/api/admin/deposits/review`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id, action, admin_msg: data.adminMsg || '' })
+                }).catch(() => {});
+                return true;
+            }
+            if (col === 'orders') {
+                await fetch(`${CF_BASE}/api/orders/update`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ order_id: id, status: data.status, admin_msg: data.adminMsg || '' })
+                }).catch(() => {});
+                return true;
+            }
+            return setDoc(dRef, data, { merge: true });
+        }
+
+        async function addDoc(colRef, data) {
+            const col = colRef.col;
+            const id = 'gen_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
+            await setDoc({ col, id, _type: 'doc' }, data);
+            return { id };
+        }
+
+        async function deleteDoc(dRef) {
+            const col = dRef.col;
+            const id = dRef.id;
+            if (col === 'users') {
+                await fetch(`${CF_BASE}/api/admin/user/delete`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ uid: id })
+                }).catch(() => {});
+                return true;
+            }
+            const key = `col-${col}`;
+            const list = CF_STORE_CACHE[key] || [];
+            CF_STORE_CACHE[key] = list.filter(x => x.id !== id);
+            await fetch(`${CF_BASE}/api/cloud/${key}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ data: CF_STORE_CACHE[key] })
+            }).catch(() => {});
+            return true;
+        }
+
+        function onSnapshot(target, nextCb, errCb) {
+            if (target.col === 'config') {
+                getDoc(target).then(snap => nextCb(snap)).catch(errCb || (() => {}));
+            } else {
+                getDocs(target).then(snap => nextCb(snap)).catch(errCb || (() => {}));
+            }
+            return () => {};
+        }
+
+        const app = {};
+        const db = {};
 
         const DEFAULTS = {
             fee: 2, coinRate: 5, pendingDays: 8, withdrawMin: 50, minDeposit: 15, bulkMinCoins: 100, bulkDiscount: 1, bonusEnabled: true, starRate: 4.666666666666667, starPack3: 14, starsEnabled: true, starAdmin: '@Blackmoney54',
@@ -5249,72 +5490,16 @@
 
         async function enterAdmin() {
             if (entering) return;
-            let cu = auth.currentUser;
-            // PIN path = always admin@gmail.com session.
-            // Onno karo (Google/stale) session atke thakle age sign out — nahole safe rules data block kore.
-            if (cu && (cu.email || '').toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
-                entering = true;
-                try { await signOut(auth); } catch (e) { }
-                entering = false;
-                cu = auth.currentUser;
-            }
-            if (cu && cu.email) {
-                if (window.setConn) window.setConn(null);
-                loadAll();
-                return;
-            }
             entering = true;
-            if (window.setConn) window.setConn('loading', 'Admin account e switch hocche...');
-            try {
-                if (cu) { try { await signOut(auth); } catch (e) { } }
-                try {
-                    await signInWithEmailAndPassword(auth, ADMIN_EMAIL, ADMIN_PASS);
-                    if (window.setConn) window.setConn(null);
-                    entering = false;
-                    loadAll();
-                    return;
-                } catch (sdkErr) {
-                    // SDK login failed (e.g. file:// unauthorized-domain) — try REST fallback
-                    console.warn('[Admin] SDK login failed:', sdkErr.code, '— trying REST fallback...');
-                    const restRes = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' + firebaseConfig.apiKey, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ email: ADMIN_EMAIL, password: ADMIN_PASS, returnSecureToken: true })
-                    });
-                    const restData = await restRes.json();
-                    if (restData.idToken) {
-                        const { signInWithCustomToken } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js');
-                        // Use the REST token to create a signed-in session isn't directly possible,
-                        // so we store idToken for direct REST Firestore calls as fallback
-                        window._adminIdToken = restData.idToken;
-                        window._adminRefreshToken = restData.refreshToken;
-                        console.log('[Admin] REST auth succeeded — idToken stored for Firestore calls.');
-                        if (window.setConn) window.setConn(null);
-                        entering = false;
-                        loadAll();
-                        return;
-                    } else {
-                        throw sdkErr; // REST also failed, throw original error
-                    }
-                }
-                entering = false;
-            } catch (e) {
-                console.warn(e);
-                entering = false;
-                let msg = 'Firebase login failed. ';
-                if (e && e.code === 'auth/operation-not-allowed') msg += 'Console > Authentication > Email/Password ON করুন, তারপর Refresh দিন।';
-                else if (e && e.code === 'auth/user-not-found') msg += 'Console > Users > Add user: admin@gmail.com / nayem544, তারপর Refresh দিন।';
-                else if (e && e.code === 'auth/wrong-password' || e && e.code === 'auth/invalid-credential') msg += 'Password milche na (nayem544). Console theke reset korun.';
-                else if (e && e.code === 'auth/unauthorized-domain') msg += 'Domain unauthorized — admin.html localhost বা web server থেকে খুলুন (file:/// থেকে নয়)।';
-                else if (e && e.code === 'auth/network-request-failed') msg += 'Internet connection check korun, tarpor Refresh din.';
-                else msg += 'Console setup check kore Refresh din. (' + ((e && e.code) || 'error') + ')';
-                if (window.setConn) window.setConn('offline', msg + ' <button onclick="retryConn()" class="underline font-extrabold ml-1">Retry</button>');
-                toast('Offline preview mode active');
-                if (typeof loadConfigFromCloudflareFallback === 'function') loadConfigFromCloudflareFallback();
-                if (window.fetchCloudflareStatsNow) window.fetchCloudflareStatsNow();
-                if (window.fetchCloudflarePendingData) window.fetchCloudflarePendingData();
-                if (window.renderAdminScreen) { try { renderAdminScreen(CURRENT); } catch (err) { } }
-            }
+            if (window.setConn) window.setConn(null);
+            localStorage.setItem('admin_unlocked', '1');
+            document.getElementById('loginView').classList.add('hidden');
+            document.getElementById('adminApp').classList.remove('hidden');
+            try { const mn = document.getElementById('mnavBar'); if (mn) mn.classList.remove('hidden'); } catch (e) { }
+            const cb = document.getElementById('codeBox');
+            if (cb) cb.classList.remove('hidden');
+            entering = false;
+            loadAll();
         }
         window.retryConn = () => { if (window.setConn) window.setConn('loading', 'Retrying connection...'); enterAdmin(); };
         window.enterAdmin = enterAdmin;
@@ -5441,17 +5626,17 @@
         }
 
         function mergeVirtualUsers() {
-            // Firestore থেকে আসা আসল ইউজারদের মূল তালিকা (Real balance ও profile অক্ষুণ্ণ থাকবে)
-            const baseUsers = (S._firestoreUsers && S._firestoreUsers.length) ? S._firestoreUsers.slice() : [];
-            const existingUserIds = new Set(baseUsers.map(u => u.id));
+            const baseUsers = (S.users && S.users.length) ? S.users.slice() : [];
+            const existingUserIds = new Set(baseUsers.map(u => u.id || u.uid || u.pp_id));
             const extraUsers = [];
-            [...S.deposits, ...S.orders, ...S.redemptions].forEach(item => {
-                if (item.uid && !existingUserIds.has(item.uid)) {
-                    existingUserIds.add(item.uid);
+            [...S.deposits, ...S.orders].forEach(item => {
+                const uid = item.user_id || item.uid;
+                if (uid && !existingUserIds.has(uid)) {
+                    existingUserIds.add(uid);
                     extraUsers.push({
-                        id: item.uid, uid: item.uid, name: item.name || 'User', email: item.email || '',
-                        photo: item.photo || '', balance: 0, banned: false,
-                        createdAt: item.createdAt || null, _virtual: true
+                        id: uid, uid: uid, pp_id: uid, name: item.name || 'User', email: item.email || '',
+                        balance: 0, coins: 0, banned: false,
+                        createdAt: item.createdAt || item.created_at || null, _virtual: true
                     });
                 }
             });
@@ -5571,118 +5756,29 @@
             }
         }, 30000);
 
+        function syncMergedDeposits() {
+            S.deposits = (S._cfDeposits || []).slice().sort((x, y) => msOf(y) - msOf(x));
+        }
+        window.syncMergedDeposits = syncMergedDeposits;
+
+        function syncMergedOrders() {
+            S.orders = (S._cfOrders || []).slice().sort((x, y) => msOf(y) - msOf(x));
+        }
+        window.syncMergedOrders = syncMergedOrders;
+
         function subscribeAll() {
-            incAdminReads(5);
             stopLive();
-
-            unsubs.push(onSnapshot(doc(db, 'config', 'app'), (snap) => {
-                S.cfg = { ...DEFAULTS, ...(snap.exists() ? snap.data() : {}) };
-                fillConfigForm();
-                if (window.setConn) window.setConn(null);
-                scheduleRender();
-            }, connError));
-
-            unsubs.push(onSnapshot(doc(db, 'config', 'extension'), (snap) => {
-                S.extension = snap.exists() ? snap.data() : {
-                    server_status: 'online',
-                    latest_version: '2.7',
-                    offline_message: 'Server is currently under maintenance. Please try again later.',
-                    broadcast_enabled: true,
-                    broadcast_message: '⚡ Play Points Friday Auto-Drop is Active!',
-                    valid_keys: {}
-                };
-                if (!S.extension.valid_keys) S.extension.valid_keys = {};
-                if (window.renderExtensionScreen && CURRENT === 'scrExt') window.renderExtensionScreen();
-            }, (err) => console.warn('Extension config error:', err)));
-
-            unsubs.push(onSnapshot(doc(db, 'config', 'star_buy'), (snap) => {
-                if (snap.exists()) {
-                    S.star_buy = { ...S.star_buy, ...snap.data() };
-                }
-                if (window.syncStarBuyUI) window.syncStarBuyUI();
-                if (CURRENT === 'scrStore' && window._adminStoreCat === 'star') {
-                    if (window.renderStarBuyAdmin) window.renderStarBuyAdmin();
-                }
-            }, (err) => console.warn('Star buy config error:', err)));
-
-            // ফায়ারস্টোর থেকে সম্পূর্ণ ইউজার ও তাদের শেষ আপডেট ব্যালেন্স লোড
-            try {
-                getDocs(collection(db, 'users')).then((snap) => {
-                    const arr = [];
-                    snap.forEach(d => arr.push({ id: d.id, ...d.data() }));
-                    arr.sort((x, y) => msOf(y) - msOf(x));
-                    S._firestoreUsers = arr;
-                    mergeVirtualUsers();
-                    updateStats();
-                    if (CURRENT === 'scrUsr' && typeof _old_unused_renderUsers === 'function') {
-                        _old_unused_renderUsers();
-                    }
-                }).catch(err => console.warn('[Users Quota-Saver Fetch Warn]:', err));
-            } catch (e) {
-                console.warn('Users subscribe error:', e);
+            liveOn = true;
+            if (window.setConn) window.setConn(null);
+            loadConfigFromCloudflareFallback();
+            fetchCloudflarePendingData();
+            if (window.loadUsersFromCloudflare) {
+                window.loadUsersFromCloudflare(_usrOffset || 0, "", true);
             }
+        }
 
-            // ডিপোজিট ও অর্ডারে কোটা সেভার লিমিট ও ক্লাউডফ্লেয়ার D1 সিঙ্ক
-            S._cfDeposits = S._cfDeposits || [];
-            S._fbDeposits = S._fbDeposits || [];
-            S._cfOrders = S._cfOrders || [];
-            S._fbOrders = S._fbOrders || [];
-
-            function syncMergedDeposits() {
-                const map = new Map();
-                (S._fbDeposits || []).forEach(d => map.set(d.id, d));
-                (S._cfDeposits || []).forEach(d => {
-                    const existing = map.get(d.id);
-                    if (!existing) map.set(d.id, d);
-                    else map.set(d.id, { ...existing, ...d }); // Cloudflare D1 Authority for Pending!
-                });
-                S.deposits = Array.from(map.values()).sort((x, y) => msOf(y) - msOf(x));
-            }
-            window.syncMergedDeposits = syncMergedDeposits;
-
-            function syncMergedOrders() {
-                const map = new Map();
-                (S._fbOrders || []).forEach(o => map.set(o.id, o));
-                (S._cfOrders || []).forEach(o => {
-                    const existing = map.get(o.id);
-                    if (!existing) map.set(o.id, o);
-                    else map.set(o.id, { ...existing, ...o }); // Cloudflare D1 Authority for Pending!
-                });
-                S.orders = Array.from(map.values()).sort((x, y) => msOf(y) - msOf(x));
-            }
-            window.syncMergedOrders = syncMergedOrders;
-
-            const liveCols = [
-                ['deposits', 100, v => { S._fbDeposits = v; syncMergedDeposits(); }],
-                ['orders', 100, v => { S._fbOrders = v; syncMergedOrders(); }],
-                ['offers', 50, v => S.offers = v],
-                ['earn_tasks', 50, v => S.earn_tasks = v],
-                ['store_items', 50, v => S.store_items = v],
-                ['p2p_deals', 50, v => S.p2p_deals = v],
-                ['adell_rooms', 50, v => S.adell_rooms = v],
-                ['star_deals', 50, v => { S.star_deals = v; if (window.renderStarBuyAdmin && CURRENT === 'scrStore' && window._adminStoreCat === 'star') window.renderStarBuyAdmin(); }]
-            ];
-            liveCols.forEach(([col, cap, set]) => {
-                try {
-                    unsubs.push(onSnapshot(query(collection(db, col), limit(cap)), (s) => {
-                        const a = [];
-                        s.forEach(d => a.push({ id: d.id, ...d.data() }));
-                        a.sort((x, y) => msOf(y) - msOf(x));
-                        set(a);
-                        mergeVirtualUsers();
-                        updateStats();
-                        scheduleRender();
-                    }, (err) => {
-                        console.warn(`[Live Sync Warn] ${col}:`, err);
-                        scheduleRender();
-                    }));
-                } catch (e) {
-                    console.warn(`Subscribe error on ${col}`, e);
-                }
-            });
-
-            // Cloudflare D1-এর সম্পূর্ণ ডিপোজিট ও অর্ডার রিয়েল সিঙ্ক (Zero Firebase Quota & Real D1 Authority)
-            async function fetchCloudflarePendingData() {
+        // Cloudflare D1 Deposit and Order Live Sync (100% Pure Cloudflare)
+        async function fetchCloudflarePendingData() {
                 try {
                     const [depRes, ordRes] = await Promise.all([
                         fetch("https://ppmodscloud.profitking34.workers.dev/api/admin/deposits?_t=" + Date.now()).then(r => r.json()).catch(() => null),
@@ -5739,10 +5835,6 @@
             fetchCloudflarePendingData();
             if (window._cfPendingTimer) clearInterval(window._cfPendingTimer);
             window._cfPendingTimer = setInterval(fetchCloudflarePendingData, 15000);
-
-            loadHeavyCollectionsOnce();
-            liveOn = true;
-        }
 
         async function loadConfigFromCloudflareFallback() {
             try {
@@ -9197,25 +9289,7 @@
                     throw new Error((data && data.error) || 'Invalid API response');
                 }
             } catch (err) {
-                console.warn('CF Users Load Error, falling back to Firestore S.users:', err);
-                // Fallback: If Cloudflare D1 hits daily read limit or network error, immediately render from Firebase Firestore S.users!
-                if (typeof _old_unused_renderUsers === 'function' && S.users && S.users.length) {
-                    _old_unused_renderUsers();
-                    const tCntEl = document.getElementById('usrTotalCount');
-                    const tBalEl = document.getElementById('usrTotalBalance');
-                    const actEl = document.getElementById('usrActiveCount');
-                    const banEl = document.getElementById('usrBannedCount');
-                    const lbl = document.getElementById('usrPageLabel');
-                    if (tCntEl) tCntEl.textContent = S.users.length;
-                    const totBal = S.users.reduce((acc, u) => acc + (Number(u.balance) || 0), 0);
-                    if (tBalEl) tBalEl.textContent = (Math.round((totBal + Number.EPSILON) * 100) / 100) + ' Coins';
-                    const bCount = S.users.filter(u => u.banned === true).length;
-                    if (actEl) actEl.textContent = S.users.length - bCount;
-                    if (banEl) banEl.textContent = bCount;
-                    if (lbl) lbl.textContent = `Showing all ${S.users.length} users (Live from Firebase Firestore)`;
-                    toast('⚠️ Cloudflare D1 লিমিট থাকায় Firebase Firestore থেকে ৮০০+ ইউজার ব্যাকআপ মোডে লোড হয়েছে।');
-                    return;
-                }
+                console.warn('CF Users Load Error:', err);
                 if (box) {
                     box.innerHTML = `<div class="p-6 text-center bg-rose-50 border border-rose-200 rounded-2xl space-y-2">
                         <p class="text-xs font-black text-rose-700">⚠️ Cloudflare D1 থেকে ইউজার লোড করতে সমস্যা হয়েছে!</p>
