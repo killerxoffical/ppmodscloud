@@ -96,6 +96,114 @@ export default {
         });
       }
 
+      if (path === "/api/init-db") {
+        const statements = [
+          `CREATE TABLE IF NOT EXISTS users (
+            pp_id TEXT PRIMARY KEY,
+            email TEXT UNIQUE NOT NULL,
+            password TEXT NOT NULL,
+            name TEXT NOT NULL DEFAULT 'User',
+            avatar_url TEXT DEFAULT '',
+            coins REAL NOT NULL DEFAULT 0.0,
+            monthly_points REAL NOT NULL DEFAULT 0.0,
+            monthly_points_month TEXT DEFAULT '',
+            device_id TEXT DEFAULT '',
+            role TEXT NOT NULL DEFAULT 'user',
+            is_banned INTEGER NOT NULL DEFAULT 0,
+            ban_reason TEXT DEFAULT '',
+            telegram_chat_id TEXT DEFAULT '',
+            created_at INTEGER NOT NULL,
+            updated_at INTEGER NOT NULL
+          )`,
+          `CREATE INDEX IF NOT EXISTS idx_users_email ON users(email)`,
+          `CREATE INDEX IF NOT EXISTS idx_users_role ON users(role)`,
+          `CREATE INDEX IF NOT EXISTS idx_users_device ON users(device_id)`,
+          `CREATE TABLE IF NOT EXISTS orders (
+            id TEXT PRIMARY KEY,
+            user_id TEXT NOT NULL,
+            user_email TEXT,
+            game TEXT NOT NULL,
+            logo TEXT DEFAULT '',
+            coins REAL NOT NULL DEFAULT 2.0,
+            status TEXT NOT NULL DEFAULT 'pending',
+            qid TEXT DEFAULT '',
+            sync_code TEXT DEFAULT '',
+            admin_msg TEXT DEFAULT '',
+            time_elapsed INTEGER DEFAULT 1,
+            retry_count INTEGER DEFAULT 1,
+            created_at INTEGER NOT NULL,
+            completed_at INTEGER,
+            refunded_at INTEGER
+          )`,
+          `CREATE INDEX IF NOT EXISTS idx_orders_uid ON orders(user_id)`,
+          `CREATE INDEX IF NOT EXISTS idx_orders_status ON orders(status)`,
+          `CREATE INDEX IF NOT EXISTS idx_orders_created ON orders(created_at DESC)`,
+          `CREATE TABLE IF NOT EXISTS deposits (
+            id TEXT PRIMARY KEY,
+            user_id TEXT NOT NULL,
+            user_email TEXT,
+            method TEXT NOT NULL,
+            amount_taka REAL NOT NULL,
+            coins REAL NOT NULL,
+            trx_id TEXT UNIQUE NOT NULL,
+            status TEXT NOT NULL DEFAULT 'pending',
+            admin_msg TEXT DEFAULT '',
+            created_at INTEGER NOT NULL,
+            reviewed_at INTEGER
+          )`,
+          `CREATE INDEX IF NOT EXISTS idx_deposits_uid ON deposits(user_id)`,
+          `CREATE INDEX IF NOT EXISTS idx_deposits_trx ON deposits(trx_id)`,
+          `CREATE INDEX IF NOT EXISTS idx_deposits_status ON deposits(status)`,
+          `CREATE TABLE IF NOT EXISTS transactions (
+            id TEXT PRIMARY KEY,
+            user_id TEXT NOT NULL,
+            type TEXT NOT NULL,
+            coins REAL NOT NULL,
+            balance_before REAL NOT NULL,
+            balance_after REAL NOT NULL,
+            title TEXT NOT NULL,
+            details TEXT DEFAULT '',
+            created_at INTEGER NOT NULL
+          )`,
+          `CREATE INDEX IF NOT EXISTS idx_tx_uid ON transactions(user_id)`,
+          `CREATE INDEX IF NOT EXISTS idx_tx_created ON transactions(created_at DESC)`,
+          `CREATE TABLE IF NOT EXISTS portal_games (
+            game_id TEXT PRIMARY KEY,
+            title TEXT NOT NULL,
+            package_name TEXT NOT NULL,
+            icon_url TEXT DEFAULT '',
+            quests_json TEXT NOT NULL DEFAULT '[]',
+            cost_coins REAL NOT NULL DEFAULT 2.0,
+            is_active INTEGER NOT NULL DEFAULT 1,
+            sort_order INTEGER NOT NULL DEFAULT 0,
+            updated_at INTEGER NOT NULL
+          )`,
+          `CREATE INDEX IF NOT EXISTS idx_games_active ON portal_games(is_active, sort_order)`,
+          `CREATE TABLE IF NOT EXISTS redemptions (
+            id TEXT PRIMARY KEY,
+            code TEXT NOT NULL,
+            user_id TEXT NOT NULL,
+            coins REAL NOT NULL,
+            created_at INTEGER NOT NULL
+          )`,
+          `CREATE INDEX IF NOT EXISTS idx_redemptions_uid_code ON redemptions(user_id, code)`,
+          `CREATE TABLE IF NOT EXISTS promo_codes (
+            code TEXT PRIMARY KEY,
+            coins REAL NOT NULL,
+            max_uses INTEGER NOT NULL DEFAULT 100,
+            used_count INTEGER NOT NULL DEFAULT 0,
+            is_active INTEGER NOT NULL DEFAULT 1,
+            created_at INTEGER NOT NULL
+          )`
+        ];
+
+        for (const sql of statements) {
+          await db.prepare(sql).run();
+        }
+
+        return json({ ok: true, message: "PPM Cloud D1 Database Tables & Indexes Initialized Successfully!" });
+      }
+
       // -------------------------------------------------------------
       // 2. AUTHENTICATION (Email + Password + 8-char PP ID)
       // -------------------------------------------------------------
