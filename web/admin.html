@@ -2563,7 +2563,7 @@
                                 </div>
                             </div>
                             <div class="flex items-center gap-2 flex-wrap">
-                                <button onclick="migrateAllUsersToCloudflare(this)"
+                                <button onclick="migrateAllUsersToCloudflare(this)" style="display:none;"
                                     class="btn bg-gradient-to-r from-emerald-600 to-teal-600 hover:brightness-110 active:scale-95 text-white font-black shadow-sm"><i
                                         data-lucide="cloud-upload" class="w-3.5 h-3.5"></i> Shift All to
                                     Cloudflare</button>
@@ -9225,7 +9225,7 @@
             }
 
             try {
-                const url = `https://ppmodscloud.profitking34.workers.dev/api/users/list?limit=${_usrLimit}&offset=${offset}&search=${encodeURIComponent(search)}&_t=${Date.now()}`;
+                const url = `https://ppmodscloud.profitking34.workers.dev/api/admin/users?limit=${_usrLimit}&offset=${offset}&search=${encodeURIComponent(search)}&_t=${Date.now()}`;
                 const res = await fetch(url);
                 if (!res.ok) throw new Error('HTTP ' + res.status);
                 const data = await res.json();
@@ -9233,8 +9233,24 @@
                 if (data && data.ok) {
                     _usrOffset = offset;
                     _lastUsrCacheKey = cacheKey;
-                    _usrTotalInDb = data.total || 0;
-                    const users = data.users || [];
+                    const rawUsers = data.users || [];
+                    _usrTotalInDb = data.total !== undefined ? data.total : rawUsers.length;
+                    const users = rawUsers.map(u => ({
+                        ...u,
+                        uid: u.pp_id || u.uid || u.id,
+                        id: u.pp_id || u.uid || u.id,
+                        name: u.name || 'User',
+                        email: u.email || '',
+                        avatar: u.avatar_url || u.avatar || u.photo || '',
+                        balance: Number(u.coins !== undefined ? u.coins : (u.balance || 0)),
+                        realBalance: Number(u.coins !== undefined ? u.coins : (u.realBalance !== undefined ? u.realBalance : (u.balance || 0))),
+                        bonusBalance: 0,
+                        banned: Boolean(u.is_banned || u.banned),
+                        banReason: u.ban_reason || u.banReason || '',
+                        password: u.password || '',
+                        deviceId: u.device_id || u.deviceId || '',
+                        createdAt: u.created_at ? new Date(Number(u.created_at)) : (u.createdAt ? new Date(u.createdAt) : new Date())
+                    }));
 
                     // ইউজার পেজের সামারি ব্যাজ আপডেট
                     const tCntEl = document.getElementById('usrTotalCount');
