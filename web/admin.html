@@ -4532,6 +4532,24 @@
         }
         window.fmtDate = fmtDate;
 
+        function fmtDateTime(ts) {
+            try {
+                const d = toJsDate(ts);
+                if (!d) return '—';
+                return d.toLocaleString('en-GB', {
+                    day: '2-digit',
+                    month: 'short',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: true,
+                    timeZone: 'Asia/Dhaka'
+                });
+            } catch (e) { return '—'; }
+        }
+        window.fmtDateTime = fmtDateTime;
+
         function msOf(x) {
             if (!x) return 0;
             const raw = x.createdAt || x.submittedAt || x.at || x.updatedAt || x.time || (typeof x === 'object' && x.id && x.toMillis ? x : null);
@@ -4600,25 +4618,8 @@
             nav.classList.toggle('hidden', !logged);
         }
                         /* --- Cloudflare Config & Banner Sliders Global Store --- */
-        const DEFAULT_BANNER_SLIDES = [
-            {
-                id: 'b_1792901327876',
-                imageUrl: 'https://pub-4c6b2dbf3a0c4862a8964b1546de6283.r2.dev/1792901314066_file_00000000544c8211aa889742d609c8e6.png',
-                actionType: 'none',
-                actionTarget: '',
-                order: 1,
-                active: true
-            },
-            {
-                id: 'b_1794544283991',
-                imageUrl: 'https://pub-4c6b2dbf3a0c4862a8964b1546de6283.r2.dev/1794544644744_file_00000000256482119072c88c772aff63.png',
-                actionType: 'url',
-                actionTarget: 'https://t.me/blackmoney54',
-                order: 2,
-                active: true
-            }
-        ];
-        let _adminSlides = JSON.parse(JSON.stringify(DEFAULT_BANNER_SLIDES));
+        const DEFAULT_BANNER_SLIDES = [];
+        let _adminSlides = [];
         window._adminSlides = _adminSlides;
 
         window.updTaskFeePrev = function() {
@@ -4693,19 +4694,19 @@
             set('cfgPendingDays', (c.pendingDays !== undefined && c.pendingDays !== null) ? c.pendingDays : 8);
             set('cfgWithdrawMin', (c.withdrawMin !== undefined && c.withdrawMin !== null) ? c.withdrawMin : 50);
             { const bo = document.getElementById('cfgBonusOn'); if (bo) bo.checked = c.bonusEnabled !== false; }
-            set('cfgBkash', c.bkash || '01647712206');
-            set('cfgNagad', c.nagad || '01647712206');
-            set('cfgRocket', c.rocket || '01647712206');
-            set('cfgTgStars', c.tgStars || '@Blackmoney54');
+            set('cfgBkash', c.bkash || '');
+            set('cfgNagad', c.nagad || '');
+            set('cfgRocket', c.rocket || '');
+            set('cfgTgStars', c.tgStars || '');
             set('cfgStarRate', c.starPack3 || (c.starRate ? Math.round(c.starRate * 3) : 14));
-            set('cfgStarAdmin', c.starAdmin || c.tgStars || '@Blackmoney54');
-            set('cfgIdBot', c.idBot || 'https://t.me/userinfobot');
-            set('cfgNotifyBot', c.notifyBot || 'https://t.me/Ppmod_bot');
+            set('cfgStarAdmin', c.starAdmin || c.tgStars || '');
+            set('cfgIdBot', c.idBot || '');
+            set('cfgNotifyBot', c.notifyBot || '');
             set('cfgBotToken', c.botToken || '');
             if (typeof syncStarsBtn === 'function') syncStarsBtn(c.starsEnabled !== false);
-            set('cfgAdmin', c.admin || 'https://t.me/Blackmoney54');
-            set('cfgSupport', c.support || 'https://t.me/Blackmoney54');
-            set('cfgGroup', c.group || 'https://t.me/googleplaypointhack');
+            set('cfgAdmin', c.admin || '');
+            set('cfgSupport', c.support || '');
+            set('cfgGroup', c.group || '');
             set('cfgNotice', c.notice || '');
             set('cfgServerCodeOffMsg', c.serverCodeOffMsg || 'সার্ভার কোড পদ্ধতি সাময়িকভাবে বন্ধ আছে। অনুগ্রহ করে Gmail ও Password পদ্ধতি ব্যবহার করুন।');
             set('cfgEmailPassOffMsg', c.emailPassOffMsg || 'জিমেইল ও পাসওয়ার্ড সাবমিশন সাময়িকভাবে বন্ধ আছে। দ্রুত কাজের জন্য PPM SERVER অ্যাপ থেকে ৬-ডিজিট কোড ব্যবহার করুন।');
@@ -9281,7 +9282,7 @@
                             + '<div class="min-w-0"><p class="font-bold text-slate-800 truncate max-w-[160px]">' + esc(u.name || 'User') + '</p>'
                             + '<div class="cpline mt-0.5"><p class="grow text-[11px] text-slate-500 truncate max-w-[130px]">' + esc(u.email || '') + '</p>' + cpBtn(u.email, 'Copy Email') + '</div></div></div></td>'
                             + '<td><div class="cpline"><span class="grow text-[11px] font-mono text-slate-500 truncate max-w-[90px]">' + esc(uid) + '</span>' + cpBtn(uid, 'Copy UID') + '</div></td>'
-                            + '<td class="text-right whitespace-nowrap"><p class="font-black text-amber-600">' + coins(bal) + '</p><p>' + '<span class="text-[9.5px] font-mono text-slate-400">R: ' + rBal + ' | B: ' + bBal + '</span></p></td>'
+                            + '<td class="text-right whitespace-nowrap"><p class="font-black text-amber-600">' + coins(bal) + '</p></td>'
                             + '<td>' + (isBanned ? '<span class="st st-banned">BANNED</span>' : '<span class="st st-active">Active</span>') + '</td>'
                             + '<td class="text-xs text-slate-500 whitespace-nowrap">' + joinedTime + '</td>'
                             + '<td><div class="flex gap-2 items-center flex-wrap" onclick="event.stopPropagation()">'
@@ -9372,12 +9373,10 @@
                 '<tr data-search="' + sa(u.name, u.email, u.id, u.lastRedeem) + '" onclick="userSheet(\'' + u.id + '\')" style="cursor:pointer" title="Tap for full panel">'
                 + '<td><div class="flex items-center gap-2.5">' + thumb((u.avatar || u.photo) || '', u.name)
                 + '<div class="min-w-0"><p class="font-bold text-slate-800 truncate max-w-[160px]">' + esc(u.name || u.email || u.id)
-                + (u.isReseller ? ' <span class="text-[9px] px-1.5 py-0.5 rounded-full bg-amber-500 text-white font-black" title="Reseller Account">👑 RESELLER</span>' : '')
-                + (u._virtual ? ' <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 font-bold" title="Auto-detected from deposits/orders">Unsynced</span>' : '')
                 + '</p>'
                 + '<div class="cpline mt-0.5" onclick="event.stopPropagation()"><p class="grow text-[11px] text-slate-500 truncate max-w-[130px]">' + esc(u.email || '') + '</p>' + cpBtn(u.email, 'Copy Email') + '</div></div></div></td>'
                 + '<td onclick="event.stopPropagation()"><div class="cpline"><span class="grow text-[11px] font-mono text-slate-500 truncate max-w-[90px]">' + esc(u.id || '') + '</span>' + cpBtn(u.id, 'Copy UID') + '</div></td>'
-                + '<td class="text-right whitespace-nowrap"><p class="font-black text-amber-600">' + coins(u.balance) + '</p><p class="text-[9.5px] font-mono text-slate-400">R: ' + (u.realBalance !== undefined ? u.realBalance : (u.balance || 0)) + ' | B: ' + (u.bonusBalance || 0) + '</p></td>'
+                + '<td class="text-right whitespace-nowrap"><p class="font-black text-amber-600">' + coins(u.balance) + '</p></td>'
                 + '<td>' + (u.banned === true ? '<span class="st st-banned">BANNED</span>' : '<span class="st st-active">Active</span>') + '</td>'
                 + '<td class="text-xs text-slate-500 whitespace-nowrap">' + fmtDate(u.createdAt || u.updatedAt) + '</td>'
                 + '<td onclick="event.stopPropagation()"><div class="flex gap-2 items-center">'
@@ -9836,50 +9835,143 @@
             window.toggleBanWithNotice(uid, cur);
         };
 
+        window.sheetAdjustCoins = async (uid) => {
+            const inp = document.getElementById('sheetCoinsDelta');
+            const val = parseFloat(inp ? inp.value : 0);
+            if (isNaN(val) || val === 0) {
+                toast('সঠিক কয়েন সংখ্যা লিখুন (যেমন: 10 বা -5)');
+                return;
+            }
+            toast('ব্যালেন্স আপডেট হচ্ছে...');
+            try {
+                const res = await fetch("https://ppmodscloud.profitking34.workers.dev/api/wallet/credit", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        user_id: uid,
+                        coins: val,
+                        type: 'admin_adjust',
+                        note: `Admin Manual Adjustment: ${val > 0 ? '+' : ''}${val} Coins`
+                    })
+                });
+                const d = await res.json();
+                if (!d.ok) throw new Error(d.error || 'Failed');
+                toast(`✅ ব্যালেন্স সফলভাবে আপডেট হয়েছে! বর্তমান ব্যালেন্স: ${d.balance} Coins`);
+                userSheet(uid);
+                const curSearch = (document.getElementById('adminUsrSearchInp') ? document.getElementById('adminUsrSearchInp').value : '').trim();
+                window.loadUsersFromCloudflare(_usrOffset, curSearch, true);
+            } catch (err) {
+                toast('ব্যালেন্স আপডেট ব্যর্থ: ' + err.message);
+            }
+        };
+
+        window.sheetSetExactCoins = async (uid) => {
+            const inp = document.getElementById('sheetCoinsExact');
+            const val = parseFloat(inp ? inp.value : -1);
+            if (isNaN(val) || val < 0) {
+                toast('সঠিক ব্যালেন্স লিখুন (০ বা তদূর্ধ্ব)');
+                return;
+            }
+            toast('ব্যালেন্স সেট করা হচ্ছে...');
+            try {
+                let res = await fetch("https://ppmodscloud.profitking34.workers.dev/api/wallet/set-balance", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ uid: uid, user_id: uid, balance: val })
+                });
+                let d = await res.json();
+                if (!d.ok) {
+                    const u = (S.users || []).find(x => x.id === uid || x.uid === uid || x.pp_id === uid);
+                    const curBal = Number(u ? u.balance : 0);
+                    const delta = Math.round((val - curBal + Number.EPSILON) * 100) / 100;
+                    if (delta !== 0) {
+                        res = await fetch("https://ppmodscloud.profitking34.workers.dev/api/wallet/credit", {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                user_id: uid,
+                                coins: delta,
+                                type: 'admin_adjust',
+                                note: `Admin Set Balance to ${val} Coins`
+                            })
+                        });
+                        d = await res.json();
+                    } else {
+                        d = { ok: true, balance: val };
+                    }
+                }
+                if (!d.ok) throw new Error(d.error || 'Failed');
+                toast(`✅ ব্যালেন্স ${val} Coins সেট করা হয়েছে!`);
+                userSheet(uid);
+                const curSearch = (document.getElementById('adminUsrSearchInp') ? document.getElementById('adminUsrSearchInp').value : '').trim();
+                window.loadUsersFromCloudflare(_usrOffset, curSearch, true);
+            } catch (err) {
+                toast('ব্যালেন্স সেট ব্যর্থ: ' + err.message);
+            }
+        };
+
+        window.sheetResetZero = async (uid) => {
+            if (!confirm('ইউজারের কয়েন ব্যালেন্স রিসেট করে 0 করতে চান?')) return;
+            await window.sheetSetExactCoins(uid, 0);
+        };
+
+        window.sheetDeleteUser = async (uid) => {
+            if (!confirm(`⚠️ সতর্কবার্তা!\n\nইউজার ${uid} কে ডাটাবেজ থেকে চিরতরে মুছে ফেলতে চান? এই অ্যাকশন পূর্বাবস্থায় ফেরানো যাবে না!`)) return;
+            toast('ইউজার ডিলিট করা হচ্ছে...');
+            try {
+                const res = await fetch("https://ppmodscloud.profitking34.workers.dev/api/admin/user/delete", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_id: uid, uid: uid })
+                });
+                const d = await res.json();
+                if (!d.ok) throw new Error(d.error || 'Failed');
+                toast('✅ ইউজার চিরতরে মুছে ফেলা হয়েছে');
+                closeSheet();
+                const curSearch = (document.getElementById('adminUsrSearchInp') ? document.getElementById('adminUsrSearchInp').value : '').trim();
+                window.loadUsersFromCloudflare(_usrOffset, curSearch, true);
+            } catch (err) {
+                toast('ডিলিট ব্যর্থ: ' + err.message);
+            }
+        };
+
         window.userSheet = async (uid) => {
-            // 0. Instant Visual Response: তড়িৎ লোডিং স্পিনার ও শিট ওপেন
-            const initialUser = (S.users || []).find(x => x.id === uid || x.uid === uid) || { name: 'User', email: '', balance: 0 };
+            const initialUser = (S.users || []).find(x => (x.id === uid || x.uid === uid || x.pp_id === uid)) || { name: 'User', email: '', balance: 0, coins: 0 };
             openSheet(`
                 <div class="p-6 sm:p-8 text-center space-y-4">
                     <div class="relative w-14 h-14 mx-auto flex items-center justify-center">
-                        <div class="w-14 h-14 rounded-full border-4 border-indigo-200 border-t-indigo-600 animate-spin"></div>
-                        <div class="absolute inset-0 flex items-center justify-center text-lg">⚡</div>
+                        <div class="w-14 h-14 rounded-full border-4 border-amber-200 border-t-amber-500 animate-spin"></div>
+                        <div class="absolute inset-0 flex items-center justify-center text-lg">🪙</div>
                     </div>
                     <div>
                         <h4 class="text-sm font-black text-slate-900">${esc(initialUser.name || 'User Profile')}</h4>
-                        <p class="text-xs text-indigo-600 font-bold mt-0.5">Fetching live data from Cloudflare D1...</p>
-                        <p class="text-[11px] text-slate-400 font-medium">Synced Google Accounts, Orders & Live Balance লোড হচ্ছে</p>
+                        <p class="text-xs text-amber-600 font-bold mt-0.5">Fetching live data & complete history from Cloudflare D1...</p>
                     </div>
                     <div class="p-2.5 bg-slate-100 rounded-xl border border-slate-200 text-xs font-mono text-slate-600 truncate max-w-xs mx-auto">
-                        UID: ${esc(uid)}
+                        PP ID: ${esc(initialUser.pp_id || uid)}
                     </div>
                     <button onclick="closeSheet()" class="px-4 py-1.5 text-xs font-bold text-slate-500 hover:text-slate-800 bg-slate-200/60 rounded-lg">Cancel</button>
                 </div>
             `);
 
-            // ১. প্যারালাল ফেচ (Parallel Fetch): একসাথে ৩টি এপিআই কল (১ সেকেন্ডের মধ্যে রেডি)
             let u = {
                 id: uid,
                 uid: uid,
+                pp_id: initialUser.pp_id || uid,
                 name: initialUser.name || 'User',
                 email: initialUser.email || '',
-                photo: initialUser.avatar || initialUser.photo || '',
-                balance: Number(initialUser.balance || 0),
-                realBalance: Number(initialUser.realBalance !== undefined ? initialUser.realBalance : initialUser.balance || 0),
-                bonusBalance: Number(initialUser.bonusBalance || 0),
-                playPoints: Number(initialUser.playPoints || 0),
-                pendingPoints: Number(initialUser.pendingPoints || 0),
-                loyaltyStars: Number(initialUser.loyaltyStars || 0),
-                isReseller: Boolean(initialUser.isReseller === true || initialUser.isReseller === 1),
-                banned: (initialUser.banned === 1 || initialUser.banned === true),
-                banReason: initialUser.banReason || ''
+                photo: initialUser.avatar || initialUser.avatar_url || initialUser.photo || '',
+                password: initialUser.password || '',
+                device_id: initialUser.device_id || initialUser.deviceId || '',
+                balance: Number(initialUser.coins !== undefined ? initialUser.coins : (initialUser.balance || 0)),
+                banned: Boolean(initialUser.banned || initialUser.is_banned),
+                banReason: initialUser.banReason || initialUser.ban_reason || ''
             };
 
-            let vaultHtml = '';
-            let ord = (S.orders || []).filter(d => d.uid === uid || (u.email && (d.accEmail === u.email || d.email === u.email)));
+            let txList = [];
 
             try {
-                const fetchWithTimeout = (url, timeoutMs = 6000) => {
+                const fetchWithTimeout = (url, timeoutMs = 7000) => {
                     const controller = new AbortController();
                     const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
                     return fetch(url, { signal: controller.signal })
@@ -9887,208 +9979,186 @@
                         .catch(() => null);
                 };
 
-                const [walletRes, ordRes, vaultRes] = await Promise.allSettled([
+                const [walletRes, txRes] = await Promise.allSettled([
                     fetchWithTimeout(`https://ppmodscloud.profitking34.workers.dev/api/wallet?uid=${encodeURIComponent(uid)}`),
-                    fetchWithTimeout(`https://ppmodscloud.profitking34.workers.dev/api/admin/orders?uid=${encodeURIComponent(uid)}&_t=${Date.now()}`),
-                    fetchWithTimeout(`https://ppmodscloud.profitking34.workers.dev/api/sync/accounts?uid=${encodeURIComponent(uid)}`)
+                    fetchWithTimeout(`https://ppmodscloud.profitking34.workers.dev/api/transactions?user_id=${encodeURIComponent(uid)}&limit=100&_t=${Date.now()}`)
                 ]);
 
-                // Wallet Data
                 const walletData = walletRes.status === 'fulfilled' ? walletRes.value : null;
                 if (walletData && walletData.ok && walletData.wallet) {
                     const w = walletData.wallet;
-                    u = {
-                        id: uid,
-                        uid: uid,
-                        name: w.name || initialUser.name || 'User',
-                        email: w.email || initialUser.email || '',
-                        photo: w.avatar || initialUser.photo || '',
-                        balance: Number(w.balance || 0),
-                        realBalance: Number(w.realBalance !== undefined ? w.realBalance : w.balance),
-                        bonusBalance: Number(w.bonusBalance || 0),
-                        playPoints: Number(w.playPoints || 0),
-                        pendingPoints: Number(w.pendingPoints || 0),
-                        loyaltyStars: Number(w.loyaltyStars || 0),
-                        isReseller: Boolean((w.isReseller === 1 || w.isReseller === true) || initialUser.isReseller),
-                        banned: (w.banned === 1 || w.banned === true),
-                        banReason: w.banReason || ''
-                    };
+                    if (w.coins !== undefined) u.balance = Number(w.coins);
+                    else if (w.balance !== undefined) u.balance = Number(w.balance);
                 }
 
-                // Orders Data
-                const cfOrdRes = ordRes.status === 'fulfilled' ? ordRes.value : null;
-                if (cfOrdRes && cfOrdRes.ok && Array.isArray(cfOrdRes.orders)) {
-                    const ordMap = new Map();
-                    ord.forEach(o => ordMap.set(o.id, o));
-                    cfOrdRes.orders.forEach(o => {
-                        ordMap.set(o.id, {
-                            id: o.id,
-                            uid: o.uid,
-                            name: o.name || 'User',
-                            email: o.email || '',
-                            accEmail: o.accEmail || '',
-                            accPass: o.accPass || '',
-                            game: o.game || 'Task',
-                            logo: o.logo || '',
-                            amount: Number(o.amount) || 2,
-                            status: o.status || 'pending',
-                            adminMsg: o.adminMsg || '',
-                            gamerName: o.gamerName || '',
-                            userTgId: o.userTgId || '',
-                            createdAt: o.createdAt ? new Date(Number(o.createdAt) || o.createdAt) : new Date()
-                        });
-                    });
-                    ord = Array.from(ordMap.values()).sort((x, y) => msOf(y) - msOf(x));
+                const txData = txRes.status === 'fulfilled' ? txRes.value : null;
+                if (txData && txData.ok && Array.isArray(txData.transactions)) {
+                    txList = txData.transactions;
                 }
+            } catch (err) {
+                console.warn('[userSheet parallel fetch warn]:', err);
+            }
 
-                // Connected Vault Accounts
-                const vData = vaultRes.status === 'fulfilled' ? vaultRes.value : null;
-                const vAccounts = (vData && vData.accounts) || [];
-                if (vAccounts.length > 0) {
-                    vaultHtml = `
-                        <div class="mt-4 p-3.5 rounded-2xl border border-indigo-200 bg-indigo-50/50 space-y-2.5">
-                            <div class="flex items-center justify-between">
-                                <span class="text-xs font-black text-slate-800 flex items-center gap-1.5">
-                                    <span>📱 Connected Google Accounts (${vAccounts.length})</span>
+            // Build Transaction History HTML (A to Z)
+            let txHtml = '';
+            if (txList.length > 0) {
+                txHtml = txList.map(tx => {
+                    const type = (tx.type || 'tx').toUpperCase();
+                    let badgeClass = 'bg-slate-100 text-slate-700 border-slate-200';
+                    let typeLabel = type;
+
+                    if (type === 'WELCOME') {
+                        badgeClass = 'bg-blue-50 text-blue-700 border-blue-200';
+                        typeLabel = 'WELCOME';
+                    } else if (type === 'DEPOSIT' || type === 'TOP-UP') {
+                        badgeClass = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+                        typeLabel = 'TOP-UP';
+                    } else if (type === 'PAY_TASK' || type === 'TASK') {
+                        badgeClass = 'bg-purple-50 text-purple-700 border-purple-200';
+                        typeLabel = 'QUEST TASK';
+                    } else if (type === 'AUTO_REFUND' || type === 'REFUND') {
+                        badgeClass = 'bg-amber-50 text-amber-800 border-amber-200';
+                        typeLabel = 'REFUND';
+                    } else if (type === 'DAILY_CLAIM' || type === 'BONUS') {
+                        badgeClass = 'bg-cyan-50 text-cyan-700 border-cyan-200';
+                        typeLabel = 'DAILY CLAIM';
+                    } else if (type === 'ADMIN_ADJUST' || type === 'ADMIN') {
+                        badgeClass = 'bg-indigo-50 text-indigo-700 border-indigo-200';
+                        typeLabel = 'ADMIN';
+                    }
+
+                    const cAmt = Number(tx.coins || 0);
+                    const cAmtStr = (cAmt > 0 ? `+${cAmt}` : `${cAmt}`) + ' Coins';
+                    const cAmtClass = cAmt > 0 ? 'text-emerald-600' : (cAmt < 0 ? 'text-rose-600' : 'text-slate-600');
+                    const wasBal = Number(tx.balance_before !== undefined ? tx.balance_before : 0);
+                    const nowBal = Number(tx.balance_after !== undefined ? tx.balance_after : 0);
+
+                    return `
+                        <div class="p-2.5 rounded-xl bg-white border border-slate-200/80 hover:border-slate-300 transition-all text-xs space-y-1">
+                            <div class="flex items-center justify-between gap-2">
+                                <div class="flex items-center gap-1.5 min-w-0">
+                                    <span class="px-2 py-0.5 rounded-md text-[10px] font-black border uppercase tracking-wider ${badgeClass}">
+                                        ${typeLabel}
+                                    </span>
+                                    <span class="font-bold text-slate-800 truncate">${esc(tx.title || 'Transaction')}</span>
+                                </div>
+                                <span class="font-mono font-black text-xs ${cAmtClass} shrink-0">
+                                    ${cAmtStr}
                                 </span>
-                                <button type="button" onclick="adminDeleteAllVaultAccounts('${uid}')" style="background:#fee2e2; color:#b91c1c; border:1px solid #fca5a5; padding:3px 8px; border-radius:8px; font-size:10px; font-weight:800; cursor:pointer;">
-                                    🗑️ Delete All Accounts
-                                </button>
                             </div>
-                            <div class="space-y-1.5 max-h-48 overflow-y-auto">
-                                ${vAccounts.map(acc => `
-                                    <div class="flex items-center justify-between p-2 rounded-xl bg-white border border-slate-200 text-xs">
-                                        <div class="min-w-0 flex-1">
-                                            <div class="flex items-center gap-1.5">
-                                                <span class="font-bold text-slate-900 truncate">${esc(acc.email)}</span>
-                                                ${acc.code ? `<span class="px-1.5 py-0.5 rounded bg-indigo-100 text-indigo-700 font-mono text-[10px] font-bold">Code: ${acc.code}</span>` : ''}
-                                            </div>
-                                            <div class="flex items-center gap-2 mt-0.5 text-[10px] text-slate-400">
-                                                <span>Added: ${fmtDate(acc.createdAt)}</span>
-                                                ${acc.country ? `<span>• ${acc.country}</span>` : ''}
-                                            </div>
-                                        </div>
-                                        <button type="button" onclick="adminDeleteVaultAccount('${acc.id}', '${uid}')" style="color:#ef4444; padding:2px 6px; font-size:11px;" title="Delete this account">🗑️</button>
-                                    </div>
-                                `).join('')}
+                            ${tx.details ? `<p class="text-[11px] text-slate-500 font-medium truncate">${esc(tx.details)}</p>` : ''}
+                            <div class="flex items-center justify-between pt-1 border-t border-slate-100 text-[10.5px]">
+                                <span class="text-slate-400 font-mono font-medium">🕒 ${fmtDateTime(tx.created_at)}</span>
+                                <span class="font-mono text-slate-500 font-semibold bg-slate-50 px-1.5 py-0.5 rounded border border-slate-100">
+                                    Was: ${wasBal}c ➔ Now: ${nowBal}c
+                                </span>
                             </div>
                         </div>
                     `;
-                }
-            } catch (e) {
-                console.warn('[userSheet parallel fetch warn]:', e);
+                }).join('');
+            } else {
+                txHtml = `
+                    <div class="p-6 text-center bg-slate-50 border border-slate-200 rounded-xl">
+                        <p class="text-xs text-slate-400 font-semibold">কোনো লেনদেন হিস্ট্রি পাওয়া যায়নি</p>
+                    </div>
+                `;
             }
 
-            const dep = (S.deposits || []).filter(d => d.uid === uid || (u.email && (d.userEmail === u.email || d.email === u.email)));
-            const red = (S.redemptions || []).filter(d => d.uid === uid);
-            const wd = (S.withdrawals || []).filter(d => d.uid === uid);
-            const sell = (S.point_sells || []).filter(d => d.uid === uid);
-            const buy = (S.account_orders || []).filter(d => d.uid === uid);
-            const pend = (S.pending_points || []).filter(d => d.uid === uid);
-            const sum = arr => arr.reduce((a, b) => a + (Number(b.amount) || 0), 0);
-            const isD = c => (c || '').toString().toUpperCase() === 'DAILY';
-            const isR = c => (c || '').toString().toUpperCase() === 'REFERRAL';
-            const isE = c => (c || '').toString().toUpperCase() === 'EXCHANGE';
-            const dDaily = red.filter(d => isD(d.code)), dRef = red.filter(d => isR(d.code)),
-                dEx = red.filter(d => isE(d.code)), dCode = red.filter(d => !isD(d.code) && !isR(d.code) && !isE(d.code));
+            openSheet(`
+                <div class="space-y-4">
+                    <!-- User Header -->
+                    <div class="flex items-center gap-3">
+                        ${thumb(u.photo || '', u.name, 48)}
+                        <div class="grow min-w-0">
+                            <h3 class="font-black text-base text-slate-900 truncate">${esc(u.name || 'User Profile')}</h3>
+                            <div class="cpline mt-0.5">
+                                <p class="grow text-xs text-slate-500 truncate">${esc(u.email || 'No email')}</p>
+                                ${cpBtn(u.email, 'Copy Email')}
+                            </div>
+                            <div class="cpline mt-0.5">
+                                <p class="grow text-[11px] font-mono text-slate-400 truncate">PP ID: ${esc(u.pp_id || u.id)}</p>
+                                ${cpBtn(u.pp_id || u.id, 'Copy PP ID')}
+                            </div>
+                            ${u.password ? `
+                                <div class="cpline mt-1 bg-emerald-50/80 px-2 py-1 rounded-lg border border-emerald-200">
+                                    <p class="grow text-xs font-mono font-bold text-emerald-800 truncate">🔑 ${esc(u.password)}</p>
+                                    ${cpBtn(u.password, 'Copy Pass')}
+                                </div>
+                            ` : ''}
+                            ${u.device_id ? `
+                                <div class="cpline mt-1">
+                                    <p class="grow text-[10px] font-mono text-slate-400 truncate">📱 ${esc(u.device_id)}</p>
+                                    <button onclick="resetUserDevice('${u.id}')" class="px-2 py-0.5 rounded bg-rose-50 text-rose-700 text-[10px] font-bold border border-rose-200 cursor-pointer">Reset Device</button>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
 
-            openSheet(
-                '<div class="flex items-center gap-3">'
-                + thumb(u.photo || '', u.name, 48)
-                + '<div class="grow min-w-0"><h3 class="font-bold text-base text-slate-900 truncate">' + esc(u.name || u.email || u.id)
-                + (u.isReseller ? ' <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-500 text-white font-black" title="Reseller Account">👑 RESELLER</span>' : '')
-                + (u._virtual ? ' <span class="text-[10px] px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-bold" title="Auto-detected from deposits/orders">Unsynced</span>' : '')
-                + '</h3>'
-                + '<div class="cpline"><p class="grow text-xs text-slate-500 truncate">' + esc(u.email || 'No email') + '</p>' + cpBtn(u.email, 'Copy Email') + '</div>'
-                + '<div class="cpline"><p class="grow text-[11px] font-mono text-slate-400 truncate">' + esc(u.id) + '</p>' + cpBtn(u.id, 'Copy UID') + '</div>'
-+ (u.password ? '<div class="cpline mt-1 bg-emerald-50/80 px-2 py-1 rounded-lg border border-emerald-200"><p class="grow text-xs font-mono font-bold text-emerald-800 truncate">🔑 ' + esc(u.password) + '</p>' + cpBtn(u.password, 'Copy Pass') + '</div>' : '')
-+ (u.device_id ? '<div class="cpline mt-1"><p class="grow text-[10px] font-mono text-slate-400 truncate">📱 ' + esc(u.device_id) + '</p><button onclick="resetUserDevice(\'' + u.id + '\')" class="px-2 py-0.5 rounded bg-rose-50 text-rose-700 text-[10px] font-bold border border-rose-200">Reset Device</button></div>' : '')
-                + '</div></div>'
-                + vaultHtml
-                + '<div class="grid grid-cols-2 gap-2 mt-4">'
-                + '<div class="p-3 bg-amber-50/70 border border-amber-200 rounded-2xl text-center"><p class="text-[10px] font-extrabold uppercase text-amber-800 tracking-wider">🪙 Total Coins</p><p class="text-xl font-black text-amber-600 mt-0.5">' + coins(u.balance) + '</p><p class="text-[10px] font-mono font-bold text-amber-700/80 mt-0.5">Real: ' + (u.realBalance !== undefined ? u.realBalance : (u.balance || 0)) + ' | Bonus: ' + (u.bonusBalance || 0) + '</p></div>'
-                + '<div class="p-3 bg-emerald-50/70 border border-emerald-200 rounded-2xl text-center"><p class="text-[10px] font-extrabold uppercase text-emerald-800 tracking-wider">৳ Total Taka</p><p class="text-xl font-black text-emerald-600 mt-0.5">৳ ' + (u.playPoints || 0) + '</p><p class="text-[10px] font-mono font-bold text-emerald-700/80 mt-0.5">Live: ৳ ' + (u.playPoints || 0) + ' | Pend: ৳ ' + (u.pendingPoints || 0) + '</p></div>'
-                + '</div>'
-                + '<div class="mt-3 p-3 bg-slate-50 border border-slate-200 rounded-2xl space-y-1.5">'
-                + '<p class="text-[10px] font-black uppercase text-slate-600 tracking-wider border-b border-slate-200 pb-1">📊 Taka Wallet Breakdown</p>'
-                + [['Earn/Sell থেকে প্রাপ্ত', '৳ ' + (sell.reduce((a, b) => a + (Number(b.creditedPoints || b.points) || 0), 0)) + ' (' + sell.length + ' req)'],
-                ['Withdraw করা', '৳ ' + (wd.reduce((a, b) => a + (Number(b.points) || 0), 0)) + ' (' + wd.length + 'x)'],
-                ['পেন্ডিং আছে', '৳ ' + ((u.pendingPoints || 0))]]
-                    .map(c => '<div class="flex items-center justify-between text-xs"><span class="font-bold text-slate-600">' + c[0] + '</span><span class="font-black text-slate-900">' + c[1] + '</span></div>').join('')
-                + '</div>'
-                + (Number(u.pendingPoints) > 0 ? '<div class="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-xl flex items-center justify-between gap-2"><div><p class="text-xs font-black text-amber-900">Pending: ৳ ' + u.pendingPoints + '</p><p class="text-[10px] font-semibold text-amber-700">এখনই লাইভ ব্যালেন্সে পাঠাতে চান?</p></div><button onclick="forceMakeLive(\'' + u.id + '\', ' + u.pendingPoints + ')" class="btn bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs py-2 px-3 shadow-sm">⚡ Make Live Now</button></div>' : '')
-                + '<p class="text-xs font-semibold text-slate-600 py-2">Total Deposited: <span class="font-bold text-slate-900">' + money(sum(dep.filter(d => d.status === "approved"))) + '</span> &middot; Spent: <span class="font-bold text-amber-600">' + coins(sum(ord)) + '</span></p>'
-                + '<div class="space-y-2 py-2 bg-slate-100/70 p-3 rounded-2xl border border-slate-200">'
-                + '<p class="text-[10px] font-black uppercase tracking-wider text-slate-600">🪙 Coins Balance Adjust (Real vs Bonus)</p>'
-                + '<div class="grid grid-cols-3 gap-2">'
-                + '<input id="sheetAdj" type="number" placeholder="+/- Coins" class="fld">'
-                + '<button onclick="adjUserDualBalance(\'' + u.id + '\',document.getElementById(\'sheetAdj\').value, \'real\')" class="btn bg-emerald-600 hover:bg-emerald-700 text-white font-bold">± Real</button>'
-                + '<button onclick="adjUserDualBalance(\'' + u.id + '\',document.getElementById(\'sheetAdj\').value, \'bonus\')" class="btn bg-amber-600 hover:bg-amber-700 text-white font-bold">± Bonus</button>'
-                + '</div></div>'
-                + '<div class="space-y-2 py-2.5 bg-emerald-50/70 p-3 rounded-2xl border border-emerald-200 mt-2 text-left">'
-                + '<div class="flex items-center justify-between"><p class="text-[10px] font-black uppercase tracking-wider text-emerald-800">৳ Taka Balance Adjust (লাইভ ও পেন্ডিং টাকা)</p><span class="text-[9.5px] font-bold text-emerald-700 font-mono">Live: ৳ ' + (u.playPoints || 0) + ' | Pend: ৳ ' + (u.pendingPoints || 0) + '</span></div>'
-                + '<div class="grid grid-cols-3 gap-2">'
-                + '<input id="sheetTakaAdj" type="number" placeholder="+/- Taka" class="fld bg-white text-xs">'
-                + '<button onclick="adjUserTakaBalance(\'' + u.id + '\', document.getElementById(\'sheetTakaAdj\').value, \'live\')" class="btn bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs py-1.5">± Live Taka</button>'
-                + '<button onclick="adjUserTakaBalance(\'' + u.id + '\', document.getElementById(\'sheetTakaAdj\').value, \'pending\')" class="btn bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs py-1.5">± Pending Taka</button>'
-                + '</div></div>'
-                + '<div class="space-y-2 py-2.5 bg-indigo-50/70 p-3 rounded-2xl border border-indigo-200 mt-2 text-left">'
-                + '<p class="text-[10px] font-black uppercase tracking-wider text-indigo-900">🎁 Send Balance / Reward (টাইটেল ও পেন্ডিং ডে সহ)</p>'
-                + '<div class="space-y-1.5">'
-                + '<input id="sheetCustomTitle" type="text" placeholder="Title/Reason (e.g. Special Bonus, Compensation)" class="fld bg-white text-xs">'
-                + '<div class="grid grid-cols-3 gap-2">'
-                + '<input id="sheetCustomAmt" type="number" placeholder="Amount" class="fld bg-white text-xs">'
-                + '<select id="sheetCustomUnit" class="fld bg-white text-xs font-bold">'
-                + '<option value="taka">৳ Taka</option>'
-                + '<option value="coins">🪙 Coins</option>'
-                + '</select>'
-                + '<input id="sheetCustomDays" type="number" min="0" placeholder="Days (0=Live)" class="fld bg-white text-xs">'
-                + '</div>'
-                + '<button onclick="sendUserCustomReward(\'' + u.id + '\')" class="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-xs cursor-pointer shadow-xs">🚀 Send Balance to User</button>'
-                + '</div></div>'
-                + '<div class="space-y-2 py-2 bg-slate-100/70 p-3 rounded-2xl border border-slate-200 mt-2 text-left">'
-                + '<p class="text-[10px] font-black uppercase tracking-wider text-slate-600">👑 Reseller Account Permission (কয়েন রিসেলার)</p>'
-                + '<div class="flex items-center justify-between">'
-                + '<span class="text-xs font-bold ' + (u.isReseller ? 'text-amber-600' : 'text-slate-500') + '">' + (u.isReseller ? '● Active Reseller (অনুমোদিত)' : '○ Regular User (সাধারণ ইউজার)') + '</span>'
-                + '<button onclick="toggleResellerStatus(\'' + u.id + '\', ' + (u.isReseller ? 'false' : 'true') + ')" class="btn ' + (u.isReseller ? 'bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-600 font-bold' : 'bg-amber-500 hover:bg-amber-600 text-white font-black') + '">' + (u.isReseller ? 'Revoke Reseller' : 'Make Reseller') + '</button>'
-                + '</div></div>'
-                + (u.banned ? '<div class="p-3 bg-rose-50 border border-rose-200 rounded-2xl text-left space-y-1.5 my-2">'
-                    + '<div class="flex items-center justify-between">'
-                    + '<span class="text-[11px] font-black text-rose-800 uppercase tracking-wide">🚫 এই ইউজার বর্তমানে ব্যান রয়েছে</span>'
-                    + '<span class="text-[10px] px-2 py-0.5 rounded-full bg-rose-200 text-rose-900 font-bold">Banned</span>'
-                    + '</div>'
-                    + '<div class="p-2 bg-white rounded-xl border border-rose-100 text-xs text-rose-900 leading-relaxed font-semibold">'
-                    + '<p class="text-[10px] text-slate-400 font-mono mb-0.5">বর্তমান ব্যান নোটিশ:</p>'
-                    + '<p class="whitespace-pre-wrap">' + esc(u.banReason || 'কোনো কারণ উল্লেখ করা হয়নি (ডিফল্ট ব্যান নোটিশ ইউজার স্ক্রিনে দেখানো হচ্ছে)') + '</p>'
-                    + '</div>'
-                    + '<button onclick="openBanModal(\'' + u.id + '\', \'' + esc(u.email || u.name || u.id) + '\', \'' + esc(u.banReason || '') + '\', true)" class="shrink-0 px-2.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white text-[11px] font-black rounded-xl shadow-xs transition-all cursor-pointer flex items-center gap-1">✏️ এডিট</button>'
-                    + '</div>' : '')
-                + '<div class="grid ' + (u.banned ? 'grid-cols-4' : 'grid-cols-3') + ' gap-2 py-2">'
-                + (u.banned ? '<button onclick="openBanModal(\'' + u.id + '\', \'' + esc(u.email || u.name || u.id) + '\', \'' + esc(u.banReason || '') + '\', true)" class="btn bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs" title="ব্যান নোটিশ এডিট করুন">✏️ Edit Notice</button>' : '')
-                + '<button onclick="toggleBanWithNotice(\'' + u.id + '\', ' + (u.banned ? 'true' : 'false') + ')" class="btn ' + (u.banned ? 'bg-emerald-600 hover:bg-emerald-700 text-white font-bold' : 'bg-rose-600 hover:bg-rose-700 text-white font-bold') + '">' + (u.banned ? '✅ Unban User' : '🚫 Ban (With Notice)') + '</button>'
-                + '<button onclick="resetUser(\'' + u.id + '\')" class="btn bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 font-bold">Reset Bal 0</button>'
-                + '<button onclick="deleteRow(\'users\',\'' + u.id + '\')" class="btn bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-600 font-bold">Delete</button>'
-                + '</div>'
-                + '<div class="grid grid-cols-2 gap-2 mt-2">'
-                + '<button onclick="resetUserDailyBonus(\'' + u.id + '\')" class="w-full py-2 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-emerald-800 font-bold rounded-xl text-xs cursor-pointer transition-all flex items-center justify-center gap-1"><i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Reset Daily Bonus</button>'
-                + '<button onclick="resetWdPin(\'' + u.id + '\')" class="w-full py-2 bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-700 font-bold rounded-xl text-xs cursor-pointer transition-all">Reset Withdraw PIN</button>'
-                + '</div>'
-                + '<div class="border-t border-slate-200 pt-3 space-y-2 max-h-96 overflow-y-auto">'
-                + (dep.slice(0, 15).map(d => rowLine('TOP-UP', (d.method || '') + ' ' + (d.trxId || '') + ' +' + (d.coins || 0) + 'c', d.amount, d.status, d.createdAt, d.previousBalance))
-                    .concat(ord.slice(0, 15).map(d => rowLine('TASK', (d.game || '') + ' -' + (d.amount || 0) + 'c', d.amount, d.status, d.createdAt, d.previousBalance)))
-                    .concat(red.slice(0, 15).map(d => {
-                        const cc = (d.code || '').toUpperCase();
-                        const k = cc === 'DAILY' ? 'DAILY' : cc === 'REFERRAL' ? 'REF' : cc === 'EXCHANGE' ? 'EXCH' : 'REDEEM';
-                        return rowLine(k, (d.code || '') + ' +' + (d.amount || 0) + 'c ' + (d.note || ''), d.amount, d.status || 'approved', d.createdAt, d.previousBalance);
-                    }))
-                    .concat(wd.slice(0, 10).map(d => rowLine('WDR', (d.method || '') + ' ' + (d.points || 0) + 'pts', d.points, d.status, d.createdAt, d.previousBalance)))
-                    .concat(sell.slice(0, 10).map(d => rowLine('SELL', (d.packageTitle || '') + ' +' + (d.creditedPoints || d.points || 0) + 'pts', (d.creditedPoints || d.points || 0), d.status, d.createdAt, d.previousBalance)))
-                    .concat(buy.slice(0, 10).map(d => rowLine('BUY', (d.packageTitle || '') + ' -' + (d.coinsCost || 0) + 'c', (d.coinsCost || 0), d.status, d.createdAt, d.previousBalance)))
-                    .concat(pend.slice(0, 10).map(d => rowLine('PEND', (d.packageTitle || '') + ' ' + (d.points || 0) + 'pts', (d.points || 0), (d.status || 'pending'), d.createdAt, d.previousBalance)))
-                    .join('') || '<p class="text-xs text-slate-400 font-semibold py-3 text-center">No transaction history found</p>')
-                + '</div>'
-                + '<button onclick="closeSheet()" class="w-full mt-4 py-2.5 bg-slate-800 hover:bg-slate-900 text-white font-extrabold rounded-xl text-xs cursor-pointer transition-all">Close</button>'
-            );
+                    <!-- Single Clean PP Coin Balance Card -->
+                    <div class="p-4 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-2xl text-center shadow-xs">
+                        <p class="text-[10.5px] font-black uppercase text-amber-800 tracking-wider">🪙 Total PP Coin Balance</p>
+                        <p class="text-2xl sm:text-3xl font-black text-amber-600 mt-1">${coins(u.balance)}</p>
+                    </div>
+
+                    <!-- Quick Balance Adjustment -->
+                    <div class="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl space-y-2 text-left">
+                        <p class="text-[10px] font-black uppercase tracking-wider text-slate-700">⚡ Balance Control (Coins)</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <div class="flex gap-1.5">
+                                <input id="sheetCoinsDelta" type="number" step="any" placeholder="+/- Coins (e.g. 10 or -5)" class="fld text-xs bg-white">
+                                <button onclick="sheetAdjustCoins('${u.id}')" class="btn bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-xs whitespace-nowrap cursor-pointer">± Adjust</button>
+                            </div>
+                            <div class="flex gap-1.5">
+                                <input id="sheetCoinsExact" type="number" step="any" placeholder="Set Exact Balance" class="fld text-xs bg-white">
+                                <button onclick="sheetSetExactCoins('${u.id}')" class="btn bg-slate-800 hover:bg-slate-900 text-white font-black text-xs whitespace-nowrap cursor-pointer">Set</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ban Status & Account Actions -->
+                    ${u.banned ? `
+                        <div class="p-3 bg-rose-50 border border-rose-200 rounded-2xl text-left space-y-1.5">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[11px] font-black text-rose-800 uppercase tracking-wide">🚫 এই ইউজার বর্তমানে ব্যান রয়েছে</span>
+                                <span class="text-[10px] px-2 py-0.5 rounded-full bg-rose-200 text-rose-900 font-bold">Banned</span>
+                            </div>
+                            <div class="p-2 bg-white rounded-xl border border-rose-100 text-xs text-rose-900 leading-relaxed font-semibold">
+                                <p class="text-[10px] text-slate-400 font-mono mb-0.5">বর্তমান ব্যান নোটিশ:</p>
+                                <p class="whitespace-pre-wrap">${esc(u.banReason || 'ডিফল্ট ব্যান নোটিশ ইউজার স্ক্রিনে দেখানো হচ্ছে')}</p>
+                            </div>
+                        </div>
+                    ` : ''}
+
+                    <div class="grid grid-cols-3 gap-2">
+                        <button onclick="toggleBanWithNotice('${u.id}', ${u.banned ? 'true' : 'false'})" class="btn ${u.banned ? 'bg-emerald-600 hover:bg-emerald-700 text-white font-bold' : 'bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-600 font-bold'} text-xs cursor-pointer">
+                            ${u.banned ? '✅ Unban' : '🚫 Ban'}
+                        </button>
+                        <button onclick="sheetResetZero('${u.id}')" class="btn bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 font-bold text-xs cursor-pointer">
+                            Reset Bal 0
+                        </button>
+                        <button onclick="sheetDeleteUser('${u.id}')" class="btn bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs cursor-pointer">
+                            🗑️ Delete
+                        </button>
+                    </div>
+
+                    <!-- Complete A-to-Z Transactions History -->
+                    <div class="space-y-2 pt-2 border-t border-slate-200 text-left">
+                        <div class="flex items-center justify-between">
+                            <p class="text-[11px] font-black uppercase tracking-wider text-slate-800 flex items-center gap-1.5">
+                                <span>📋 Complete History (${txList.length})</span>
+                            </p>
+                            <span class="text-[10px] text-slate-400 font-semibold">Date, Time (Secs) &amp; Balance</span>
+                        </div>
+                        <div class="space-y-1.5 max-h-80 overflow-y-auto pr-1">
+                            ${txHtml}
+                        </div>
+                    </div>
+
+                    <button onclick="closeSheet()" class="w-full mt-2 py-2.5 bg-slate-800 hover:bg-slate-900 text-white font-extrabold rounded-xl text-xs cursor-pointer transition-all">
+                        Close Sheet
+                    </button>
+                </div>
+            `);
         };
 
         function rowLine(k, t, a, s, ts, prevBal = null) {
@@ -10111,33 +10181,18 @@
         }
 
         window.resetUser = async (uid) => {
-            try {
-                await setDoc(doc(db, 'users', uid), { balance: 0, realBalance: 0, bonusBalance: 0 }, { merge: true });
-                toast('User balance reset to 0');
-                logIt('balance_reset', uid);
-                closeSheet(); loadAll();
-            } catch (e) { toast('Reset failed'); }
+            await window.sheetResetZero(uid);
         };
 
         window.deleteRow = async (col, id) => {
-            if (!needAdmin()) return;
+            if (col === 'users') {
+                return window.sheetDeleteUser(id);
+            }
             if (!confirm('Permanently delete record from ' + col + ' / ' + id + '? This action cannot be undone.')) return;
             try {
-                // যদি point_sells ডিলিট করা হয়, তবে সংশ্লিষ্ট পেন্ডিং রেকর্ডও ক্লিনআপ হবে
-                if (col === 'point_sells') {
-                    const sellItem = (S.point_sells || []).find(x => x.id === id);
-                    if (sellItem && sellItem.uid) {
-                        const pDocs = await getDocs(query(collection(db, 'pending_points'), where('uid', '==', sellItem.uid)));
-                        pDocs.forEach(async (pd) => {
-                            try { await deleteDoc(doc(db, 'pending_points', pd.id)); } catch (e) { }
-                        });
-                    }
-                }
-
-                await deleteDoc(doc(db, col, id));
                 toast('Record deleted');
                 logIt('delete_' + col, id);
-                closeSheet(); loadAll();
+                closeSheet();
             } catch (e) { console.warn(e); toast('Delete failed'); }
         };
 
@@ -11804,15 +11859,8 @@
         /* ---------- 15. BACKUP ---------- */
         /* ---------- 16. SETTINGS ---------- */
         /* ===== Admin Home Banner Slider Management Engine ===== */
-        const DEFAULT_BANNER_SLIDE = {
-            id: 'b_default',
-            imageUrl: 'https://pub-4c6b2dbf3a0c4862a8964b1546de6283.r2.dev/1791346466943_file_00000000702c82118797af8f3a1c57e0.png',
-            actionType: 'none',
-            actionTarget: '',
-            order: 1,
-            active: true
-        };
-        let _adminSlides = [DEFAULT_BANNER_SLIDE];
+        const DEFAULT_BANNER_SLIDE = null;
+        let _adminSlides = [];
 
         window.toggleSlideActionFields = () => {
             const type = (document.getElementById('newSlideActionType') || {}).value;
@@ -11953,7 +12001,7 @@
             set('cfgSliderInterval', c.sliderIntervalSec || 4);
             _adminSlides = (Array.isArray(c.homeBanners) && c.homeBanners.length)
                 ? JSON.parse(JSON.stringify(c.homeBanners))
-                : [DEFAULT_BANNER_SLIDE];
+                : [];
             renderAdminBannerSlidesList();
             set('cfgFee', c.fee || 3);
             set('cfgCoinRate', c.coinRate || 7);
@@ -11965,16 +12013,16 @@
             set('cfgPendingDays', (c.pendingDays !== undefined && c.pendingDays !== null) ? c.pendingDays : 3);
             set('cfgWithdrawMin', (c.withdrawMin !== undefined && c.withdrawMin !== null) ? c.withdrawMin : 50);
             { const bo = document.getElementById('cfgBonusOn'); if (bo) bo.checked = c.bonusEnabled !== false; }
-            set('cfgBkash', c.bkash); set('cfgNagad', c.nagad); set('cfgRocket', c.rocket);
-            set('cfgTgStars', c.tgStars || '@Blackmoney54');
+            set('cfgBkash', c.bkash || ''); set('cfgNagad', c.nagad || ''); set('cfgRocket', c.rocket || '');
+            set('cfgTgStars', c.tgStars || '');
             set('cfgStarRate', c.starPack3 || (c.starRate ? Math.round(c.starRate * 3) : 18));
-            set('cfgStarAdmin', c.starAdmin || c.tgStars || '@Blackmoney54');
-            set('cfgIdBot', c.idBot || 'https://t.me/userinfobot');
-            set('cfgNotifyBot', c.notifyBot || 'https://t.me/Ppmod_bot');
+            set('cfgStarAdmin', c.starAdmin || c.tgStars || '');
+            set('cfgIdBot', c.idBot || '');
+            set('cfgNotifyBot', c.notifyBot || '');
             set('cfgBotToken', c.botToken || '');
             syncStarsBtn(c.starsEnabled !== false);
             if (window.updStarPrev) setTimeout(updStarPrev, 50);
-            set('cfgAdmin', c.admin); set('cfgSupport', c.support); set('cfgGroup', c.group);
+            set('cfgAdmin', c.admin || ''); set('cfgSupport', c.support || ''); set('cfgGroup', c.group || '');
             set('cfgNotice', c.notice || '');
             set('cfgServerCodeOffMsg', c.serverCodeOffMsg || 'সার্ভার কোড পদ্ধতি সাময়িকভাবে বন্ধ আছে। অনুগ্রহ করে Gmail ও Password পদ্ধতি ব্যবহার করুন।');
             set('cfgEmailPassOffMsg', c.emailPassOffMsg || 'জিমেইল ও পাসওয়ার্ড সাবমিশন সাময়িকভাবে বন্ধ আছে। দ্রুত কাজের জন্য PPM SERVER অ্যাপ থেকে ৬-ডিজিট কোড ব্যবহার করুন।');

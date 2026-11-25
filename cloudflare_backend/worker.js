@@ -532,26 +532,26 @@ export default {
       }
 
       // Coin Credit (Refund, Deposit, Promo, Admin Adjust)
-      if (path === "/api/wallet/credit" && method === "POST") {
+      if ((path === "/api/wallet/credit" || path === "/api/wallet/adjust") && method === "POST") {
         const body = await request.json().catch(() => ({}));
         const uid = (body.user_id || body.pp_id || body.uid || "").trim().toUpperCase();
         const coins = Number(body.coins) || 0.0;
         const type = body.type || "admin_adjust";
-        const note = body.note || body.title || "Coin Credit";
+        const note = body.note || body.title || "Coin Adjustment";
         const orderId = body.order_id || "";
 
-        if (coins <= 0) return json({ ok: false, error: "Invalid coin amount" }, 400);
+        if (isNaN(coins) || coins === 0) return json({ ok: false, error: "Invalid coin amount" }, 400);
 
         const user = await db.prepare("SELECT pp_id, coins FROM users WHERE pp_id = ?").bind(uid).first();
         if (!user) return json({ ok: false, error: "User not found" }, 404);
 
         const currentCoins = Number(user.coins) || 0.0;
-        const newBalance = Math.round((currentCoins + coins + Number.EPSILON) * 100) / 100;
+        const newBalance = Math.max(0, Math.round((currentCoins + coins + Number.EPSILON) * 100) / 100);
         const now = Date.now();
 
         await db.prepare("UPDATE users SET coins = ?, updated_at = ? WHERE pp_id = ?").bind(newBalance, now, uid).run();
 
-        const txId = "TX-CR-" + now;
+        const txId = (coins > 0 ? "TX-CR-" : "TX-DR-") + now;
         await db.prepare(`
           INSERT INTO transactions (id, user_id, type, coins, balance_before, balance_after, title, details, created_at)
           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -560,7 +560,7 @@ export default {
         return json({
           ok: true,
           balance: newBalance,
-          credited: coins
+          adjusted: coins
         });
       }
 
@@ -884,6 +884,28 @@ export default {
       // -------------------------------------------------------------
       // 10. ADMIN MANAGEMENT
       // -------------------------------------------------------------
+      // Public Config and Cache
+      if ((path === "/api/cache/public-data" || path === "/api/config") && method === "GET") {
+        const row = await db.prepare("SELECT value FROM cloud_store WHERE key = 'config'").first();
+        let cfg = {};
+        if (row && row.value) {
+          try { cfg = JSON.parse(row.value); } catch(e) { }
+        }
+        return json({ ok: true, config: cfg });
+      }
+
+      if ((path === "/api/cache/sync" || path === "/api/config/save") && method === "POST") {
+        const body = await request.json().catch(() => ({}));
+        const cfg = body.config || body;
+        const now = Date.now();
+        await db.prepare(`
+          INSERT INTO cloud_store (key, value, updated_at)
+          VALUES ('config', ?, ?)
+          ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = excluded.updated_at
+        `).bind(JSON.stringify(cfg), now).run();
+        return json({ ok: true, message: "Config saved to Cloudflare D1" });
+      }
+
       // Cloud Store persistent sync for Render GPGS Quest Server
       if (path.startsWith("/api/cloud/") && method === "GET") {
         const key = path.replace("/api/cloud/", "");
@@ -1100,7 +1122,7 @@ export default {
       }
 
       // Admin Direct Set Balance
-      if (path === "/api/wallet/set-balance" && method === "POST") {
+      if ((path === "/api/wallet/set-balance" || path === "/api/admin/set-balance") && method === "POST") {
         const body = await request.json().catch(() => ({}));
         const uid = (body.user_id || body.uid || body.pp_id || "").toUpperCase();
         const newBal = Number(body.balance !== undefined ? body.balance : body.coins) || 0.0;
