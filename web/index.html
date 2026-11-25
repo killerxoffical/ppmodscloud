@@ -2792,7 +2792,7 @@
 
         <!-- Header (sticky on top with hd.png Background) -->
         <header id="appHeader"
-            class="app-header relative overflow-hidden flex items-center justify-between gap-2 px-3.5 py-2.5 rounded-[1.4rem] border border-slate-200/80 shadow-sm"
+            class="app-header hidden relative overflow-hidden flex items-center justify-between gap-2 px-3.5 py-2.5 rounded-[1.4rem] border border-slate-200/80 shadow-sm"
             style="background:#ffffff url('hd.png') center center / 100% 100% no-repeat;">
             <div class="flex items-center gap-2 min-w-0 flex-1">
                 <div class="logo-tile flex items-center justify-center overflow-hidden">
@@ -2831,7 +2831,7 @@
         </header>
 
         <!-- SCREEN 0: LOGIN (Google only) -->
-        <main id="screenLogin" class="screen fit-home hidden">
+        <main id="screenLogin" class="screen fit-home">
             <div class="flex-1 flex items-center justify-center py-4">
                 <div
                     class="w-full bg-white rounded-3xl border border-slate-200/80 shadow-sm p-6 text-center space-y-3 max-h-full overflow-y-auto">
@@ -2931,7 +2931,7 @@
         </main>
 
         <!-- SCREEN 1: GAME SELECTION -->
-        <main id="screenGameSelect" class="screen fit-home">
+        <main id="screenGameSelect" class="screen fit-home hidden">
 
             <!-- Dynamic Home Banner Slider -->
             <section id="homeBannerSection"
@@ -4447,7 +4447,7 @@
                                     onload="this.previousElementSibling.style.display='none'" onerror="this.remove()">
                             </span>
                         </a>
-                        <button onclick="window.ppfb&&ppfb.logout()" title="Logout"
+                        <button onclick="window.doFullLogout()" title="Logout"
                             class="w-6 h-6 rounded-full bg-white/15 border border-white/25 backdrop-blur-sm flex items-center justify-center text-white hover:bg-rose-500/60 active:scale-90 transition-all cursor-pointer">
                             <i data-lucide="log-out" class="w-3 h-3"></i>
                         </button>
@@ -4668,7 +4668,7 @@
             </div>
 
             <!-- Bottom Prominent Logout Button -->
-            <button onclick="window.ppfb&&ppfb.logout()"
+            <button onclick="window.doFullLogout()"
                 class="w-full py-3.5 px-4 bg-rose-50 hover:bg-rose-100 active:scale-98 text-rose-600 font-black rounded-2xl border border-rose-200 text-xs transition-all cursor-pointer flex items-center justify-center gap-2 shadow-2xs">
                 <i data-lucide="log-out" class="w-4 h-4"></i> Log Out Account
             </button>
@@ -5753,7 +5753,7 @@
         </main>
 
         <nav id="bottomNav"
-            class="flex-shrink-0 grid grid-cols-5 gap-1 bg-white/95 backdrop-blur px-2.5 py-2 rounded-[1.4rem] border border-slate-200/80 shadow-[0_14px_28px_-14px_rgba(15,23,42,.35)]">
+            class="hidden flex-shrink-0 grid grid-cols-5 gap-1 bg-white/95 backdrop-blur px-2.5 py-2 rounded-[1.4rem] border border-slate-200/80 shadow-[0_14px_28px_-14px_rgba(15,23,42,.35)]">
             <button data-navbtn="home" onclick="navGo('home')"
                 class="flex flex-col items-center gap-0.5 py-1.5 rounded-xl transition-all cursor-pointer active:scale-95 text-amber-600">
                 <i data-lucide="home" class="w-5 h-5"></i>
@@ -6140,25 +6140,7 @@
             <button onclick="closeService()"
                 class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-extrabold rounded-xl text-sm transition-all cursor-pointer shadow-md">Back
                 to Games</button>
-            class="mx-auto w-14 h-14 rounded-2xl flex items-center justify-center bg-indigo-100 border border-indigo-200
-            flex-shrink-0">
-            <i data-lucide="gamepad-2" class="w-7 h-7 text-indigo-600"></i>
         </div>
-        <div>
-            <h3 class="text-base font-black text-slate-900">Service Off</h3>
-            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Service Announcement</p>
-        </div>
-        <!-- Preserves exact line-breaks, spacing and formatting from Admin Panel -->
-        <div
-            class="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-left max-h-[50vh] overflow-y-auto shadow-inner">
-            <p id="serviceMsg"
-                class="text-xs text-slate-700 font-semibold leading-relaxed whitespace-pre-wrap break-words select-text">
-            </p>
-        </div>
-        <button onclick="closeService()"
-            class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-extrabold rounded-xl text-sm transition-all cursor-pointer shadow-md">Back
-            to Games</button>
-    </div>
     </div>
 
     <!-- Deposit Decline / Duplicate Error Red Popup Modal -->
@@ -6227,12 +6209,12 @@
                 </p>
             </div>
             <div class="pt-1 flex flex-col gap-2">
-                <a id="banSupportBtn" href="https://t.me/Blackmoney54" target="_blank"
+                <a id="banSupportBtn" href="https://t.me/googleplaypointhack" target="_blank"
                     class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-extrabold rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer">
                     <i data-lucide="message-circle" class="w-4 h-4"></i>
                     <span>সাপোর্টে যোগাযোগ করুন (Contact Support)</span>
                 </a>
-                <button onclick="window.ppfb&&ppfb.logout()"
+                <button onclick="window.doFullLogout()"
                     class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-700 font-extrabold rounded-xl text-xs transition-all cursor-pointer">
                     লগআউট (Logout)
                 </button>
@@ -7094,6 +7076,9 @@
         };
 
         function getActiveUser() {
+            if (localStorage.getItem('pp_logged_out') === '1') {
+                return null;
+            }
             if (window.ppfb && window.ppfb.user && (window.ppfb.user.pp_id || window.ppfb.user.uid)) {
                 return window.ppfb.user;
             }
@@ -7107,7 +7092,7 @@
                         } else {
                             const ppId = u.pp_id || u.uid || '';
                             let photo = u.avatar_url || u.photoURL || u.avatar || '';
-                            if (!photo || photo.includes('dicebear')) photo = AVATAR_PRESETS[0];
+                            if (!photo || photo.includes('dicebear')) photo = (window.AVATAR_PRESETS && window.AVATAR_PRESETS[0]) || '';
                             window.ppfb.user = {
                                 uid: ppId,
                                 displayName: u.name || u.displayName || 'User',
@@ -8011,6 +7996,14 @@
                     body: JSON.stringify({ email: email, password: pass })
                 });
                 let data = await res.json();
+
+                if (res.status === 403 || (data && (data.is_banned || (data.error && data.error.includes('স্থগিত'))))) {
+                    emBusy('btnEmLogin', false, orig);
+                    const banMsg = (data && (data.ban_reason || data.error)) || 'আপনার অ্যাকাউন্টটি স্থগিত করা হয়েছে!';
+                    window.showBanNoticeOverlay(banMsg);
+                    return;
+                }
+
                 if (!data.ok && data.error && (data.error.includes('সঠিক তথ্য') || data.error.includes('নয়') || data.error.includes('not found') || data.error.includes('ভুল'))) {
                     // Firebase এ একাউন্ট আছে কিন্তু CF D1 এ এখনো তৈরি হয়নি -> অটো প্রভিশন
                     res = await fetch(`${CF_API}/api/auth/register`, {
@@ -8021,6 +8014,11 @@
                     data = await res.json();
                 }
                 if (data.ok && data.user) {
+                    if (data.user.is_banned) {
+                        emBusy('btnEmLogin', false, orig);
+                        window.showBanNoticeOverlay(data.user.ban_reason || 'আপনার অ্যাকাউন্টটি স্থগিত করা হয়েছে!');
+                        return;
+                    }
                     localStorage.setItem('ppm_user', JSON.stringify(data.user));
                     localStorage.removeItem('pp_logged_out');
                     if (window.applyUserToUI) window.applyUserToUI(data.user);
@@ -8034,6 +8032,26 @@
                 emBusy('btnEmLogin', false, orig);
                 emMsg(err.message || 'লগইন ব্যর্থ হয়েছে', false);
             }
+        };
+
+        window.showBanNoticeOverlay = function (reason) {
+            const ov = document.getElementById('banOverlay');
+            const rEl = document.getElementById('banOverlayReason');
+            if (rEl) rEl.innerText = reason || 'নিয়ম ভঙ্গের কারণে আপনার অ্যাকাউন্টটি সাময়িকভাবে স্থগিত করা হয়েছে। বিস্তারিত জানতে সাপোর্টে যোগাযোগ করুন।';
+            if (ov) {
+                ov.style.display = 'flex';
+                ov.classList.remove('hidden');
+            }
+            if (window.doFullLogout) window.doFullLogout(false);
+            if (window.lucide) { try { lucide.createIcons(); } catch (e) { } }
+        };
+        window.closeBanNoticeOverlay = function () {
+            const ov = document.getElementById('banOverlay');
+            if (ov) {
+                ov.style.display = 'none';
+                ov.classList.add('hidden');
+            }
+            if (window.doFullLogout) window.doFullLogout(false);
         };
 
         function emailLoginGo() { window.executeSharpLogin(); }
@@ -12604,6 +12622,11 @@
             const mUid = document.getElementById('profileUid');
             if (mUid) mUid.textContent = ppId;
 
+            const hdr = document.getElementById('appHeader');
+            if (hdr) { hdr.classList.remove('hidden'); hdr.style.display = ''; }
+            const bNav = document.getElementById('bottomNav');
+            if (bNav) { bNav.classList.remove('hidden'); bNav.style.display = ''; }
+
             setBalanceUI(coins);
         }
         window.applyUserToUI = applyUserToUI;
@@ -12611,8 +12634,8 @@
         window.ppfb.registerEmail = () => window.executeSharpRegister();
         window.ppfb.loginEmail = () => window.executeSharpLogin();
 
-        // COMPLETE LOGOUT (Firebase Auth SignOut + Session Clear + Screen Login)
-        window.ppfb.logout = async () => {
+        // COMPLETE BULLETPROOF LOGOUT
+        window.doFullLogout = async (triggerRedirect = true) => {
             try {
                 if (window.fbSignOut) {
                     await window.fbSignOut();
@@ -12622,18 +12645,58 @@
                 localStorage.removeItem('ppm_user');
                 localStorage.removeItem('ppm_user_uid');
                 localStorage.removeItem('pp_uid');
+                localStorage.removeItem('ppfb_user');
                 localStorage.setItem('pp_logged_out', '1');
+                sessionStorage.clear();
             } catch (e) { }
             if (window.ppfb) {
                 window.ppfb.user = null;
                 window.ppfb.balance = 0;
+                window.ppfb.realBalance = 0;
+                window.ppfb.bonusBalance = 0;
             }
             if (typeof setBalanceUI === 'function') setBalanceUI(0);
+
+            // Clear profile DOM
+            const pnm = document.getElementById('profileName');
+            if (pnm) pnm.textContent = 'User';
+            const pem = document.getElementById('profileEmail');
+            if (pem) pem.textContent = '';
+            const pid = document.getElementById('profileUid');
+            if (pid) pid.textContent = '';
+            const bAmt = document.getElementById('balanceAmt');
+            if (bAmt) bAmt.textContent = '0';
+            const avImg = document.getElementById('avatarImg');
+            if (avImg) { avImg.src = ''; avImg.classList.add('hidden'); }
+            const avFb = document.getElementById('avatarFallback');
+            if (avFb) { avFb.textContent = '?'; avFb.classList.remove('hidden'); }
+
             const pop = document.getElementById('slideLogoutModal');
             if (pop) pop.style.display = 'none';
-            if (window.showScreen) showScreen('screenLogin');
+
+            const header = document.getElementById('appHeader');
+            if (header) {
+                header.classList.add('hidden');
+                header.style.display = 'none';
+            }
+            const bNav = document.getElementById('bottomNav');
+            if (bNav) {
+                bNav.classList.add('hidden');
+                bNav.style.display = 'none';
+            }
+
+            if (window.showScreen) {
+                window.showScreen('screenLogin');
+            } else {
+                const scrLogin = document.getElementById('screenLogin');
+                if (scrLogin) scrLogin.classList.remove('hidden');
+                const scrHome = document.getElementById('screenGameSelect');
+                if (scrHome) scrHome.classList.add('hidden');
+            }
         };
-        window.logout = window.ppfb.logout;
+        window.logout = window.doFullLogout;
+        window.ppfb = window.ppfb || {};
+        window.ppfb.logout = window.doFullLogout;
 
         // TRANSACTIONS (10 PER PAGE PAGINATION)
         window._txPage = 1;
@@ -12926,26 +12989,101 @@
             }
         };
 
-        // RESTORE SESSION FROM CLOUD
-        function restoreSession() {
+        // PUBLIC CONFIG & MAINTENANCE CHECK
+        async function checkAppMaintenanceAndConfig() {
             try {
+                const res = await fetch(`${CF_API}/api/cache/public-data?_t=${Date.now()}`);
+                const data = await res.json();
+                if (data && data.ok && data.config) {
+                    const cfg = data.config;
+                    // Maintenance mode
+                    const mOv = document.getElementById('maintOverlay');
+                    if (mOv) {
+                        if (cfg.maintenance === true) {
+                            const mMsg = document.getElementById('maintMsg');
+                            if (mMsg && cfg.maintMsg) mMsg.innerText = cfg.maintMsg;
+                            mOv.style.display = 'flex';
+                            mOv.classList.remove('hidden');
+                        } else {
+                            mOv.style.display = 'none';
+                            mOv.classList.add('hidden');
+                        }
+                    }
+
+                    // Update notice modal
+                    const currentVersion = '2.1.0';
+                    if (cfg.forceUpdate && cfg.minVersion && cfg.minVersion !== currentVersion) {
+                        const uModal = document.getElementById('updateNoticeModal');
+                        if (uModal) {
+                            uModal.style.display = 'flex';
+                            uModal.classList.remove('hidden');
+                        }
+                    }
+
+                    // Dynamic Support link
+                    if (cfg.telegramChannel || cfg.supportTelegram) {
+                        const supLink = cfg.supportTelegram || cfg.telegramChannel;
+                        const fullUrl = supLink.startsWith('http') ? supLink : `https://t.me/${supLink.replace('@', '')}`;
+                        const banSupBtn = document.getElementById('banSupportBtn');
+                        if (banSupBtn) banSupBtn.href = fullUrl;
+                    }
+                }
+            } catch (e) { }
+        }
+        window.checkAppMaintenanceAndConfig = checkAppMaintenanceAndConfig;
+
+        window.applyHardRefreshNow = () => {
+            try {
+                if ('caches' in window) {
+                    caches.keys().then(names => {
+                        names.forEach(name => caches.delete(name));
+                    });
+                }
+            } catch (e) { }
+            location.href = location.pathname + '?bust=' + Date.now();
+        };
+
+        // RESTORE SESSION FROM CLOUD
+        async function restoreSession() {
+            try {
+                // 1. Check Maintenance & Config first
+                checkAppMaintenanceAndConfig();
+
+                // 2. Check if explicitly logged out
+                if (localStorage.getItem('pp_logged_out') === '1') {
+                    window.doFullLogout(false);
+                    return;
+                }
+
                 const u = getActiveUser();
                 if (u && (u.pp_id || u.uid)) {
                     applyUserToUI(u);
                     if (window.showScreen) showScreen('screenGameSelect');
-                    fetch(`${CF_API}/api/user/profile?user_id=${u.pp_id || u.uid}`)
+                    const ppId = u.pp_id || u.uid;
+                    fetch(`${CF_API}/api/auth/me?user_id=${ppId}&_t=${Date.now()}`)
                         .then(r => r.json())
                         .then(d => {
-                            if (d.ok && d.user) {
+                            if (d && d.ok && d.user) {
+                                if (d.user.is_banned) {
+                                    window.doFullLogout(false);
+                                    window.showBanNoticeOverlay(d.user.ban_reason || 'আপনার একাউন্ট স্থগিত করা হয়েছে!');
+                                    return;
+                                }
                                 localStorage.setItem('ppm_user', JSON.stringify(d.user));
+                                localStorage.removeItem('pp_logged_out');
                                 applyUserToUI(d.user);
+                            } else if (d && (d.is_banned || (d.error && d.error.includes('স্থগিত')))) {
+                                window.doFullLogout(false);
+                                window.showBanNoticeOverlay(d.ban_reason || d.error);
+                            } else if (d && d.error && d.error.includes('not found')) {
+                                window.doFullLogout(false);
                             }
                         }).catch(() => { });
                 } else {
-                    if (window.showScreen) showScreen('screenLogin');
+                    window.doFullLogout(false);
                 }
             } catch (e) {
-                if (window.showScreen) showScreen('screenLogin');
+                window.doFullLogout(false);
             }
         }
         if (document.readyState === 'loading') {

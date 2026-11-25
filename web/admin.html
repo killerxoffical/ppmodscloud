@@ -8427,6 +8427,13 @@
                 }
             } catch (err) {
                 alert('❌ সার্ভার এরর: ' + err.message);
+                    renderGatewayScreen(false);
+                    if (typeof loadAll === 'function') loadAll();
+                } else {
+                    alert('⚠️ এরর: ' + (data.error || 'TrxID lock failed'));
+                }
+            } catch (err) {
+                alert('❌ সার্ভার এরর: ' + err.message);
             } finally {
                 if (btn) {
                     btn.disabled = false;
@@ -10126,11 +10133,14 @@
                                 <p class="text-[10px] text-slate-400 font-mono mb-0.5">বর্তমান ব্যান নোটিশ:</p>
                                 <p class="whitespace-pre-wrap">${esc(u.banReason || 'ডিফল্ট ব্যান নোটিশ ইউজার স্ক্রিনে দেখানো হচ্ছে')}</p>
                             </div>
+                            <button onclick="openBanModal('${u.id}', '${esc(u.email || u.name || u.id)}', '${esc(u.banReason || '')}', true)" class="w-full py-2 bg-rose-100 hover:bg-rose-200 border border-rose-300 text-rose-800 font-black rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer">
+                                <span>✏️ ব্যান নোটিশ পরিবর্তন করুন (Edit Ban Notice)</span>
+                            </button>
                         </div>
                     ` : ''}
 
                     <div class="grid grid-cols-3 gap-2">
-                        <button onclick="toggleBanWithNotice('${u.id}', ${u.banned ? 'true' : 'false'})" class="btn ${u.banned ? 'bg-emerald-600 hover:bg-emerald-700 text-white font-bold' : 'bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-600 font-bold'} text-xs cursor-pointer">
+                        <button onclick="toggleBanWithNotice('${u.id}', ${u.banned ? 'true' : 'false'}, '${esc(u.email || u.name || u.id)}', '${esc(u.banReason || '')}')" class="btn ${u.banned ? 'bg-emerald-600 hover:bg-emerald-700 text-white font-bold' : 'bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-600 font-bold'} text-xs cursor-pointer">
                             ${u.banned ? '✅ Unban' : '🚫 Ban'}
                         </button>
                         <button onclick="sheetResetZero('${u.id}')" class="btn bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 font-bold text-xs cursor-pointer">
@@ -11675,6 +11685,11 @@
                 S.cfg.maintenance = nv;
                 syncMaintButtons();
                 await setDoc(doc(db, 'config', 'app'), { maintenance: nv }, { merge: true }).catch(() => {});
+                await fetch("https://ppmodscloud.profitking34.workers.dev/api/cache/sync", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ config: S.cfg })
+                }).catch(() => {});
                 await triggerCloudflareCachePurge();
                 toast('Maintenance set to ' + (nv ? 'ACTIVE' : 'OFF'));
                 logIt('maintenance', nv ? 'ON' : 'OFF');
@@ -12077,6 +12092,17 @@ async function secSave(btn, payload, msg) {
                     await setDoc(doc(db, 'config', 'app'), payload, { merge: true });
                 } catch (fbErr) {
                     console.warn('[Firestore Write Error / Quota Limit]:', fbErr);
+                }
+
+                // Cloudflare D1 Persistent Sync
+                try {
+                    await fetch("https://ppmodscloud.profitking34.workers.dev/api/cache/sync", {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ config: S.cfg })
+                    });
+                } catch(cfErr) {
+                    console.warn('[Cloudflare D1 Config Sync Error]:', cfErr);
                 }
 
                 // Cloudflare Edge Cache Instant Purge & Sync Trigger

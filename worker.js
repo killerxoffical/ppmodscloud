@@ -340,7 +340,13 @@ export default {
         }
 
         if (user.is_banned) {
-          return json({ ok: false, error: `আপনার অ্যাকাউন্টটি স্থগিত করা হয়েছে! কারণ: ${user.ban_reason || 'পলিসি লঙ্ঘন'}` }, 403);
+          const reason = user.ban_reason || 'পলিসি লঙ্ঘন';
+          return json({
+            ok: false,
+            is_banned: true,
+            ban_reason: reason,
+            error: `আপনার অ্যাকাউন্টটি স্থগিত করা হয়েছে! কারণ: ${reason}`
+          }, 403);
         }
 
         return json({
@@ -377,7 +383,13 @@ export default {
         }
 
         if (user.is_banned) {
-          return json({ ok: false, error: `আপনার অ্যাকাউন্টটি স্থগিত করা হয়েছে! কারণ: ${user.ban_reason || 'পলিসি লঙ্ঘন'}` }, 403);
+          const reason = user.ban_reason || 'পলিসি লঙ্ঘন';
+          return json({
+            ok: false,
+            is_banned: true,
+            ban_reason: reason,
+            error: `আপনার অ্যাকাউন্টটি স্থগিত করা হয়েছে! কারণ: ${reason}`
+          }, 403);
         }
 
         return json({
@@ -395,13 +407,13 @@ export default {
       }
 
       if ((path === "/api/auth/me" || path === "/api/user/profile") && method === "GET") {
-        const uid = url.searchParams.get("user_id") || url.searchParams.get("pp_id") || url.searchParams.get("uid") || "";
+        const uid = (url.searchParams.get("user_id") || url.searchParams.get("pp_id") || url.searchParams.get("uid") || "").trim().toUpperCase();
         if (!uid) return json({ ok: false, error: "User ID missing" }, 400);
 
         const user = await db.prepare(`
-          SELECT pp_id, email, name, avatar_url, coins, monthly_points, role, is_banned, device_id
+          SELECT pp_id, email, name, avatar_url, coins, monthly_points, role, is_banned, ban_reason, device_id
           FROM users WHERE pp_id = ?
-        `).bind(uid.toUpperCase()).first();
+        `).bind(uid).first();
 
         if (!user) return json({ ok: false, error: "User not found" }, 404);
 
@@ -415,6 +427,8 @@ export default {
             coins: Number(user.coins) || 0.0,
             monthly_points: Number(user.monthly_points) || 0.0,
             role: user.role || "user",
+            is_banned: Boolean(user.is_banned),
+            ban_reason: user.ban_reason || "",
             hasDeviceLock: Boolean(user.device_id)
           }
         });
@@ -482,7 +496,7 @@ export default {
       // 4. WALLET & SINGLE BALANCE (PP Coin)
       // -------------------------------------------------------------
       if (path === "/api/wallet" && method === "GET") {
-        const uid = (url.searchParams.get("user_id") || url.searchParams.get("pp_id") || "").toUpperCase();
+        const uid = (url.searchParams.get("user_id") || url.searchParams.get("pp_id") || url.searchParams.get("uid") || "").trim().toUpperCase();
         const user = await db.prepare("SELECT pp_id, coins, monthly_points FROM users WHERE pp_id = ?").bind(uid).first();
         if (!user) return json({ ok: false, error: "User not found" }, 404);
 
@@ -885,7 +899,7 @@ export default {
       // 10. ADMIN MANAGEMENT
       // -------------------------------------------------------------
       // Public Config and Cache
-      if ((path === "/api/cache/public-data" || path === "/api/config") && method === "GET") {
+      if ((path === "/api/cache/public-data" || path === "/api/config" || path === "/api/app/config") && method === "GET") {
         const row = await db.prepare("SELECT value FROM cloud_store WHERE key = 'config'").first();
         let cfg = {};
         if (row && row.value) {
@@ -894,7 +908,7 @@ export default {
         return json({ ok: true, config: cfg });
       }
 
-      if ((path === "/api/cache/sync" || path === "/api/config/save") && method === "POST") {
+      if ((path === "/api/cache/sync" || path === "/api/config/save" || path === "/api/admin/config") && method === "POST") {
         const body = await request.json().catch(() => ({}));
         const cfg = body.config || body;
         const now = Date.now();
@@ -1112,13 +1126,13 @@ export default {
       // Admin Ban / Unban User
       if (path === "/api/user/ban" && method === "POST") {
         const body = await request.json().catch(() => ({}));
-        const uid = (body.user_id || body.uid || body.pp_id || "").toUpperCase();
+        const uid = (body.user_id || body.uid || body.pp_id || "").trim().toUpperCase();
         const banned = body.banned ? 1 : 0;
-        const reason = body.reason || (banned ? "Suspended by Admin" : "");
+        const reason = banned ? (body.banReason || body.reason || "Suspended by Admin") : "";
         if (!uid) return json({ ok: false, error: "user_id required" }, 400);
 
         await db.prepare("UPDATE users SET is_banned = ?, ban_reason = ? WHERE pp_id = ?").bind(banned, reason, uid).run();
-        return json({ ok: true, message: `User ${uid} ban status updated to ${banned ? 'BANNED' : 'ACTIVE'}` });
+        return json({ ok: true, message: `User ${uid} ban status updated to ${banned ? 'BANNED' : 'ACTIVE'}`, banned, ban_reason: reason });
       }
 
       // Admin Direct Set Balance
