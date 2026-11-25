@@ -778,6 +778,19 @@ export default {
         return json({ ok: true, users: (rows && rows.results) || [] });
       }
 
+      if ((path === "/api/admin/user/delete" && method === "POST") || (path === "/api/admin/user" && method === "DELETE")) {
+        const body = await request.json().catch(() => ({}));
+        const uid = (body.user_id || body.pp_id || "").toUpperCase();
+        if (!uid) return json({ ok: false, error: "user_id required" }, 400);
+
+        await db.prepare("DELETE FROM users WHERE pp_id = ?").bind(uid).run();
+        await db.prepare("DELETE FROM orders WHERE user_id = ?").bind(uid).run();
+        await db.prepare("DELETE FROM deposits WHERE user_id = ?").bind(uid).run();
+        await db.prepare("DELETE FROM transactions WHERE user_id = ?").bind(uid).run();
+
+        return json({ ok: true, message: `User ${uid} deleted permanently from Cloudflare D1` });
+      }
+
       return json({ ok: false, error: "Endpoint not found" }, 404);
 
     } catch (err) {
