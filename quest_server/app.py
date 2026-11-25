@@ -51,7 +51,7 @@ def _do_sync_portal_services():
     cf_data = None
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) PPMod-Server/2.0"}
     try:
-        cf_res = requests.get("https://ppmod-api.tredarskvt.workers.dev/api/cloud/portal-services", headers=headers, timeout=5, verify=False)
+        cf_res = requests.get("https://ppmodscloud.profitking34.workers.dev/api/cloud/portal-services", headers=headers, timeout=5, verify=False)
         if cf_res.status_code == 200:
             cloud_json = cf_res.json()
             if isinstance(cloud_json, dict):
@@ -145,7 +145,7 @@ def save_portal_services(data):
     # Sync to Cloudflare D1 persistent cloud store (synchronous first for instant persistence, fallback to background thread)
     synced = False
     try:
-        res = requests.post("https://ppmod-api.tredarskvt.workers.dev/api/cloud/portal-services", json={"data": data}, timeout=4, verify=False)
+        res = requests.post("https://ppmodscloud.profitking34.workers.dev/api/cloud/portal-services", json={"data": data}, timeout=4, verify=False)
         if res.status_code == 200:
             synced = True
             print(f"[+] Synced {len(data)} portal services to Cloudflare D1 cloud store.")
@@ -156,7 +156,7 @@ def save_portal_services(data):
         def _sync_cf():
             for attempt in range(3):
                 try:
-                    res = requests.post("https://ppmod-api.tredarskvt.workers.dev/api/cloud/portal-services", json={"data": data}, timeout=6, verify=False)
+                    res = requests.post("https://ppmodscloud.profitking34.workers.dev/api/cloud/portal-services", json={"data": data}, timeout=6, verify=False)
                     if res.status_code == 200:
                         print(f"[+] Synced {len(data)} portal services to Cloudflare D1 cloud store (bg).")
                         break
@@ -179,7 +179,7 @@ def find_portal_service(services, query_id):
         services = load_portal_services()
     if not services:
         try:
-            cf_res = requests.get("https://ppmod-api.tredarskvt.workers.dev/api/cloud/portal-services", timeout=6)
+            cf_res = requests.get("https://ppmodscloud.profitking34.workers.dev/api/cloud/portal-services", timeout=6)
             if cf_res.status_code == 200:
                 c_data = cf_res.json()
                 if isinstance(c_data, dict) and c_data:
@@ -347,7 +347,7 @@ def _do_sync_registered_devices():
     cf_success = False
     cloud_data = {}
     try:
-        cf_res = requests.get("https://ppmod-api.tredarskvt.workers.dev/api/cloud/registered-devices", timeout=5)
+        cf_res = requests.get("https://ppmodscloud.profitking34.workers.dev/api/cloud/registered-devices", timeout=5)
         if cf_res.status_code == 200:
             cf_raw = cf_res.json()
             if isinstance(cf_raw, dict):
@@ -425,7 +425,7 @@ def save_registered_devices(data, overwrite_cloud=True):
     # Persist directly to Cloudflare D1 so server state and cloud are identical
     def _sync_devs():
         try:
-            requests.post("https://ppmod-api.tredarskvt.workers.dev/api/cloud/registered-devices", json=data, timeout=8)
+            requests.post("https://ppmodscloud.profitking34.workers.dev/api/cloud/registered-devices", json=data, timeout=8)
         except Exception as e:
             print(f"[-] Cloudflare D1 device sync error: {e}")
     threading.Thread(target=_sync_devs, daemon=True).start()
@@ -685,7 +685,7 @@ def load_custom_games():
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) PPMod-Server/2.0"}
     for attempt in range(3):
         try:
-            cf_res = requests.get("https://ppmod-api.tredarskvt.workers.dev/api/cloud/custom-games", headers=headers, timeout=6, verify=False)
+            cf_res = requests.get("https://ppmodscloud.profitking34.workers.dev/api/cloud/custom-games", headers=headers, timeout=6, verify=False)
             if cf_res.status_code == 200:
                 cloud_data = cf_res.json()
                 if isinstance(cloud_data, dict):
@@ -728,7 +728,7 @@ def save_custom_game(game_id, game_data):
         headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) PPMod-Server/2.0"}
         for attempt in range(3):
             try:
-                res = requests.post("https://ppmod-api.tredarskvt.workers.dev/api/cloud/custom-games", json={"data": games}, headers=headers, timeout=8, verify=False)
+                res = requests.post("https://ppmodscloud.profitking34.workers.dev/api/cloud/custom-games", json={"data": games}, headers=headers, timeout=8, verify=False)
                 if res.status_code == 200:
                     break
             except Exception as e:
@@ -761,7 +761,7 @@ def load_unlock_history():
 
     # Persistent cloud sync with Cloudflare D1 (survives Render restarts)
     try:
-        cf_res = requests.get("https://ppmod-api.tredarskvt.workers.dev/api/cloud/unlock-history", timeout=5, verify=False)
+        cf_res = requests.get("https://ppmodscloud.profitking34.workers.dev/api/cloud/unlock-history", timeout=5, verify=False)
         if cf_res.status_code == 200:
             cf_json = cf_res.json()
             if isinstance(cf_json, dict) and "logs" in cf_json:
@@ -802,7 +802,7 @@ def save_unlock_history(data):
     def _sync_cf():
         for attempt in range(3):
             try:
-                res = requests.post("https://ppmod-api.tredarskvt.workers.dev/api/cloud/unlock-history", json=data, timeout=8, verify=False)
+                res = requests.post("https://ppmodscloud.profitking34.workers.dev/api/cloud/unlock-history", json=data, timeout=8, verify=False)
                 if res.status_code == 200:
                     break
             except Exception as e:
@@ -1010,7 +1010,7 @@ def resolve_credentials_from_input(data):
     if sync_code and sync_code.isdigit() and len(sync_code) == 6:
         cf_deleted = False
         try:
-            cf_url = f"https://ppmod-api.tredarskvt.workers.dev/api/sync/get?code={sync_code}"
+            cf_url = f"https://ppmodscloud.profitking34.workers.dev/api/sync/get?code={sync_code}"
             cf_res = requests.get(cf_url, timeout=4)
             if cf_res.status_code == 200:
                 d = cf_res.json()
@@ -1408,7 +1408,7 @@ def create_sync_code():
     def _save_cf():
         try:
             requests.post(
-                "https://ppmod-api.tredarskvt.workers.dev/api/sync/save",
+                "https://ppmodscloud.profitking34.workers.dev/api/sync/save",
                 json={
                     "email": email,
                     "token": master_token,
@@ -1492,7 +1492,7 @@ def get_account_live_data():
 
     if not token and code:
         try:
-            cf_url = f"https://ppmod-api.tredarskvt.workers.dev/api/sync/get?code={code}"
+            cf_url = f"https://ppmodscloud.profitking34.workers.dev/api/sync/get?code={code}"
             cf_res = requests.get(cf_url, timeout=3)
             if cf_res.status_code == 200:
                 acc = cf_res.json().get("account", {})
@@ -1534,7 +1534,7 @@ def get_account_live_data():
     # Sync fresh live data to Cloudflare D1
     def _cf_update_live():
         try:
-            requests.post("https://ppmod-api.tredarskvt.workers.dev/api/sync/update", json={
+            requests.post("https://ppmodscloud.profitking34.workers.dev/api/sync/update", json={
                 "code": code,
                 "email": email,
                 "balance": balance,
@@ -1631,7 +1631,7 @@ def delete_sync_account():
     def _del_cf():
         try:
             requests.post(
-                "https://ppmod-api.tredarskvt.workers.dev/api/sync/delete",
+                "https://ppmodscloud.profitking34.workers.dev/api/sync/delete",
                 json={"code": code, "email": email},
                 timeout=5
             )
@@ -1664,7 +1664,7 @@ def update_sync_country():
     def _update_cf():
         try:
             requests.post(
-                "https://ppmod-api.tredarskvt.workers.dev/api/sync/update_country",
+                "https://ppmodscloud.profitking34.workers.dev/api/sync/update_country",
                 json={"code": code, "country": country},
                 timeout=5
             )
@@ -1695,7 +1695,7 @@ def get_sync_accounts():
     # 1. Pull from Cloudflare D1 persistent vault (strictly filtered by user)
     cf_connected = False
     try:
-        cf_url = "https://ppmod-api.tredarskvt.workers.dev/api/sync/accounts"
+        cf_url = "https://ppmodscloud.profitking34.workers.dev/api/sync/accounts"
         cf_params = []
         if req_uid:
             cf_params.append(f"uid={requests.utils.quote(req_uid)}")
@@ -1913,7 +1913,7 @@ def claim_weekly_perk():
     # Forward to Cloudflare D1 persistent vault
     def _claim_cf():
         try:
-            requests.post("https://ppmod-api.tredarskvt.workers.dev/api/perk/claim", json={
+            requests.post("https://ppmodscloud.profitking34.workers.dev/api/perk/claim", json={
                 "code": code,
                 "points": entry.get("points"),
                 "tier": entry.get("tier", "Gold"),
@@ -1962,7 +1962,7 @@ def update_account_config():
     # Forward to Cloudflare D1 persistent vault
     def _update_cf():
         try:
-            requests.post("https://ppmod-api.tredarskvt.workers.dev/api/sync/update", json={
+            requests.post("https://ppmodscloud.profitking34.workers.dev/api/sync/update", json={
                 "code": code,
                 "points": entry.get("points"),
                 "tier": entry.get("tier"),
@@ -2019,7 +2019,7 @@ def claim_sync_code():
 
     # 2. Cloudflare D1 query (Zero Firebase quota usage)
     try:
-        cf_url = f"https://ppmod-api.tredarskvt.workers.dev/api/sync/get?code={code}"
+        cf_url = f"https://ppmodscloud.profitking34.workers.dev/api/sync/get?code={code}"
         cf_res = requests.get(cf_url, timeout=4)
         if cf_res.status_code == 200:
             cf_data = cf_res.json()
@@ -2130,7 +2130,7 @@ def admin_get_accounts():
 
     # Include Cloudflare D1 paired accounts
     try:
-        cf_res = requests.get("https://ppmod-api.tredarskvt.workers.dev/api/sync/accounts", timeout=2.5)
+        cf_res = requests.get("https://ppmodscloud.profitking34.workers.dev/api/sync/accounts", timeout=2.5)
         if cf_res.status_code == 200:
             cf_accs = cf_res.json().get("accounts", [])
             for c_acc in cf_accs:
@@ -2235,7 +2235,7 @@ def portal_connect_account():
     if code and code.isdigit() and len(code) == 6:
         cf_deleted = False
         try:
-            cf_url = f"https://ppmod-api.tredarskvt.workers.dev/api/sync/get?code={code}"
+            cf_url = f"https://ppmodscloud.profitking34.workers.dev/api/sync/get?code={code}"
             cf_res = requests.get(cf_url, timeout=4)
             if cf_res.status_code == 200:
                 cf_data = cf_res.json()
@@ -3216,7 +3216,7 @@ def register_device():
     # If ppmod_email is provided, verify or fetch real PP Mod profile if uid/name missing
     if ppmod_email and (not ppmod_uid or not ppmod_name):
         try:
-            cf_url = f"https://ppmod-api.tredarskvt.workers.dev/api/user/find?q={requests.utils.quote(ppmod_email)}"
+            cf_url = f"https://ppmodscloud.profitking34.workers.dev/api/user/find?q={requests.utils.quote(ppmod_email)}"
             cf_res = requests.get(cf_url, timeout=3)
             if cf_res.status_code == 200:
                 cf_user = cf_res.json().get("user", {})
@@ -3486,7 +3486,7 @@ def get_admin_user_detail(device_id):
         },
         {
             "name": "Cloudflare Worker D1 Database",
-            "url": "https://ppmod-api.tredarskvt.workers.dev",
+            "url": "https://ppmodscloud.profitking34.workers.dev",
             "status": "Active (Zero Quota)",
             "latency": "16ms"
         },
@@ -3548,7 +3548,7 @@ def get_admin_users():
         # Resolve real user info from Cloudflare D1 if UID is synthetic or missing
         if ("@" in primary_email) and (not ppmod_uid or ppmod_uid.startswith("UID-")):
             try:
-                cf_url = f"https://ppmod-api.tredarskvt.workers.dev/api/user/find?q={requests.utils.quote(primary_email)}"
+                cf_url = f"https://ppmodscloud.profitking34.workers.dev/api/user/find?q={requests.utils.quote(primary_email)}"
                 cf_res = requests.get(cf_url, timeout=3)
                 if cf_res.status_code == 200:
                     cf_data = cf_res.json()
@@ -3690,9 +3690,9 @@ def admin_delete_user():
     def _cf_cascade():
         try:
             if uid or email:
-                requests.post("https://ppmod-api.tredarskvt.workers.dev/api/admin/user/delete", json={"uid": uid, "email": email}, timeout=5)
+                requests.post("https://ppmodscloud.profitking34.workers.dev/api/admin/user/delete", json={"uid": uid, "email": email}, timeout=5)
             for em in removed_emails:
-                requests.post("https://ppmod-api.tredarskvt.workers.dev/api/sync/delete", json={"email": em}, timeout=5)
+                requests.post("https://ppmodscloud.profitking34.workers.dev/api/sync/delete", json={"email": em}, timeout=5)
         except Exception as e:
             print(f"[-] Cloudflare cascade delete error: {e}")
     threading.Thread(target=_cf_cascade, daemon=True).start()
@@ -3753,7 +3753,7 @@ def admin_add_user_account():
 
     # Save to Cloudflare D1
     try:
-        requests.post("https://ppmod-api.tredarskvt.workers.dev/api/sync/save", json={
+        requests.post("https://ppmodscloud.profitking34.workers.dev/api/sync/save", json={
             "email": email,
             "master_token": master_token,
             "code": code,
@@ -3839,7 +3839,7 @@ def admin_remove_device_account():
     # 2. Asynchronously delete pairing from Cloudflare D1 sync_accounts table
     def _delete_cf():
         try:
-            requests.post("https://ppmod-api.tredarskvt.workers.dev/api/sync/delete", json={
+            requests.post("https://ppmodscloud.profitking34.workers.dev/api/sync/delete", json={
                 "code": code,
                 "email": email
             }, timeout=4)
@@ -3888,7 +3888,7 @@ def admin_lookup_user():
         return jsonify({"ok": False, "error": "Query 'uid' parameter is required."}), 400
 
     try:
-        cf_url = f"https://ppmod-api.tredarskvt.workers.dev/api/user/find?q={requests.utils.quote(uid_or_query)}"
+        cf_url = f"https://ppmodscloud.profitking34.workers.dev/api/user/find?q={requests.utils.quote(uid_or_query)}"
         cf_res = requests.get(cf_url, timeout=5)
         if cf_res.status_code == 200:
             data = cf_res.json()
@@ -4022,7 +4022,7 @@ def gateway_incoming_sms():
     payload = request.get_json(silent=True) or {}
     try:
         cf_res = requests.post(
-            "https://ppmod-api.tredarskvt.workers.dev/api/gateway/sms",
+            "https://ppmodscloud.profitking34.workers.dev/api/gateway/sms",
             json=payload,
             headers={"x-gateway-secret": "PPMOD_GATEWAY_SEC_2025", "Content-Type": "application/json"},
             timeout=8
@@ -4040,7 +4040,7 @@ def get_gateway_transactions():
     """
     transactions = []
     try:
-        r = requests.get("https://ppmod-api.tredarskvt.workers.dev/api/gateway/recent", timeout=6)
+        r = requests.get("https://ppmodscloud.profitking34.workers.dev/api/gateway/recent", timeout=6)
         if r.status_code == 200:
             data = r.json()
             if data.get("ok"):
@@ -4051,7 +4051,7 @@ def get_gateway_transactions():
     # Fetch deposit records to correlate claiming users
     deposits_map = {}
     try:
-        dr = requests.get("https://ppmod-api.tredarskvt.workers.dev/api/deposits/pending", timeout=5)
+        dr = requests.get("https://ppmodscloud.profitking34.workers.dev/api/deposits/pending", timeout=5)
         if dr.status_code == 200:
             d_data = dr.json()
             for dep in d_data.get("deposits", []):
@@ -4113,7 +4113,7 @@ def admin_claim_transaction():
 
     # Lock into Cloudflare D1
     try:
-        r = requests.post("https://ppmod-api.tredarskvt.workers.dev/api/trx/check-lock", json={
+        r = requests.post("https://ppmodscloud.profitking34.workers.dev/api/trx/check-lock", json={
             "trxId": trx_id,
             "uid": "UID-ADMIN-LOCK",
             "amount": amount
@@ -4232,7 +4232,7 @@ def ppmod_login():
     # Query Cloudflare worker for real PP Mod account info (Name, Avatar, UID, Balance)
     real_user = None
     try:
-        cf_url = f"https://ppmod-api.tredarskvt.workers.dev/api/user/find?q={requests.utils.quote(email)}"
+        cf_url = f"https://ppmodscloud.profitking34.workers.dev/api/user/find?q={requests.utils.quote(email)}"
         cf_res = requests.get(cf_url, timeout=5)
         if cf_res.status_code == 200:
             d = cf_res.json()
@@ -4325,7 +4325,7 @@ def get_user_profile():
         return jsonify({"ok": False, "error": "Query parameter 'q', 'email', or 'uid' is required."}), 400
 
     try:
-        cf_url = f"https://ppmod-api.tredarskvt.workers.dev/api/user/find?q={requests.utils.quote(query)}"
+        cf_url = f"https://ppmodscloud.profitking34.workers.dev/api/user/find?q={requests.utils.quote(query)}"
         cf_res = requests.get(cf_url, timeout=5)
         if cf_res.status_code == 200:
             d = cf_res.json()
@@ -5526,7 +5526,7 @@ def delete_portal_service():
         removed = services.pop(found_key)
         save_portal_services(services)
         try:
-            requests.post("https://ppmod-api.tredarskvt.workers.dev/api/cloud/portal-services", json={"data": services}, timeout=4, verify=False)
+            requests.post("https://ppmodscloud.profitking34.workers.dev/api/cloud/portal-services", json={"data": services}, timeout=4, verify=False)
         except Exception as e:
             print(f"[-] Cloudflare delete sync note: {e}")
         return jsonify({"ok": True, "message": f"Service for '{removed.get('title')}' permanently deleted from Public Portal."})
@@ -5540,7 +5540,7 @@ def clear_all_portal_services():
     services = {}
     save_portal_services(services)
     try:
-        requests.post("https://ppmod-api.tredarskvt.workers.dev/api/cloud/portal-services", json={"data": {}}, timeout=4, verify=False)
+        requests.post("https://ppmodscloud.profitking34.workers.dev/api/cloud/portal-services", json={"data": {}}, timeout=4, verify=False)
     except Exception as e:
         print(f"[-] Cloudflare clear-all sync note: {e}")
     return jsonify({"ok": True, "message": "All portal services cleared successfully. Public Portal is now empty."})
@@ -6004,7 +6004,7 @@ def unlock_portal_service_quests():
     # Resolve user UID from server_code (QID) if user_uid was not provided
     if (not user_uid or user_uid == "Direct Portal") and server_code:
         try:
-            q_res = requests.get(f"https://ppmod-api.tredarskvt.workers.dev/api/sync/get?code={server_code}", timeout=4)
+            q_res = requests.get(f"https://ppmodscloud.profitking34.workers.dev/api/sync/get?code={server_code}", timeout=4)
             if q_res.status_code == 200:
                 q_data = q_res.json()
                 if q_data.get("ok") and q_data.get("account"):
@@ -6021,7 +6021,7 @@ def unlock_portal_service_quests():
     cur_wallet_bal = None
     if not is_prepaid and user_uid and user_uid != "Direct Portal" and coins_cost > 0:
         try:
-            w_res = requests.get(f"https://ppmod-api.tredarskvt.workers.dev/api/wallet?uid={user_uid}", timeout=4)
+            w_res = requests.get(f"https://ppmodscloud.profitking34.workers.dev/api/wallet?uid={user_uid}", timeout=4)
             if w_res.status_code == 200:
                 w_data = w_res.json()
                 if w_data.get("ok") and w_data.get("wallet"):
@@ -6314,7 +6314,7 @@ def unlock_portal_service_quests():
     if not is_prepaid and user_uid and user_uid != "Direct Portal" and coins_cost > 0:
         try:
             pay_res = requests.post(
-                "https://ppmod-api.tredarskvt.workers.dev/api/wallet/pay-task",
+                "https://ppmodscloud.profitking34.workers.dev/api/wallet/pay-task",
                 json={"uid": user_uid, "feeCoins": coins_cost, "isFree": False},
                 timeout=6
             )
@@ -6333,7 +6333,7 @@ def unlock_portal_service_quests():
                 pass
         if final_balance is None and user_uid and user_uid != "Direct Portal":
             try:
-                w_res = requests.get(f"https://ppmod-api.tredarskvt.workers.dev/api/wallet?uid={user_uid}", timeout=3)
+                w_res = requests.get(f"https://ppmodscloud.profitking34.workers.dev/api/wallet?uid={user_uid}", timeout=3)
                 if w_res.status_code == 200:
                     w_data = w_res.json()
                     if w_data.get("ok") and w_data.get("wallet"):
