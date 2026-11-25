@@ -176,7 +176,9 @@
             scrollbar-width: none;
         }
 
-        .hidden {
+        .hidden,
+        #appHeader.hidden,
+        #bottomNav.hidden {
             display: none !important;
         }
 
@@ -2831,7 +2833,7 @@
         </header>
 
         <!-- SCREEN 0: LOGIN (Google only) -->
-        <main id="screenLogin" class="screen fit-home">
+        <main id="screenLogin" class="screen fit-home hidden">
             <div class="flex-1 flex items-center justify-center py-4">
                 <div
                     class="w-full bg-white rounded-3xl border border-slate-200/80 shadow-sm p-6 text-center space-y-3 max-h-full overflow-y-auto">
@@ -4447,7 +4449,7 @@
                                     onload="this.previousElementSibling.style.display='none'" onerror="this.remove()">
                             </span>
                         </a>
-                        <button onclick="window.doFullLogout()" title="Logout"
+                        <button onclick="window.openSlideLogout()" title="Logout"
                             class="w-6 h-6 rounded-full bg-white/15 border border-white/25 backdrop-blur-sm flex items-center justify-center text-white hover:bg-rose-500/60 active:scale-90 transition-all cursor-pointer">
                             <i data-lucide="log-out" class="w-3 h-3"></i>
                         </button>
@@ -4669,7 +4671,7 @@
             </div>
 
             <!-- Bottom Prominent Logout Button -->
-            <button onclick="window.doFullLogout()"
+            <button onclick="window.openSlideLogout()"
                 class="w-full py-3.5 px-4 bg-rose-50 hover:bg-rose-100 active:scale-98 text-rose-600 font-black rounded-2xl border border-rose-200 text-xs transition-all cursor-pointer flex items-center justify-center gap-2 shadow-2xs">
                 <i data-lucide="log-out" class="w-4 h-4"></i> Log Out Account
             </button>
@@ -7169,11 +7171,6 @@
             const mUid = document.getElementById('profileUid');
             if (mUid) mUid.textContent = ppId;
 
-            const hdr = document.getElementById('appHeader');
-            if (hdr) { hdr.classList.remove('hidden'); hdr.style.display = ''; }
-            const bNav = document.getElementById('bottomNav');
-            if (bNav) { bNav.classList.remove('hidden'); bNav.style.display = ''; }
-
             setBalanceUI(coins);
         }
         window.applyUserToUI = applyUserToUI;
@@ -7200,7 +7197,14 @@
         window.getActiveUser = getActiveUser;
 
         // Early sync from local storage
-        try { getActiveUser(); } catch (e) { }
+        try {
+            const _earlyU = getActiveUser();
+            if (_earlyU && (_earlyU.pp_id || _earlyU.uid)) {
+                if (typeof showScreen === 'function') showScreen('screenGameSelect');
+            } else {
+                if (typeof showScreen === 'function') showScreen('screenLogin');
+            }
+        } catch (e) { }
 
         if (window.lucide) lucide.createIcons();
         window.addEventListener('DOMContentLoaded', () => {
@@ -7597,19 +7601,47 @@
         function showScreen(id) {
             ['screenLogin', 'screenGameSelect', 'screenPayment', 'screenTopup', 'screenCredentials', 'screenSuccess', 'screenProfile', 'screenEditProfile', 'screenHistory', 'screenStore', 'screenPPService', 'screenEarn', 'screenP2P', 'screenRewards', 'screenADellRoom', 'screenStarSell', 'screenCommunity'].forEach(s => {
                 const el = document.getElementById(s);
-                if (el) el.classList.toggle('hidden', s !== id);
+                if (el) {
+                    if (s === id) {
+                        el.classList.remove('hidden');
+                        el.style.display = '';
+                    } else {
+                        el.classList.add('hidden');
+                        el.style.display = 'none';
+                    }
+                }
             });
 
-            // Home (screenGameSelect) chara baki je kono screen e gele header auto hide hoye jabe
+            // STRICT App Header display rule: ONLY on screenGameSelect, NEVER on screenLogin
             const header = document.getElementById('appHeader');
             if (header) {
-                header.classList.toggle('hidden', id !== 'screenGameSelect');
+                if (id === 'screenGameSelect') {
+                    header.classList.remove('hidden');
+                    header.style.setProperty('display', 'flex', 'important');
+                } else {
+                    header.classList.add('hidden');
+                    header.style.setProperty('display', 'none', 'important');
+                }
             }
 
-            // Login ba ADELL Room e thakle nicher bottom navigation bar puro hide hobe
+            // STRICT Bottom Navigation dock display rule: strictly hidden on screenLogin & screenADellRoom
             const bNav = document.getElementById('bottomNav');
             if (bNav) {
-                bNav.classList.toggle('hidden', id === 'screenLogin' || id === 'screenADellRoom');
+                if (id === 'screenLogin' || id === 'screenADellRoom') {
+                    bNav.classList.add('hidden');
+                    bNav.style.setProperty('display', 'none', 'important');
+                } else {
+                    bNav.classList.remove('hidden');
+                    bNav.style.setProperty('display', 'grid', 'important');
+                }
+            }
+
+            if (id === 'screenEarn' && window.renderEarnUI) {
+                try { window.renderEarnUI(); } catch (e) { }
+            }
+            if (id === 'screenRewards') {
+                if (window.renderLoyaltyStars) try { window.renderLoyaltyStars(); } catch (e) { }
+                if (window.renderRewardsHistory) try { window.renderRewardsHistory(); } catch (e) { }
             }
 
             if ((id !== 'screenProfile' && id !== 'screenHistory') && window._stopHistLive) { try { window._stopHistLive(); } catch (e) { } }
@@ -7770,31 +7802,46 @@
             renderRewardsHistory();
         };
 
-        function renderRewardsHistory() {
+        async function renderRewardsHistory() {
             const feed = document.getElementById('redeemHistFeed');
             const countLabel = document.getElementById('redeemHistCount');
-            const list = (window._histItemsArr || []).filter(x => x.kind === 'REDEEM' && (x.code || '') !== 'DAILY' && (x.code || '') !== 'REFERRAL');
-
-            if (countLabel) countLabel.textContent = `${list.length} records`;
-            if (feed) {
-                if (!list.length) {
-                    feed.innerHTML = `<p class="text-center text-xs text-slate-400 py-6">কোনো রিডিম হিস্ট্রি নেই</p>`;
-                } else {
-                    feed.innerHTML = list.map(item => `
-                        <div class="p-3 bg-slate-50 border border-slate-200 rounded-2xl flex items-center justify-between gap-2">
-                            <div>
-                                <p class="font-mono font-black text-xs text-slate-900">${escH(item.code || 'PROMO')}</p>
-                                <p class="text-[10px] text-slate-400 font-semibold">${fmtDate(item.createdAt)}</p>
-                            </div>
-                            <span class="font-black text-xs text-emerald-600 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-xl">
-                                +${item.amount || 0} Coins
-                            </span>
-                        </div>
-                    `).join('');
-                }
+            const u = getActiveUser();
+            if (!u || (!u.pp_id && !u.uid)) {
+                if (feed) feed.innerHTML = `<p class="text-center text-xs text-slate-400 py-6">লগইন করার পর রিডিম হিস্ট্রি দেখতে পারবেন</p>`;
+                if (countLabel) countLabel.textContent = `0 records`;
+                return;
             }
-            if (window.lucide) lucide.createIcons();
+            const uid = u.pp_id || u.uid;
+            try {
+                const apiBase = window.CF_API || "https://ppmodscloud.profitking34.workers.dev";
+                const res = await fetch(`${apiBase}/api/promo/history?user_id=${encodeURIComponent(uid)}&_t=${Date.now()}`);
+                const data = await res.json();
+                const list = (data.ok && Array.isArray(data.redemptions)) ? data.redemptions : [];
+
+                if (countLabel) countLabel.textContent = `${list.length} records`;
+                if (feed) {
+                    if (!list.length) {
+                        feed.innerHTML = `<p class="text-center text-xs text-slate-400 py-6">কোনো রিডিম হিস্ট্রি নেই</p>`;
+                    } else {
+                        feed.innerHTML = list.map(item => `
+                            <div class="p-3 bg-slate-50 border border-slate-200 rounded-2xl flex items-center justify-between gap-2 shadow-2xs">
+                                <div>
+                                    <p class="font-mono font-black text-xs text-slate-900">${item.code || 'PROMO'}</p>
+                                    <p class="text-[10px] text-slate-400 font-semibold">${new Date(item.created_at).toLocaleString('bn-BD', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
+                                </div>
+                                <span class="font-black text-xs text-emerald-600 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-xl">
+                                    +${item.coins || 0} Coins
+                                </span>
+                            </div>
+                        `).join('');
+                    }
+                }
+            } catch (e) {
+                if (feed) feed.innerHTML = `<p class="text-center text-xs text-slate-400 py-6">কোনো রিডিম হিস্ট্রি নেই</p>`;
+            }
+            if (window.lucide) { try { lucide.createIcons(); } catch (e) { } }
         }
+        window.renderRewardsHistory = renderRewardsHistory;
 
         window.redeemGoFromPage = async () => {
             const inp = document.getElementById('redeemInputPage');
@@ -12550,12 +12597,105 @@
                 </div>
             </div>
 
+            <!-- Instant Tap Alternative for Mobile Convenience -->
+            <button onclick="window.doFullLogout()"
+                class="w-full py-2.5 px-3 bg-rose-600 hover:bg-rose-700 active:scale-95 text-white font-black rounded-xl text-xs shadow-sm flex items-center justify-center gap-1.5 transition-all cursor-pointer">
+                <i data-lucide="log-out" class="w-3.5 h-3.5"></i> হ্যাঁ, নিশ্চিত লগআউট
+            </button>
+
             <button onclick="closeSlideLogout()"
-                class="w-full py-2.5 text-xs font-bold text-slate-500 hover:text-slate-800 rounded-xl hover:bg-slate-100 transition-all cursor-pointer">Cancel</button>
+                class="w-full py-2 text-xs font-bold text-slate-500 hover:text-slate-800 rounded-xl hover:bg-slate-100 transition-all cursor-pointer">Cancel</button>
         </div>
     </div>
 
     <script>
+        // Interactive Slide to Logout Implementation
+        window.openSlideLogout = function () {
+            const modal = document.getElementById('slideLogoutModal');
+            if (!modal) {
+                if (confirm('আপনি কি নিশ্চিত যে অ্যাকাউন্ট থেকে লগআউট করতে চান?')) {
+                    window.doFullLogout();
+                }
+                return;
+            }
+            modal.style.display = 'flex';
+            if (window.lucide) try { lucide.createIcons(); } catch (e) { }
+
+            // Reset slider state
+            const thumb = document.getElementById('slideLogoutThumb');
+            const fill = document.getElementById('slideLogoutFill');
+            const label = document.getElementById('slideLogoutLabel');
+            if (thumb) thumb.style.transform = 'translateX(0px)';
+            if (fill) fill.style.width = '44px';
+            if (label) label.textContent = 'SLIDE TO LOGOUT ➔';
+
+            initSlideLogoutDrag();
+        };
+
+        window.closeSlideLogout = function () {
+            const modal = document.getElementById('slideLogoutModal');
+            if (modal) modal.style.display = 'none';
+        };
+
+        let _slideLogoutInited = false;
+        function initSlideLogoutDrag() {
+            if (_slideLogoutInited) return;
+            const track = document.getElementById('slideLogoutTrack');
+            const thumb = document.getElementById('slideLogoutThumb');
+            const fill = document.getElementById('slideLogoutFill');
+            if (!track || !thumb) return;
+            _slideLogoutInited = true;
+
+            let isDragging = false;
+            let startX = 0;
+            let currentX = 0;
+
+            const onStart = (e) => {
+                isDragging = true;
+                startX = (e.touches ? e.touches[0].clientX : e.clientX);
+                thumb.style.transition = 'none';
+                if (fill) fill.style.transition = 'none';
+            };
+
+            const onMove = (e) => {
+                if (!isDragging) return;
+                const clientX = (e.touches ? e.touches[0].clientX : e.clientX);
+                const deltaX = clientX - startX;
+                const maxSlide = track.clientWidth - thumb.clientWidth - 8;
+                currentX = Math.max(0, Math.min(deltaX, maxSlide));
+
+                thumb.style.transform = `translateX(${currentX}px)`;
+                if (fill) fill.style.width = `${currentX + 44}px`;
+
+                if (currentX >= maxSlide * 0.85) {
+                    isDragging = false;
+                    thumb.style.transition = 'transform 0.2s ease';
+                    window.doFullLogout();
+                }
+            };
+
+            const onEnd = () => {
+                if (!isDragging) return;
+                isDragging = false;
+                const maxSlide = track.clientWidth - thumb.clientWidth - 8;
+                if (currentX >= maxSlide * 0.75) {
+                    window.doFullLogout();
+                } else {
+                    thumb.style.transition = 'transform 0.25s ease';
+                    if (fill) fill.style.transition = 'width 0.25s ease';
+                    thumb.style.transform = 'translateX(0px)';
+                    if (fill) fill.style.width = '44px';
+                }
+            };
+
+            thumb.addEventListener('mousedown', onStart);
+            window.addEventListener('mousemove', onMove);
+            window.addEventListener('mouseup', onEnd);
+
+            thumb.addEventListener('touchstart', onStart, { passive: true });
+            window.addEventListener('touchmove', onMove, { passive: true });
+            window.addEventListener('touchend', onEnd);
+        }
         /* ==============================================================================
            PPM CLOUD - Pure Serverless Cloudflare Native Frontend Client
            Zero Firebase Dependencies • 8-char PP ID • Single PP Coin Balance
@@ -12711,11 +12851,6 @@
             const mUid = document.getElementById('profileUid');
             if (mUid) mUid.textContent = ppId;
 
-            const hdr = document.getElementById('appHeader');
-            if (hdr) { hdr.classList.remove('hidden'); hdr.style.display = ''; }
-            const bNav = document.getElementById('bottomNav');
-            if (bNav) { bNav.classList.remove('hidden'); bNav.style.display = ''; }
-
             setBalanceUI(coins);
         }
         window.applyUserToUI = applyUserToUI;
@@ -12790,31 +12925,33 @@
         // TRANSACTIONS (10 PER PAGE PAGINATION)
         window._txPage = 1;
         async function loadTransactions(page = 1) {
-            if (!window.ppfb.user || !window.ppfb.user.pp_id) return;
+            const u = getActiveUser() || (window.ppfb && window.ppfb.user);
+            const uid = u ? (u.pp_id || u.uid) : null;
+            if (!uid) return;
             window._txPage = page;
             const box = document.getElementById('historyFullList');
             if (!box) return;
-            box.innerHTML = '<div class="p-6 text-center text-xs font-bold text-slate-400">লেনদেন হিস্ট্রি লোড হচ্ছে...</div>';
+            box.innerHTML = '<div class="p-8 text-center text-xs font-bold text-slate-400"><div class="inline-block animate-spin w-5 h-5 border-2 border-amber-500 border-t-transparent rounded-full mb-2"></div><p>লেনদেন হিস্ট্রি লোড হচ্ছে...</p></div>';
 
             try {
-                const res = await fetch(`${CF_API}/api/transactions?user_id=${window.ppfb.user.pp_id}&page=${page}&limit=10`);
+                const res = await fetch(`${CF_API}/api/transactions?user_id=${encodeURIComponent(uid)}&page=${page}&limit=10&_t=${Date.now()}`);
                 const data = await res.json();
                 if (data.ok && data.transactions && data.transactions.length > 0) {
                     const itemsHtml = data.transactions.map(t => {
                         const isPlus = t.coins > 0;
                         const dateStr = new Date(t.created_at).toLocaleString('bn-BD', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
                         return `
-                        <div class="p-3 bg-white border border-slate-200/90 rounded-2xl flex items-center justify-between shadow-2xs">
+                        <div class="p-3.5 bg-white border border-slate-200/90 rounded-2xl flex items-center justify-between shadow-2xs">
                             <div class="flex items-center gap-2.5">
-                                <div class="w-8 h-8 rounded-xl ${isPlus ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'} flex items-center justify-center font-black text-xs">
+                                <div class="w-8 h-8 rounded-xl ${isPlus ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'} flex items-center justify-center font-black text-xs flex-shrink-0">
                                     ${isPlus ? '+' : '-'}
                                 </div>
-                                <div>
-                                    <h4 class="text-xs font-black text-slate-900 leading-tight">${t.title || 'Transaction'}</h4>
-                                    <span class="text-[10px] font-semibold text-slate-400 block">${t.details || ''} • ${dateStr}</span>
+                                <div class="min-w-0">
+                                    <h4 class="text-xs font-black text-slate-900 leading-tight truncate">${t.title || 'Transaction'}</h4>
+                                    <span class="text-[10px] font-semibold text-slate-400 block truncate">${t.details || ''} • ${dateStr}</span>
                                 </div>
                             </div>
-                            <div class="text-right">
+                            <div class="text-right flex-shrink-0">
                                 <span class="text-xs font-black ${isPlus ? 'text-emerald-600' : 'text-slate-900'} tabular-nums">
                                     ${isPlus ? '+' : ''}${Number(t.coins).toFixed(1)} Coin
                                 </span>
@@ -12826,17 +12963,32 @@
 
                     const paginationHtml = `
                     <div class="flex items-center justify-between pt-3 border-t border-slate-100">
-                        <button onclick="loadTransactions(${page - 1})" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-xl text-xs font-black text-slate-700 ${page <= 1 ? 'opacity-40 pointer-events-none' : ''}">← Previous</button>
+                        <button onclick="loadTransactions(${page - 1})" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 active:scale-95 rounded-xl text-xs font-black text-slate-700 ${page <= 1 ? 'opacity-40 pointer-events-none' : 'cursor-pointer'}">← Previous</button>
                         <span class="text-xs font-bold text-slate-500">Page ${data.pagination.page} / ${data.pagination.total_pages || 1}</span>
-                        <button onclick="loadTransactions(${page + 1})" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-xl text-xs font-black text-slate-700 ${!data.pagination.has_more ? 'opacity-40 pointer-events-none' : ''}">Next →</button>
+                        <button onclick="loadTransactions(${page + 1})" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 active:scale-95 rounded-xl text-xs font-black text-slate-700 ${!data.pagination.has_more ? 'opacity-40 pointer-events-none' : 'cursor-pointer'}">Next →</button>
                     </div>
                 `;
                     box.innerHTML = itemsHtml + paginationHtml;
                 } else {
-                    box.innerHTML = '<div class="p-6 text-center text-xs font-bold text-slate-400">কোনো লেনদেন রেকর্ড পাওয়া যায়নি</div>';
+                    box.innerHTML = `
+                        <div class="p-8 text-center bg-white rounded-3xl border border-slate-200/90 shadow-2xs space-y-3">
+                            <div class="w-14 h-14 mx-auto rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-2xl shadow-2xs">
+                                📜
+                            </div>
+                            <div class="space-y-1">
+                                <h4 class="text-sm font-black text-slate-900">কোনো হিস্ট্রি পাওয়া যায়নি</h4>
+                                <p class="text-xs text-slate-400 font-semibold max-w-[260px] mx-auto leading-relaxed">আপনার অ্যাকাউন্টে এখনো কোনো লেনদেন বা অর্ডারের রেকর্ড নেই।</p>
+                            </div>
+                        </div>
+                    `;
                 }
             } catch (e) {
-                box.innerHTML = '<div class="p-6 text-center text-xs font-bold text-red-500">হিস্ট্রি লোড করতে সমস্যা হয়েছে</div>';
+                box.innerHTML = `
+                    <div class="p-6 text-center bg-rose-50 rounded-2xl border border-rose-200 space-y-2">
+                        <p class="text-xs font-black text-rose-700">হিস্ট্রি লোড করতে সমস্যা হয়েছে</p>
+                        <button onclick="loadTransactions(${page})" class="px-3 py-1 bg-rose-600 text-white font-bold rounded-lg text-xs cursor-pointer">পুনরায় চেষ্টা করুন</button>
+                    </div>
+                `;
             }
         }
         window.loadTransactions = loadTransactions;
@@ -13005,6 +13157,309 @@
                 if (loadingBox) loadingBox.classList.add('hidden');
                 if (emptyBox) emptyBox.classList.remove('hidden');
             }
+        };
+
+        // ==========================================
+        // EARN TASKS SYSTEM (PURE CLOUDFLARE D1)
+        // ==========================================
+        window.getEarnCompletedStore = function (uid) {
+            const res = {};
+            try {
+                const uKey = uid || (getActiveUser() && getActiveUser().pp_id) || 'guest';
+                const s = JSON.parse(localStorage.getItem('ppm_earn_done_' + uKey) || '{}');
+                if (s && typeof s === 'object') Object.assign(res, s);
+            } catch (e) { }
+            return res;
+        };
+
+        window.saveEarnCompletedStore = function (taskId, timestamp, uid) {
+            const ts = timestamp || Date.now();
+            const uKey = uid || (getActiveUser() && getActiveUser().pp_id) || 'guest';
+            try {
+                const map = window.getEarnCompletedStore(uKey);
+                map[taskId] = ts;
+                localStorage.setItem('ppm_earn_done_' + uKey, JSON.stringify(map));
+            } catch (e) { }
+        };
+
+        window.claimDailyBonus = async function (btnEl) {
+            const u = getActiveUser();
+            if (!u || !u.pp_id) {
+                toast('বোনাস ক্লেইম করতে দয়া করে আগে লগইন করুন');
+                showScreen('screenLogin');
+                return;
+            }
+            if (btnEl) {
+                btnEl.disabled = true;
+                btnEl.innerHTML = `<span class="inline-block animate-spin mr-1">⏳</span> ক্লেইম হচ্ছে...`;
+            }
+            try {
+                const res = await fetch(`${CF_API}/api/earn/daily-claim`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_id: u.pp_id })
+                });
+                const data = await res.json();
+                if (data.ok) {
+                    toast(data.message || '🎉 +১ PP Coin ডেইলি বোনাস যুক্ত হয়েছে!');
+                    if (data.balance !== undefined) {
+                        setBalanceUI(data.balance);
+                        u.coins = data.balance;
+                        localStorage.setItem('ppm_user', JSON.stringify(u));
+                    }
+                    window.saveEarnCompletedStore('daily_checkin', Date.now(), u.pp_id);
+                    window.renderEarnUI();
+                } else {
+                    toast(data.error || 'আজকের ক্লেইম ইতিমধ্যে নেওয়া হয়েছে');
+                    if (btnEl) {
+                        btnEl.disabled = true;
+                        btnEl.textContent = '✓ আজকের ক্লেইম সম্পন্ন';
+                    }
+                }
+            } catch (e) {
+                toast('নেটওয়ার্ক সমস্যা, আবার চেষ্টা করুন');
+                if (btnEl) {
+                    btnEl.disabled = false;
+                    btnEl.textContent = 'Claim Bonus';
+                }
+            }
+        };
+
+        window.claimTaskReward = async function (taskId, url, rewardCoins, btnEl) {
+            const u = getActiveUser();
+            if (!u || !u.pp_id) {
+                toast('রিওয়ার্ড ক্লেইম করতে দয়া করে আগে লগইন করুন');
+                showScreen('screenLogin');
+                return;
+            }
+            if (url) {
+                window.open(url, '_blank');
+            }
+            if (btnEl) {
+                btnEl.disabled = true;
+                btnEl.innerHTML = `<span class="inline-block animate-spin mr-1">⏳</span> যাচাই হচ্ছে...`;
+            }
+            setTimeout(async () => {
+                try {
+                    const res = await fetch(`${CF_API}/api/earn/claim-task`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ user_id: u.pp_id, task_id: taskId })
+                    });
+                    const data = await res.json();
+                    if (data.ok) {
+                        toast(data.message || `🎉 +${rewardCoins} Coins যুক্ত হয়েছে!`);
+                        if (data.balance !== undefined) {
+                            setBalanceUI(data.balance);
+                            u.coins = data.balance;
+                            localStorage.setItem('ppm_user', JSON.stringify(u));
+                        }
+                        window.saveEarnCompletedStore(taskId, Date.now(), u.pp_id);
+                        window.renderEarnUI();
+                    } else {
+                        toast(data.error || 'টাস্ক সম্পন্ন করা যায়নি');
+                        if (btnEl) {
+                            btnEl.disabled = false;
+                            btnEl.textContent = 'Claim Reward';
+                        }
+                    }
+                } catch (e) {
+                    toast('নেটওয়ার্ক সমস্যা');
+                    if (btnEl) {
+                        btnEl.disabled = false;
+                        btnEl.textContent = 'Claim Reward';
+                    }
+                }
+            }, 1200);
+        };
+
+        window.renderEarnUI = async function () {
+            const u = getActiveUser();
+            const bBalEl = document.getElementById('earnBonusBalDisplay');
+            if (bBalEl) {
+                const bVal = Number((u && u.coins) || (window.ppfb && window.ppfb.balance) || 0);
+                bBalEl.textContent = `${bVal.toFixed(2)} Coins`;
+            }
+
+            const box = document.getElementById('earnTasksCardsList');
+            if (!box) return;
+
+            let tasks = [
+                {
+                    id: "daily_checkin",
+                    title: "দৈনিক বোনাস ক্লেইম",
+                    desc: "প্রতিদিন লগইন করে ফ্রি ১টি PP Coin উপহার নিন",
+                    reward: 1.0,
+                    resetType: "daily",
+                    icon: "🎁",
+                    actionType: "claim"
+                },
+                {
+                    id: "tg_channel",
+                    title: "Join Official Telegram",
+                    desc: "অফিশিয়াল টেলিগ্রাম চ্যানেলে জয়েন হয়ে নিয়মিত আপডেট পান",
+                    reward: 2.0,
+                    resetType: "once",
+                    icon: "📢",
+                    actionType: "link",
+                    url: "https://t.me/ppmodsofficial"
+                },
+                {
+                    id: "yt_channel",
+                    title: "Subscribe YouTube Channel",
+                    desc: "আমাদের ইউটিউব চ্যানেলে সাবস্ক্রাইব করে সাপোর্ট করুন",
+                    reward: 1.0,
+                    resetType: "once",
+                    icon: "▶️",
+                    actionType: "link",
+                    url: "https://youtube.com/@ppmods"
+                },
+                {
+                    id: "app_download",
+                    title: "Download PPM Server App",
+                    desc: "PPM কানেক্টর অ্যাপ v4.5 ডাউনলোড ও ইনস্টল করুন",
+                    reward: 5.0,
+                    resetType: "once",
+                    icon: "📲",
+                    actionType: "link",
+                    url: "https://t.me/ppmodsofficial"
+                }
+            ];
+
+            try {
+                const res = await fetch(`${CF_API}/api/earn/tasks?_t=${Date.now()}`);
+                const data = await res.json();
+                if (data.ok && Array.isArray(data.tasks) && data.tasks.length > 0) {
+                    tasks = data.tasks;
+                }
+            } catch (e) { }
+
+            const compStore = window.getEarnCompletedStore(u && u.pp_id);
+            const todayMidnight = new Date();
+            todayMidnight.setHours(0, 0, 0, 0);
+            const midnightMs = todayMidnight.getTime();
+
+            let completedCount = 0;
+
+            const cardsHtml = tasks.map(t => {
+                const compTime = compStore[t.id];
+                let isDone = false;
+                if (compTime) {
+                    if (t.resetType === 'once') {
+                        isDone = true;
+                    } else {
+                        isDone = Number(compTime) >= midnightMs;
+                    }
+                }
+                if (isDone) completedCount++;
+
+                let actionBtn = '';
+                if (isDone) {
+                    actionBtn = `
+                        <button disabled class="w-full py-2.5 px-3 bg-slate-100 border border-slate-200 text-slate-400 font-black rounded-xl text-xs flex items-center justify-center gap-1.5 cursor-not-allowed">
+                            <span class="text-emerald-500 font-black text-sm">✓</span> সম্পন্ন হয়েছে
+                        </button>
+                    `;
+                } else if (t.id === 'daily_checkin') {
+                    actionBtn = `
+                        <button onclick="claimDailyBonus(this)" class="w-full py-2.5 px-3 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 active:scale-98 text-white font-black rounded-xl text-xs shadow-md shadow-amber-500/20 flex items-center justify-center gap-1.5 transition-all cursor-pointer">
+                            <span>🎁 ক্লেইম করুন (+${Number(t.reward).toFixed(1)} Coin)</span>
+                        </button>
+                    `;
+                } else {
+                    actionBtn = `
+                        <button onclick="claimTaskReward('${t.id}', '${t.url || ''}', ${t.reward}, this)" class="w-full py-2.5 px-3 bg-slate-900 hover:bg-slate-800 active:scale-98 text-white font-black rounded-xl text-xs shadow-md flex items-center justify-center gap-1.5 transition-all cursor-pointer">
+                            <span>টাস্ক শুরু ও ক্লেইম (+${Number(t.reward).toFixed(1)} Coin) ➔</span>
+                        </button>
+                    `;
+                }
+
+                return `
+                    <div class="p-4 bg-white rounded-2xl border border-slate-200/90 shadow-2xs space-y-3 transition-all">
+                        <div class="flex items-start justify-between gap-2.5">
+                            <div class="flex items-start gap-2.5 min-w-0">
+                                <span class="w-10 h-10 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-lg shadow-2xs flex-shrink-0">
+                                    ${t.icon || '⚡'}
+                                </span>
+                                <div class="min-w-0">
+                                    <h4 class="text-xs font-black text-slate-900 truncate">${t.title}</h4>
+                                    <p class="text-[10.5px] text-slate-500 font-semibold mt-0.5 leading-snug">${t.desc}</p>
+                                </div>
+                            </div>
+                            <span class="flex-shrink-0 px-2 py-0.5 rounded-full bg-amber-100 border border-amber-300 text-amber-900 font-black text-[10px] whitespace-nowrap">
+                                +${Number(t.reward).toFixed(1)} Coins
+                            </span>
+                        </div>
+                        ${actionBtn}
+                    </div>
+                `;
+            }).join('');
+
+            box.innerHTML = cardsHtml;
+
+            const uBadge = document.getElementById('earnUserMonthTasksBadge');
+            if (uBadge) uBadge.textContent = `${completedCount} Tasks`;
+        };
+
+        // ==========================================
+        // REWARDS & LOYALTY STARS SYSTEM
+        // ==========================================
+        window.renderLoyaltyStars = function () {
+            const row = document.getElementById('loyaltyStarRow');
+            const badge = document.getElementById('loyaltyStarBadge');
+            const u = getActiveUser();
+            const stars = (u && u.loyaltyStars !== undefined) ? Number(u.loyaltyStars) : ((window.ppfb && window.ppfb.loyaltyStars) || 0);
+            const clamped = Math.max(0, Math.min(10, stars));
+
+            if (badge) badge.textContent = `${clamped} / 10 Stars`;
+
+            if (row) {
+                let html = '';
+                for (let i = 1; i <= 10; i++) {
+                    const isDone = i <= clamped;
+                    const isTenth = i === 10;
+                    html += `
+                        <div class="flex flex-col items-center justify-center p-1 rounded-xl ${isDone ? 'bg-amber-100/90 text-amber-600 font-black border border-amber-300 shadow-2xs' : 'bg-slate-50 text-slate-300 border border-slate-200'}">
+                            <span class="text-xs">${isDone ? '⭐' : (isTenth ? '🎁' : '☆')}</span>
+                            <span class="text-[8.5px] font-bold ${isDone ? 'text-amber-800' : 'text-slate-400'}">${i}</span>
+                        </div>
+                    `;
+                }
+                row.innerHTML = html;
+            }
+        };
+
+        window.isTenthTaskFree = function () {
+            const u = getActiveUser();
+            const stars = (u && u.loyaltyStars !== undefined) ? Number(u.loyaltyStars) : ((window.ppfb && window.ppfb.loyaltyStars) || 0);
+            return stars >= 9;
+        };
+
+        window.ppfb = window.ppfb || {};
+        window.ppfb.redeem = async function (code) {
+            const u = getActiveUser();
+            if (!u || (!u.pp_id && !u.uid)) {
+                return { ok: false, error: 'দয়া করে প্রথমে লগইন করুন' };
+            }
+            const uid = u.pp_id || u.uid;
+            const res = await fetch(`${CF_API}/api/promo/redeem`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user_id: uid, code: code })
+            });
+            const data = await res.json();
+            if (data && data.ok) {
+                if (data.balance !== undefined) {
+                    setBalanceUI(data.balance);
+                    if (window.ppfb) window.ppfb.balance = data.balance;
+                    const cur = getActiveUser();
+                    if (cur) {
+                        cur.coins = data.balance;
+                        localStorage.setItem('ppm_user', JSON.stringify(cur));
+                    }
+                }
+            }
+            return data;
         };
 
 

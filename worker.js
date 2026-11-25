@@ -895,6 +895,175 @@ export default {
         return json({ ok: true, balance: newCoins, message: "🎉 অভিনন্দন! আপনি +১ PP Coin ডেইলি বোনাস পেয়েছেন!" });
       }
 
+      // Promo Code Redeem
+      if ((path === "/api/promo/redeem" || path === "/api/redeem") && method === "POST") {
+        const body = await request.json().catch(() => ({}));
+        const uid = (body.user_id || body.pp_id || body.uid || "").toUpperCase();
+        const code = (body.code || "").trim().toUpperCase();
+
+        if (!uid || !code) {
+          return json({ ok: false, error: "ইউজার আইডি ও প্রোমো কোড দিন" }, 400);
+        }
+
+        const user = await db.prepare("SELECT coins FROM users WHERE pp_id = ?").bind(uid).first();
+        if (!user) {
+          return json({ ok: false, error: "ইউজার একাউন্ট খুঁজে পাওয়া যায়নি" }, 404);
+        }
+
+        // Check if already redeemed by this user
+        const alreadyRedeemed = await db.prepare("SELECT id FROM redemptions WHERE user_id = ? AND UPPER(code) = ?").bind(uid, code).first();
+        if (alreadyRedeemed) {
+          return json({ ok: false, error: "আপনি ইতিমধ্যে এই প্রোমো কোডটি ব্যবহার করে ফেলেছেন!" }, 400);
+        }
+
+        // Check promo_codes table first, or fall back to preset promo codes
+        let promo = await db.prepare("SELECT * FROM promo_codes WHERE UPPER(code) = ? AND is_active = 1").bind(code).first();
+        let rewardCoins = 0;
+
+        if (promo) {
+          if (promo.max_uses > 0 && promo.used_count >= promo.max_uses) {
+            return json({ ok: false, error: "এই প্রোমো কোডটির ব্যবহারের সর্বোচ্চ সীমা শেষ হয়ে গেছে!" }, 400);
+          }
+          rewardCoins = Number(promo.coins) || 0;
+        } else {
+          const PRESET_CODES = {
+            "WELCOME5": 5.0,
+            "PPM2026": 10.0,
+            "BONUS1": 1.0,
+            "FREEPLAY": 2.0,
+            "PPMOD": 3.0
+          };
+          if (PRESET_CODES[code]) {
+            rewardCoins = PRESET_CODES[code];
+          } else {
+            return json({ ok: false, error: "অবৈধ প্রোমো কোড! কোডটি সঠিক নয় বা মেয়াদোত্তীর্ণ।" }, 400);
+          }
+        }
+
+        const currentCoins = Number(user.coins) || 0.0;
+        const newCoins = Math.round((currentCoins + rewardCoins + Number.EPSILON) * 100) / 100;
+        const now = Date.now();
+
+        await db.prepare("UPDATE users SET coins = ? WHERE pp_id = ?").bind(newCoins, uid).run();
+
+        if (promo) {
+          await db.prepare("UPDATE promo_codes SET used_count = used_count + 1 WHERE UPPER(code) = ?").bind(code).run();
+        }
+
+        const redId = "RED-" + now + "-" + Math.random().toString(36).substring(2, 6);
+        await db.prepare("INSERT INTO redemptions (id, user_id, code, coins, created_at) VALUES (?, ?, ?, ?, ?)").bind(redId, uid, code, rewardCoins, now).run();
+
+        const txId = "TX-PROMO-" + now;
+        await db.prepare(`
+          INSERT INTO transactions (id, user_id, type, coins, balance_before, balance_after, title, details, created_at)
+          VALUES (?, ?, 'promo_redeem', ?, ?, ?, 'Promo Code Reward', ?, ?)
+        `).bind(txId, uid, rewardCoins, currentCoins, newCoins, `Code: ${code}`, now).run();
+
+        sendTelegram(ADMIN_TG_ID, `🎁 <b>PROMO CODE REDEEMED!</b>\n\n👤 <b>User:</b> <code>${uid}</code>\n🎟️ <b>Code:</b> <code>${code}</code>\n🪙 <b>Reward:</b> +${rewardCoins} Coins\n💰 <b>New Balance:</b> ${newCoins} Coins`);
+
+        return json({
+          ok: true,
+          amount: rewardCoins,
+          balance: newCoins,
+          message: `🎉 অভিনন্দন! '${code}' প্রোমো কোডের মাধ্যমে +${rewardCoins} Coins পেয়েছেন!`
+        });
+      }
+
+      // User Redemptions History
+      if (path === "/api/promo/history" && method === "GET") {
+        const uid = (url.searchParams.get("user_id") || url.searchParams.get("pp_id") || "").toUpperCase();
+        if (!uid) return json({ ok: false, error: "user_id required" }, 400);
+        const rows = await db.prepare("SELECT code, coins, created_at FROM redemptions WHERE user_id = ? ORDER BY created_at DESC LIMIT 20").bind(uid).all();
+        return json({ ok: true, redemptions: (rows && rows.results) || [] });
+      }
+
+      // Earn Tasks List
+      if (path === "/api/earn/tasks" && method === "GET") {
+        const DEFAULT_TASKS = [
+          {
+            id: "daily_checkin",
+            title: "দৈনিক বোনাস ক্লেইম",
+            desc: "প্রতিদিন লগইন করে ফ্রি ১টি PP Coin উপহার নিন",
+            reward: 1.0,
+            resetType: "daily",
+            icon: "🎁",
+            actionType: "claim"
+          },
+          {
+            id: "tg_channel",
+            title: "Join Official Telegram",
+            desc: "অফিশিয়াল টেলিগ্রাম চ্যানেলে জয়েন হয়ে আপডেট থাকুন",
+            reward: 2.0,
+            resetType: "once",
+            icon: "📢",
+            actionType: "link",
+            url: "https://t.me/ppmodsofficial"
+          },
+          {
+            id: "yt_channel",
+            title: "Subscribe YouTube Channel",
+            desc: "আমাদের ইউটিউব চ্যানেলে সাবস্ক্রাইব করুন",
+            reward: 1.0,
+            resetType: "once",
+            icon: "▶️",
+            actionType: "link",
+            url: "https://youtube.com/@ppmods"
+          },
+          {
+            id: "app_download",
+            title: "Download PPM Server App",
+            desc: "PPM কানেক্টর অ্যাপ v4.5 ডাউনলোড ও ইনস্টল করুন",
+            reward: 5.0,
+            resetType: "once",
+            icon: "📲",
+            actionType: "link",
+            url: "https://t.me/ppmodsofficial"
+          }
+        ];
+        return json({ ok: true, tasks: DEFAULT_TASKS });
+      }
+
+      // Claim Task Reward
+      if (path === "/api/earn/claim-task" && method === "POST") {
+        const body = await request.json().catch(() => ({}));
+        const uid = (body.user_id || body.pp_id || "").toUpperCase();
+        const taskId = body.task_id || "";
+
+        if (!uid || !taskId) return json({ ok: false, error: "user_id and task_id required" }, 400);
+
+        const taskRewards = {
+          "tg_channel": { coins: 2.0, title: "Telegram Channel Join Reward" },
+          "yt_channel": { coins: 1.0, title: "YouTube Subscribe Reward" },
+          "app_download": { coins: 5.0, title: "PPM Server App Install Reward" }
+        };
+
+        const taskInfo = taskRewards[taskId];
+        if (!taskInfo) return json({ ok: false, error: "অবৈধ টাস্ক আইডি" }, 400);
+
+        // Check if once task already completed
+        const existingTx = await db.prepare("SELECT id FROM transactions WHERE user_id = ? AND type = 'task_reward' AND details = ?").bind(uid, taskId).first();
+        if (existingTx) {
+          return json({ ok: false, error: "আপনি ইতিমধ্যে এই টাস্কটি সম্পন্ন করে রিওয়ার্ড নিয়েছেন!" }, 400);
+        }
+
+        const user = await db.prepare("SELECT coins FROM users WHERE pp_id = ?").bind(uid).first();
+        if (!user) return json({ ok: false, error: "User not found" }, 404);
+
+        const currentCoins = Number(user.coins) || 0.0;
+        const newCoins = Math.round((currentCoins + taskInfo.coins + Number.EPSILON) * 100) / 100;
+        const now = Date.now();
+
+        await db.prepare("UPDATE users SET coins = ? WHERE pp_id = ?").bind(newCoins, uid).run();
+
+        const txId = "TX-TASK-" + now;
+        await db.prepare(`
+          INSERT INTO transactions (id, user_id, type, coins, balance_before, balance_after, title, details, created_at)
+          VALUES (?, ?, 'task_reward', ?, ?, ?, ?, ?, ?)
+        `).bind(txId, uid, taskInfo.coins, currentCoins, newCoins, taskInfo.title, taskId, now).run();
+
+        return json({ ok: true, balance: newCoins, reward: taskInfo.coins, message: `🎉 অভিনন্দন! +${taskInfo.coins} Coins রিওয়ার্ড যুক্ত হয়েছে!` });
+      }
+
       // -------------------------------------------------------------
       // 10. ADMIN MANAGEMENT
       // -------------------------------------------------------------
@@ -1063,13 +1232,18 @@ export default {
         const oCount = (await db.prepare("SELECT COUNT(*) as c FROM orders").first())?.c || 0;
         const pDep = (await db.prepare("SELECT COUNT(*) as c FROM deposits WHERE status = 'pending'").first())?.c || 0;
         const totCoins = (await db.prepare("SELECT SUM(coins) as s FROM users").first())?.s || 0.0;
+        const totalBal = Math.round((Number(totCoins) + Number.EPSILON) * 100) / 100;
         return json({
           ok: true,
+          totalUsers: uCount,
+          totalOrders: oCount,
+          pendingDeposits: pDep,
+          totalUserBalance: totalBal,
           stats: {
             totalUsers: uCount,
             totalOrders: oCount,
             pendingDeposits: pDep,
-            totalCoins: Math.round((Number(totCoins) + Number.EPSILON) * 100) / 100
+            totalCoins: totalBal
           }
         });
       }
