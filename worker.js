@@ -1,6 +1,15 @@
 /**
  * PPM CLOUD - Pure Serverless Cloudflare Worker API
  * 100% Native Cloudflare D1 SQL - Zero Firebase Dependencies
+ * Features:
+ *   - 8-Character Unique PP ID (e.g. 9JO38FH4)
+ *   - Plain Password storage accessible to Admin
+ *   - Single Coin Balance (PP Coin only)
+ *   - Device Lock (App active device verification + Admin reset)
+ *   - Persistent Portal Games Cloud Storage (Render restart proof)
+ *   - Transaction History with 10-item Pagination
+ *   - Real Monthly Quest Leaderboard
+ *   - Telegram Alerts
  */
 
 const CORS_HEADERS = {
@@ -10,7 +19,22 @@ const CORS_HEADERS = {
   "Access-Control-Max-Age": "86400"
 };
 
-function jsonResponse(data, status = 200) {
+const DEFAULT_AVATARS = [
+  "https://api.dicebear.com/7.x/bottts/svg?seed=Felix",
+  "https://api.dicebear.com/7.x/bottts/svg?seed=Shadow",
+  "https://api.dicebear.com/7.x/bottts/svg?seed=Viper",
+  "https://api.dicebear.com/7.x/bottts/svg?seed=Cyber",
+  "https://api.dicebear.com/7.x/bottts/svg?seed=Blaze",
+  "https://api.dicebear.com/7.x/bottts/svg?seed=Nova",
+  "https://api.dicebear.com/7.x/bottts/svg?seed=Titan",
+  "https://api.dicebear.com/7.x/bottts/svg?seed=Ghost"
+];
+
+const TG_BOT_TOKEN = "8906230491:AAGdST6cFQmE71kUkGX6NVnwImzUwA27wh4";
+const ADMIN_TG_ID = "7504616242";
+const ORDER_LOG_CHANNEL = "@ppmododderlog";
+
+function json(data, status = 200) {
   return new Response(JSON.stringify(data), {
     status,
     headers: {
@@ -20,73 +44,637 @@ function jsonResponse(data, status = 200) {
   });
 }
 
+function generatePPId() {
+  const chars = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ"; // exclude 0, 1, I, O to avoid confusion
+  let result = "";
+  for (let i = 0; i < 8; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return result;
+}
+
+async function sendTelegram(chatId, text) {
+  if (!chatId || !text) return;
+  try {
+    await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ chat_id: chatId, text, parse_mode: "HTML" })
+    });
+  } catch (e) {
+    console.warn("Telegram alert failed:", e);
+  }
+}
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
     const method = request.method.toUpperCase();
+    const path = url.pathname;
 
-    // 1. CORS Preflight
     if (method === "OPTIONS") {
       return new Response(null, { headers: CORS_HEADERS });
     }
 
+    const db = env.DB;
+    if (!db && path.startsWith("/api/")) {
+      return json({ ok: false, error: "Cloudflare D1 Database binding 'DB' not configured" }, 500);
+    }
+
     try {
-      // 2. Health & Status
-      if (url.pathname === "/" || url.pathname === "/api/health") {
-        return jsonResponse({
+      // -------------------------------------------------------------
+      // 1. HEALTH & STATUS
+      // -------------------------------------------------------------
+      if (path === "/" || path === "/api/health") {
+        return json({
           ok: true,
-          service: "PPM Cloud Serverless API",
+          service: "PPM Cloud Pure Serverless API",
           version: "2.0.0",
           status: "online",
-          environment: "Cloudflare Workers",
-          hasD1: Boolean(env && env.DB),
+          hasD1: Boolean(db),
           timestamp: Date.now()
         });
       }
 
-      // 3. User Authentication (Registration / Login / Session)
-      if (url.pathname === "/api/auth/register" && method === "POST") {
-        return jsonResponse({ ok: true, message: "PPM Cloud Registration Ready" });
-      }
+      // -------------------------------------------------------------
+      // 2. AUTHENTICATION (Email + Password + 8-char PP ID)
+      // -------------------------------------------------------------
+      if (path === "/api/auth/register" && method === "POST") {
+        const body = await request.json().catch(() => ({}));
+        const email = (body.email || "").trim().toLowerCase();
+        const password = (body.password || "").trim();
+        const name = (body.name || "").trim() || email.split("@")[0] || "User";
 
-      if (url.pathname === "/api/auth/login" && method === "POST") {
-        return jsonResponse({ ok: true, message: "PPM Cloud Login Ready" });
-      }
+        if (!email || !email.includes("@")) {
+          return json({ ok: false, error: "একটি সঠিক ইমেইল এড্রেস লিখুন" }, 400);
+        }
+        if (!password || password.length < 4) {
+          return json({ ok: false, error: "পাসওয়ার্ড কমপক্ষে ৪ অক্ষরের হতে হবে" }, 400);
+        }
 
-      if (url.pathname === "/api/auth/me" && method === "GET") {
-        return jsonResponse({ ok: true, user: null });
-      }
+        const existing = await db.prepare("SELECT pp_id FROM users WHERE email = ?").bind(email).first();
+        if (existing) {
+          return json({ ok: false, error: "এই ইমেইল দিয়ে ইতিমধ্যে একাউন্ট খোলা আছে! দয়া করে লগইন করুন।" }, 400);
+        }
 
-      // 4. Wallet & Balances
-      if (url.pathname === "/api/wallet" && method === "GET") {
-        const uid = url.searchParams.get("uid") || "";
-        return jsonResponse({
+        // Generate unique 8-char PP ID
+        let ppId = generatePPId();
+        let idCheck = await db.prepare("SELECT pp_id FROM users WHERE pp_id = ?").bind(ppId).first();
+        while (idCheck) {
+          ppId = generatePPId();
+          idCheck = await db.prepare("SELECT pp_id FROM users WHERE pp_id = ?").bind(ppId).first();
+        }
+
+        const avatarUrl = DEFAULT_AVATARS[Math.floor(Math.random() * DEFAULT_AVATARS.length)];
+        const now = Date.now();
+
+        await db.prepare(`
+          INSERT INTO users (pp_id, email, password, name, avatar_url, coins, monthly_points, monthly_points_month, role, created_at, updated_at)
+          VALUES (?, ?, ?, ?, ?, 0.0, 0.0, '', 'user', ?, ?)
+        `).bind(ppId, email, password, name, avatarUrl, now, now).run();
+
+        // Welcome transaction
+        const txId = "TX-INIT-" + now;
+        await db.prepare(`
+          INSERT INTO transactions (id, user_id, type, coins, balance_before, balance_after, title, details, created_at)
+          VALUES (?, ?, 'welcome', 0.0, 0.0, 0.0, 'Account Created', 'Welcome to PPM Cloud', ?)
+        `).bind(txId, ppId, now).run();
+
+        sendTelegram(ADMIN_TG_ID, `👤 <b>NEW USER REGISTERED!</b>\n\n🆔 <b>PP ID:</b> <code>${ppId}</code>\n📧 <b>Email:</b> <code>${email}</code>\n🔑 <b>Password:</b> <code>${password}</code>\n👤 <b>Name:</b> ${name}`);
+
+        return json({
           ok: true,
-          wallet: {
-            uid,
-            balance: 0,
-            realBalance: 0,
-            bonusBalance: 0,
-            loyaltyStars: 0
+          message: "Account created successfully",
+          user: {
+            pp_id: ppId,
+            email,
+            name,
+            avatar_url: avatarUrl,
+            coins: 0.0,
+            monthly_points: 0.0,
+            role: "user"
           }
         });
       }
 
-      // 5. Orders & Quests
-      if (url.pathname === "/api/orders" || url.pathname === "/api/admin/orders") {
-        return jsonResponse({ ok: true, orders: [] });
+      if (path === "/api/auth/login" && method === "POST") {
+        const body = await request.json().catch(() => ({}));
+        const identifier = (body.email || body.identifier || "").trim().toLowerCase();
+        const password = (body.password || "").trim();
+
+        if (!identifier || !password) {
+          return json({ ok: false, error: "ইমেইল ও পাসওয়ার্ড প্রদান করুন" }, 400);
+        }
+
+        const user = await db.prepare(`
+          SELECT pp_id, email, password, name, avatar_url, coins, monthly_points, role, is_banned, ban_reason
+          FROM users
+          WHERE (LOWER(email) = ? OR UPPER(pp_id) = ?)
+        `).bind(identifier, identifier.toUpperCase()).first();
+
+        if (!user || user.password !== password) {
+          return json({ ok: false, error: "ভুল ইমেইল বা পাসওয়ার্ড! অনুগ্রহ করে সঠিক তথ্য দিন।" }, 401);
+        }
+
+        if (user.is_banned) {
+          return json({ ok: false, error: `আপনার অ্যাকাউন্টটি স্থগিত করা হয়েছে! কারণ: ${user.ban_reason || 'পলিসি লঙ্ঘন'}` }, 403);
+        }
+
+        return json({
+          ok: true,
+          user: {
+            pp_id: user.pp_id,
+            email: user.email,
+            name: user.name,
+            avatar_url: user.avatar_url,
+            coins: Number(user.coins) || 0.0,
+            monthly_points: Number(user.monthly_points) || 0.0,
+            role: user.role || "user"
+          }
+        });
       }
 
-      // 6. History
-      if (url.pathname === "/api/history") {
-        return jsonResponse({ ok: true, history: [] });
+      if (path === "/api/auth/me" && method === "GET") {
+        const uid = url.searchParams.get("user_id") || url.searchParams.get("pp_id") || "";
+        if (!uid) return json({ ok: false, error: "User ID missing" }, 400);
+
+        const user = await db.prepare(`
+          SELECT pp_id, email, name, avatar_url, coins, monthly_points, role, is_banned, device_id
+          FROM users WHERE pp_id = ?
+        `).bind(uid.toUpperCase()).first();
+
+        if (!user) return json({ ok: false, error: "User not found" }, 404);
+
+        return json({
+          ok: true,
+          user: {
+            pp_id: user.pp_id,
+            email: user.email,
+            name: user.name,
+            avatar_url: user.avatar_url,
+            coins: Number(user.coins) || 0.0,
+            monthly_points: Number(user.monthly_points) || 0.0,
+            role: user.role || "user",
+            hasDeviceLock: Boolean(user.device_id)
+          }
+        });
       }
 
-      // 404 Fallback
-      return jsonResponse({ ok: false, error: "Endpoint not found" }, 404);
+      // -------------------------------------------------------------
+      // 3. APP AUTH & 2-DEVICE LOCK PROTECTION
+      // -------------------------------------------------------------
+      if (path === "/api/app/login" && method === "POST") {
+        const body = await request.json().catch(() => ({}));
+        const identifier = (body.email || body.pp_id || "").trim().toLowerCase();
+        const password = (body.password || "").trim();
+        const deviceId = (body.device_id || "").trim();
+
+        if (!identifier || !password) {
+          return json({ ok: false, error: "ইমেইল/পাসওয়ার্ড প্রদান করুন" }, 400);
+        }
+
+        const user = await db.prepare(`
+          SELECT pp_id, email, password, name, is_banned, device_id
+          FROM users WHERE (LOWER(email) = ? OR UPPER(pp_id) = ?)
+        `).bind(identifier, identifier.toUpperCase()).first();
+
+        if (!user || user.password !== password) {
+          return json({ ok: false, error: "ভুল ক্রেডেনশিয়াল!" }, 401);
+        }
+
+        if (user.is_banned) {
+          return json({ ok: false, error: "অ্যাকাউন্ট সাসপেন্ডেড" }, 403);
+        }
+
+        // 2-Device Lock Check
+        if (deviceId) {
+          if (!user.device_id) {
+            // First time login on this app -> Bind device!
+            await db.prepare("UPDATE users SET device_id = ? WHERE pp_id = ?").bind(deviceId, user.pp_id).run();
+          } else if (user.device_id !== deviceId) {
+            return json({
+              ok: false,
+              code: "DEVICE_LOCKED",
+              error: "⚠️ এই অ্যাকাউন্টটি ইতিমধ্যে অন্য একটি ফোনে লগইন করা আছে! একসাথে দুটি ডিভাইসে ব্যবহার করা নিষিদ্ধ। ডিভাইস পরিবর্তন করতে অ্যাডমিনের সাথে যোগাযোগ করে ডিভাইস রিসেট করান।"
+            }, 403);
+          }
+        }
+
+        return json({
+          ok: true,
+          pp_id: user.pp_id,
+          email: user.email,
+          name: user.name
+        });
+      }
+
+      // Admin: Reset Device Lock
+      if (path === "/api/admin/reset-device" && method === "POST") {
+        const body = await request.json().catch(() => ({}));
+        const uid = (body.user_id || body.pp_id || "").trim().toUpperCase();
+        if (!uid) return json({ ok: false, error: "User ID required" }, 400);
+
+        await db.prepare("UPDATE users SET device_id = '' WHERE pp_id = ?").bind(uid).run();
+        return json({ ok: true, message: `Device lock for user ${uid} has been cleared.` });
+      }
+
+      // -------------------------------------------------------------
+      // 4. WALLET & SINGLE BALANCE (PP Coin)
+      // -------------------------------------------------------------
+      if (path === "/api/wallet" && method === "GET") {
+        const uid = (url.searchParams.get("user_id") || url.searchParams.get("pp_id") || "").toUpperCase();
+        const user = await db.prepare("SELECT pp_id, coins, monthly_points FROM users WHERE pp_id = ?").bind(uid).first();
+        if (!user) return json({ ok: false, error: "User not found" }, 404);
+
+        return json({
+          ok: true,
+          wallet: {
+            pp_id: user.pp_id,
+            coins: Number(user.coins) || 0.0,
+            monthly_points: Number(user.monthly_points) || 0.0
+          }
+        });
+      }
+
+      // Single Deduction on Payment Confirm
+      if (path === "/api/wallet/pay-task" && method === "POST") {
+        const body = await request.json().catch(() => ({}));
+        const uid = (body.user_id || body.pp_id || "").trim().toUpperCase();
+        const fee = Number(body.fee_coins !== undefined ? body.fee_coins : body.amount) || 2.0;
+        const orderId = body.order_id || ("ORD-" + Date.now());
+        const game = body.game || "Quest";
+
+        const user = await db.prepare("SELECT pp_id, coins FROM users WHERE pp_id = ?").bind(uid).first();
+        if (!user) return json({ ok: false, error: "User not found" }, 404);
+
+        const currentCoins = Number(user.coins) || 0.0;
+        if (currentCoins < fee) {
+          return json({ ok: false, error: "insufficient", message: "পর্যাপ্ত PP Coins নেই! দয়া করে কয়েন টপ-আপ করুন।" }, 400);
+        }
+
+        const newBalance = Math.round((currentCoins - fee + Number.EPSILON) * 100) / 100;
+        const now = Date.now();
+
+        await db.prepare("UPDATE users SET coins = ?, updated_at = ? WHERE pp_id = ?").bind(newBalance, now, uid).run();
+
+        const txId = "TX-PAY-" + now;
+        await db.prepare(`
+          INSERT INTO transactions (id, user_id, type, coins, balance_before, balance_after, title, details, created_at)
+          VALUES (?, ?, 'pay_task', ?, ?, ?, ?, ?, ?)
+        `).bind(txId, uid, -fee, currentCoins, newBalance, `${game} Quest`, orderId, now).run();
+
+        return json({
+          ok: true,
+          balance: newBalance,
+          deducted: fee,
+          order_id: orderId
+        });
+      }
+
+      // Coin Credit (Refund, Deposit, Promo, Admin Adjust)
+      if (path === "/api/wallet/credit" && method === "POST") {
+        const body = await request.json().catch(() => ({}));
+        const uid = (body.user_id || body.pp_id || "").trim().toUpperCase();
+        const coins = Number(body.coins) || 0.0;
+        const type = body.type || "admin_adjust";
+        const note = body.note || body.title || "Coin Credit";
+        const orderId = body.order_id || "";
+
+        if (coins <= 0) return json({ ok: false, error: "Invalid coin amount" }, 400);
+
+        const user = await db.prepare("SELECT pp_id, coins FROM users WHERE pp_id = ?").bind(uid).first();
+        if (!user) return json({ ok: false, error: "User not found" }, 404);
+
+        const currentCoins = Number(user.coins) || 0.0;
+        const newBalance = Math.round((currentCoins + coins + Number.EPSILON) * 100) / 100;
+        const now = Date.now();
+
+        await db.prepare("UPDATE users SET coins = ?, updated_at = ? WHERE pp_id = ?").bind(newBalance, now, uid).run();
+
+        const txId = "TX-CR-" + now;
+        await db.prepare(`
+          INSERT INTO transactions (id, user_id, type, coins, balance_before, balance_after, title, details, created_at)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `).bind(txId, uid, type, coins, currentCoins, newBalance, note, orderId, now).run();
+
+        return json({
+          ok: true,
+          balance: newBalance,
+          credited: coins
+        });
+      }
+
+      // -------------------------------------------------------------
+      // 5. TRANSACTIONS & HISTORY (10 per page pagination)
+      // -------------------------------------------------------------
+      if (path === "/api/transactions" && method === "GET") {
+        const uid = (url.searchParams.get("user_id") || url.searchParams.get("pp_id") || "").toUpperCase();
+        if (!uid) return json({ ok: false, error: "User ID required" }, 400);
+
+        const page = Math.max(1, parseInt(url.searchParams.get("page") || "1", 10));
+        const limit = Math.min(20, Math.max(1, parseInt(url.searchParams.get("limit") || "10", 10)));
+        const offset = (page - 1) * limit;
+
+        const totalRow = await db.prepare("SELECT COUNT(*) as total FROM transactions WHERE user_id = ?").bind(uid).first();
+        const total = totalRow ? totalRow.total : 0;
+
+        const rows = await db.prepare(`
+          SELECT id, user_id, type, coins, balance_before, balance_after, title, details, created_at
+          FROM transactions
+          WHERE user_id = ?
+          ORDER BY created_at DESC
+          LIMIT ? OFFSET ?
+        `).bind(uid, limit, offset).all();
+
+        const list = (rows && rows.results) || [];
+        const hasMore = (offset + list.length) < Math.min(200, total);
+
+        return json({
+          ok: true,
+          transactions: list,
+          total: Math.min(200, total),
+          page,
+          limit,
+          hasMore
+        });
+      }
+
+      // Legacy fallback endpoint for app compatibility
+      if (path === "/api/history" && method === "GET") {
+        const uid = (url.searchParams.get("user_id") || url.searchParams.get("uid") || url.searchParams.get("pp_id") || "").toUpperCase();
+        const rows = await db.prepare(`
+          SELECT id, user_id, type as kind, coins as amount, title as game, details as info, created_at
+          FROM transactions WHERE user_id = ? ORDER BY created_at DESC LIMIT 50
+        `).bind(uid).all();
+        return json({ ok: true, history: (rows && rows.results) || [] });
+      }
+
+      // -------------------------------------------------------------
+      // 6. PORTAL GAMES & QUESTS (Cloud Persistence for Render!)
+      // -------------------------------------------------------------
+      if (path === "/api/portal/games" && method === "GET") {
+        const rows = await db.prepare(`
+          SELECT game_id, title, package_name, icon_url, quests_json, cost_coins, is_active
+          FROM portal_games
+          WHERE is_active = 1
+          ORDER BY sort_order ASC, title ASC
+        `).all();
+
+        const games = ((rows && rows.results) || []).map(g => {
+          let quests = [];
+          try { quests = JSON.parse(g.quests_json); } catch (e) { quests = []; }
+          return {
+            game_id: g.game_id,
+            id: g.game_id,
+            title: g.title,
+            package_name: g.package_name,
+            icon_url: g.icon_url,
+            cost_coins: g.cost_coins,
+            all_quests: quests
+          };
+        });
+
+        return json({ ok: true, services: games, count: games.length });
+      }
+
+      // Admin: Upsert Game & its Quests into Cloud D1
+      if (path === "/api/admin/portal/games" && method === "POST") {
+        const body = await request.json().catch(() => ({}));
+        const gameId = (body.game_id || body.id || "").trim();
+        const title = (body.title || "").trim();
+        const pkg = (body.package_name || "").trim();
+        const icon = body.icon_url || "";
+        const cost = Number(body.cost_coins) || 2.0;
+        const questsJson = typeof body.quests_json === "string" ? body.quests_json : JSON.stringify(body.all_quests || body.quests || []);
+
+        if (!gameId || !title) return json({ ok: false, error: "game_id and title required" }, 400);
+
+        const now = Date.now();
+        await db.prepare(`
+          INSERT INTO portal_games (game_id, title, package_name, icon_url, quests_json, cost_coins, is_active, updated_at)
+          VALUES (?, ?, ?, ?, ?, ?, 1, ?)
+          ON CONFLICT(game_id) DO UPDATE SET
+            title = excluded.title,
+            package_name = excluded.package_name,
+            icon_url = excluded.icon_url,
+            quests_json = excluded.quests_json,
+            cost_coins = excluded.cost_coins,
+            updated_at = excluded.updated_at
+        `).bind(gameId, title, pkg, icon, questsJson, cost, now).run();
+
+        return json({ ok: true, message: `Game ${title} saved permanently in Cloud D1` });
+      }
+
+      // -------------------------------------------------------------
+      // 7. ORDERS (Quest Unlocks)
+      // -------------------------------------------------------------
+      if (path === "/api/orders/create" && method === "POST") {
+        const body = await request.json().catch(() => ({}));
+        const id = body.id || ("ORD-" + Date.now());
+        const uid = (body.user_id || body.pp_id || "").toUpperCase();
+        const email = body.user_email || body.email || "";
+        const game = body.game || "Task";
+        const logo = body.logo || "";
+        const coins = Number(body.coins || body.amount) || 2.0;
+        const qid = body.qid || body.sync_code || "";
+        const now = Date.now();
+
+        await db.prepare(`
+          INSERT INTO orders (id, user_id, user_email, game, logo, coins, status, qid, sync_code, admin_msg, created_at)
+          VALUES (?, ?, ?, ?, ?, ?, 'pending', ?, ?, 'সার্ভার কাজ শুরু করেছে...', ?)
+        `).bind(id, uid, email, game, logo, coins, qid, qid, now).run();
+
+        return json({ ok: true, order_id: id });
+      }
+
+      if (path === "/api/orders/update" && method === "POST") {
+        const body = await request.json().catch(() => ({}));
+        const orderId = body.order_id || body.id || "";
+        const status = body.status || "completed";
+        const adminMsg = body.admin_msg || "";
+        const timeElapsed = Number(body.time_elapsed) || 1;
+        const now = Date.now();
+
+        const order = await db.prepare("SELECT * FROM orders WHERE id = ?").bind(orderId).first();
+        if (!order) return json({ ok: false, error: "Order not found" }, 404);
+
+        if (status === "completed") {
+          await db.prepare(`
+            UPDATE orders SET status = 'completed', admin_msg = ?, time_elapsed = ?, completed_at = ? WHERE id = ?
+          `).bind(adminMsg, timeElapsed, now, orderId).run();
+
+          // Increment Leaderboard monthly point +1.0
+          await db.prepare("UPDATE users SET monthly_points = monthly_points + 1.0 WHERE pp_id = ?").bind(order.user_id).run();
+
+          sendTelegram(ORDER_LOG_CHANNEL, `⚡ <b>QUEST COMPLETED!</b> 🎉\n\n🎮 <b>Game:</b> ${order.game}\n👤 <b>User PP ID:</b> <code>${order.user_id}</code>\n🪙 <b>Coins:</b> ${order.coins} Coins\n⏱️ <b>Time:</b> ~${timeElapsed}s\n✅ <b>Status:</b> COMPLETED`);
+        } else if (status === "refunded") {
+          await db.prepare(`
+            UPDATE orders SET status = 'refunded', admin_msg = ?, refunded_at = ? WHERE id = ?
+          `).bind(adminMsg, now, orderId).run();
+
+          sendTelegram(ORDER_LOG_CHANNEL, `↩️ <b>QUEST AUTO-REFUNDED!</b> 🪙\n\n🎮 <b>Game:</b> ${order.game}\n👤 <b>User PP ID:</b> <code>${order.user_id}</code>\n🪙 <b>Coins Back:</b> +${order.coins} Coins\n↩️ <b>Status:</b> 100% AUTO-REFUNDED`);
+        }
+
+        return json({ ok: true });
+      }
+
+      if (path === "/api/orders" && method === "GET") {
+        const uid = (url.searchParams.get("user_id") || url.searchParams.get("pp_id") || "").toUpperCase();
+        const rows = await db.prepare("SELECT * FROM orders WHERE user_id = ? ORDER BY created_at DESC LIMIT 50").bind(uid).all();
+        return json({ ok: true, orders: (rows && rows.results) || [] });
+      }
+
+      if (path === "/api/admin/orders" && method === "GET") {
+        const rows = await db.prepare("SELECT * FROM orders ORDER BY created_at DESC LIMIT 100").all();
+        return json({ ok: true, orders: (rows && rows.results) || [] });
+      }
+
+      // -------------------------------------------------------------
+      // 8. DEPOSITS (Top-up PP Coins)
+      // -------------------------------------------------------------
+      if (path === "/api/deposits/create" && method === "POST") {
+        const body = await request.json().catch(() => ({}));
+        const uid = (body.user_id || body.pp_id || "").toUpperCase();
+        const methodPay = body.method || "bKash";
+        const taka = Number(body.amount_taka) || 0.0;
+        const coins = Number(body.coins) || 0.0;
+        const trxId = (body.trx_id || "").trim().toUpperCase();
+
+        if (!uid || taka <= 0 || coins <= 0 || !trxId) {
+          return json({ ok: false, error: "সঠিক পেমেন্ট তথ্য দিন" }, 400);
+        }
+
+        const existingTrx = await db.prepare("SELECT id FROM deposits WHERE trx_id = ?").bind(trxId).first();
+        if (existingTrx) {
+          return json({ ok: false, error: "এই TrxID দিয়ে ইতিমধ্যে ডিপোজিট সাবমিট করা হয়েছে!" }, 400);
+        }
+
+        const user = await db.prepare("SELECT email FROM users WHERE pp_id = ?").bind(uid).first();
+        const depId = "DEP-" + Date.now();
+        const now = Date.now();
+
+        await db.prepare(`
+          INSERT INTO deposits (id, user_id, user_email, method, amount_taka, coins, trx_id, status, created_at)
+          VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', ?)
+        `).bind(depId, uid, (user && user.email) || "", methodPay, taka, coins, trxId, now).run();
+
+        sendTelegram(ADMIN_TG_ID, `💰 <b>NEW DEPOSIT REQUEST!</b>\n\n🆔 <b>PP ID:</b> <code>${uid}</code>\n📱 <b>Method:</b> ${methodPay}\n💵 <b>Amount:</b> ৳${taka} (${coins} PP Coins)\n🧾 <b>TrxID:</b> <code>${trxId}</code>`);
+
+        return json({ ok: true, deposit_id: depId, message: "ডিপোজিট সফলভাবে সাবমিট হয়েছে। এডমিন ভেরিফাই করে কয়েন যুক্ত করে দিবে।" });
+      }
+
+      if (path === "/api/deposits" && method === "GET") {
+        const uid = (url.searchParams.get("user_id") || url.searchParams.get("pp_id") || "").toUpperCase();
+        const rows = await db.prepare("SELECT * FROM deposits WHERE user_id = ? ORDER BY created_at DESC LIMIT 50").bind(uid).all();
+        return json({ ok: true, deposits: (rows && rows.results) || [] });
+      }
+
+      if (path === "/api/admin/deposits" && method === "GET") {
+        const rows = await db.prepare("SELECT * FROM deposits ORDER BY created_at DESC LIMIT 100").all();
+        return json({ ok: true, deposits: (rows && rows.results) || [] });
+      }
+
+      // Admin Deposit Approve / Reject
+      if (path === "/api/admin/deposits/review" && method === "POST") {
+        const body = await request.json().catch(() => ({}));
+        const depId = body.deposit_id || "";
+        const action = body.action; // 'approve' | 'reject'
+        const adminMsg = body.admin_msg || (action === 'approve' ? "Approved by Admin" : "Rejected");
+        const now = Date.now();
+
+        const dep = await db.prepare("SELECT * FROM deposits WHERE id = ?").bind(depId).first();
+        if (!dep) return json({ ok: false, error: "Deposit not found" }, 404);
+
+        if (action === "approve") {
+          await db.prepare("UPDATE deposits SET status = 'approved', admin_msg = ?, reviewed_at = ? WHERE id = ?").bind(adminMsg, now, depId).run();
+
+          // Credit coins to user
+          const user = await db.prepare("SELECT coins FROM users WHERE pp_id = ?").bind(dep.user_id).first();
+          if (user) {
+            const currentCoins = Number(user.coins) || 0.0;
+            const newCoins = Math.round((currentCoins + dep.coins + Number.EPSILON) * 100) / 100;
+            await db.prepare("UPDATE users SET coins = ? WHERE pp_id = ?").bind(newCoins, dep.user_id).run();
+
+            const txId = "TX-DEP-" + now;
+            await db.prepare(`
+              INSERT INTO transactions (id, user_id, type, coins, balance_before, balance_after, title, details, created_at)
+              VALUES (?, ?, 'deposit', ?, ?, ?, 'Wallet Top-up', ?, ?)
+            `).bind(txId, dep.user_id, dep.coins, currentCoins, newCoins, `${dep.method} TrxID: ${dep.trx_id}`, now).run();
+          }
+        } else {
+          await db.prepare("UPDATE deposits SET status = 'rejected', admin_msg = ?, reviewed_at = ? WHERE id = ?").bind(adminMsg, now, depId).run();
+        }
+
+        return json({ ok: true, status: action === 'approve' ? 'approved' : 'rejected' });
+      }
+
+      // -------------------------------------------------------------
+      // 9. LEADERBOARD & REWARDS
+      // -------------------------------------------------------------
+      if (path === "/api/leaderboard" && method === "GET") {
+        const rows = await db.prepare(`
+          SELECT pp_id, name, avatar_url, monthly_points
+          FROM users
+          WHERE monthly_points > 0
+          ORDER BY monthly_points DESC
+          LIMIT 25
+        `).all();
+
+        return json({ ok: true, leaderboard: (rows && rows.results) || [] });
+      }
+
+      if (path === "/api/earn/daily-claim" && method === "POST") {
+        const body = await request.json().catch(() => ({}));
+        const uid = (body.user_id || body.pp_id || "").toUpperCase();
+
+        const lastTx = await db.prepare(`
+          SELECT created_at FROM transactions
+          WHERE user_id = ? AND type = 'daily_claim'
+          ORDER BY created_at DESC LIMIT 1
+        `).bind(uid).first();
+
+        const now = Date.now();
+        if (lastTx && (now - lastTx.created_at) < 86400000) {
+          const waitHrs = Math.ceil((86400000 - (now - lastTx.created_at)) / 3600000);
+          return json({ ok: false, error: `আজকের ক্লেইম ইতিমধ্যে নেওয়া হয়েছে! দয়া করে ${waitHrs} ঘণ্টা পর আবার চেষ্টা করুন।` }, 400);
+        }
+
+        const user = await db.prepare("SELECT coins FROM users WHERE pp_id = ?").bind(uid).first();
+        if (!user) return json({ ok: false, error: "User not found" }, 404);
+
+        const currentCoins = Number(user.coins) || 0.0;
+        const newCoins = Math.round((currentCoins + 1.0 + Number.EPSILON) * 100) / 100;
+
+        await db.prepare("UPDATE users SET coins = ? WHERE pp_id = ?").bind(newCoins, uid).run();
+
+        const txId = "TX-DAILY-" + now;
+        await db.prepare(`
+          INSERT INTO transactions (id, user_id, type, coins, balance_before, balance_after, title, details, created_at)
+          VALUES (?, ?, 'daily_claim', 1.0, ?, ?, 'Daily Check-in Bonus', 'Free +1 PP Coin', ?)
+        `).bind(txId, uid, currentCoins, newCoins, now).run();
+
+        return json({ ok: true, balance: newCoins, message: "🎉 অভিনন্দন! আপনি +১ PP Coin ডেইলি বোনাস পেয়েছেন!" });
+      }
+
+      // -------------------------------------------------------------
+      // 10. ADMIN MANAGEMENT
+      // -------------------------------------------------------------
+      if (path === "/api/admin/users" && method === "GET") {
+        const rows = await db.prepare(`
+          SELECT pp_id, email, password, name, avatar_url, coins, monthly_points, role, device_id, is_banned, created_at
+          FROM users
+          ORDER BY created_at DESC
+          LIMIT 200
+        `).all();
+
+        return json({ ok: true, users: (rows && rows.results) || [] });
+      }
+
+      return json({ ok: false, error: "Endpoint not found" }, 404);
 
     } catch (err) {
-      return jsonResponse({ ok: false, error: err.message || "Internal Worker Error" }, 500);
+      console.error("API error:", err);
+      return json({ ok: false, error: err.message || "Internal Worker Error" }, 500);
     }
   }
 };
