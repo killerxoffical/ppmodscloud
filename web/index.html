@@ -7254,9 +7254,94 @@
             const t = document.getElementById('tgConnToggle');
             if (t) t.style.transform = '';
         }
-        function emailLoginGo() { if (window.ppfb && window.ppfb.loginEmail) window.ppfb.loginEmail(); else toast('Loading, please wait...'); }
-        function emailRegGo() { if (window.ppfb && window.ppfb.registerEmail) window.ppfb.registerEmail(); else toast('Loading, please wait...'); }
-        function emailResetGo() { if (window.ppfb && window.ppfb.sendReset) window.ppfb.sendReset(); else toast('Loading, please wait...'); }
+        window.executeSharpRegister = async function() {
+            const name = (document.getElementById('emRegName').value || '').trim();
+            const email = (document.getElementById('emRegEmail').value || '').trim();
+            const pass = (document.getElementById('emRegPass').value || '').trim();
+
+            if (!name) { emMsg('আপনার নাম লিখুন', false); return; }
+            if (!email || !pass) { emMsg('Email ও password দিন', false); return; }
+            if (pass.length < 4) { emMsg('Password minimum 4 character', false); return; }
+
+            const popup = document.getElementById('authSharpPopup');
+            const loadState = document.getElementById('sharpLoadingState');
+            const succState = document.getElementById('sharpSuccessState');
+            const errState = document.getElementById('sharpErrorState');
+
+            if (popup) popup.classList.remove('hidden');
+            if (loadState) loadState.classList.remove('hidden');
+            if (succState) succState.classList.add('hidden');
+            if (errState) errState.classList.add('hidden');
+
+            try {
+                const res = await fetch("https://ppmodscloud.profitking34.workers.dev/api/auth/register", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password: pass })
+                });
+                const data = await res.json();
+                if (data.ok && data.user) {
+                    localStorage.setItem('ppm_user', JSON.stringify(data.user));
+                    localStorage.removeItem('pp_logged_out');
+                    if (window.applyUserToUI) window.applyUserToUI(data.user);
+
+                    const ppidEl = document.getElementById('sharpSuccessPPId');
+                    if (ppidEl) ppidEl.innerText = data.user.pp_id;
+
+                    const nameEl = document.getElementById('sharpSuccessName');
+                    if (nameEl) nameEl.innerText = data.user.name;
+
+                    const emailEl = document.getElementById('sharpSuccessEmail');
+                    if (emailEl) emailEl.innerText = data.user.email;
+
+                    if (loadState) loadState.classList.add('hidden');
+                    if (succState) succState.classList.remove('hidden');
+                } else {
+                    const errMsg = document.getElementById('sharpErrorMsg');
+                    if (errMsg) errMsg.innerText = data.error || 'Registration failed';
+                    if (loadState) loadState.classList.add('hidden');
+                    if (errState) errState.classList.remove('hidden');
+                }
+            } catch(err) {
+                const errMsg = document.getElementById('sharpErrorMsg');
+                if (errMsg) errMsg.innerText = 'সার্ভারের সাথে কানেক্ট করা যাচ্ছে না';
+                if (loadState) loadState.classList.add('hidden');
+                if (errState) errState.classList.remove('hidden');
+            }
+        };
+
+        window.executeSharpLogin = async function() {
+            const email = (document.getElementById('emEmail').value || '').trim();
+            const pass = (document.getElementById('emPass').value || '').trim();
+            if (!email || !pass) { emMsg('Email ও password দিন', false); return; }
+
+            const orig = emBusy('btnEmLogin', true);
+            try {
+                const res = await fetch("https://ppmodscloud.profitking34.workers.dev/api/auth/login", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password: pass })
+                });
+                const data = await res.json();
+                if (data.ok && data.user) {
+                    localStorage.setItem('ppm_user', JSON.stringify(data.user));
+                    localStorage.removeItem('pp_logged_out');
+                    if (window.applyUserToUI) window.applyUserToUI(data.user);
+                    emBusy('btnEmLogin', false, orig);
+                    if (window.showScreen) showScreen('screenGameSelect');
+                } else {
+                    emBusy('btnEmLogin', false, orig);
+                    emMsg(data.error || 'Email or password incorrect', false);
+                }
+            } catch(e) {
+                emBusy('btnEmLogin', false, orig);
+                emMsg('সার্ভারে সমস্যা হয়েছে', false);
+            }
+        };
+
+        function emailLoginGo() { window.executeSharpLogin(); }
+        function emailRegGo() { window.executeSharpRegister(); }
+        function emailResetGo() { emMsg('পাসওয়ার্ড রিকভারির জন্য অ্যাডমিনকে মেসেজ দিন', true); }
 
         /* ===== Full Screen Profile & Telegram Sync Manager ===== */
         window._pendingTgUnlink = false;
@@ -11951,7 +12036,7 @@
         saveOrder() { return Promise.resolve(false); }
     };
 
-    function setBalanceUI(coins, pts = 0, pend = 0, realVal = 0, bonusVal = 0) {
+    function setBalanceUI(coins, pts, pend, realVal, bonusVal) {
         const c = Number(coins) || 0;
         window.ppfb.balance = c;
         window.ppfb.realBalance = c;
@@ -11981,10 +12066,10 @@
             displayName: u.name,
             email: u.email,
             photoURL: u.avatar_url || `https://api.dicebear.com/7.x/bottts/svg?seed=${u.pp_id}`,
-            pp_id: u.pp_id
+            pp_id: u.pp_id,
+            coins: Number(u.coins) || 0
         };
 
-        // Header Avatar & Name
         const hAv = document.getElementById('avatarImg');
         if (hAv) {
             hAv.src = window.ppfb.user.photoURL;
@@ -11993,7 +12078,6 @@
         const hFall = document.getElementById('avatarFallback');
         if (hFall) hFall.classList.add('hidden');
 
-        // Profile Card
         const pUid = document.getElementById('profileScreenUid');
         if (pUid) pUid.textContent = u.pp_id;
 
@@ -12010,54 +12094,25 @@
     }
     window.applyUserToUI = applyUserToUI;
 
-    // LOGIN VIA CLOUDFLARE WORKER
-    // old login replaced
-    /* old login */
-        const email = (document.getElementById('emEmail').value || '').trim();
-        const pass = document.getElementById('emPass').value || '';
-        if (!email || !pass) { emMsg('Email ও password দিন', false); return; }
-        const orig = emBusy('btnEmLogin', true);
-        if (window.openAuth3DModal) openAuth3DModal('loading', 'Logging in...', 'Verifying PPM Cloud credentials...');
-
-        try {
-            const res = await fetch(`${CF_API}/api/auth/login`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password: pass })
-            });
-            const data = await res.json();
-            if (data.ok && data.user) {
-                localStorage.setItem('ppm_user', JSON.stringify(data.user));
-                localStorage.removeItem('pp_logged_out');
-                applyUserToUI(data.user);
-                emBusy('btnEmLogin', false, orig);
-                if (window.openAuth3DModal) openAuth3DModal('success', 'Login Successful!', `স্বাগতম! আপনার PP ID: ${data.user.pp_id}`);
-                setTimeout(() => {
-                    if (window.showScreen) showScreen('screenGameSelect');
-                }, 800);
-            } else {
-                emMsg(data.error || 'Login failed', false);
-                emBusy('btnEmLogin', false, orig);
-                if (window.openAuth3DModal) openAuth3DModal('error', 'Login Failed', data.error || 'Invalid email or password');
-            }
-        } catch (e) {
-            emMsg('সার্ভারে সমস্যা হয়েছে', false);
-            emBusy('btnEmLogin', false, orig);
-            if (window.openAuth3DModal) openAuth3DModal('error', 'Network Error', 'Could not connect to server');
-        }
-    };
-
-    // REGISTER VIA CLOUDFLARE WORKER (GENERATES 8-CHAR PP ID)
-    // old reg replaced
-    /* old reg */
+    // DIRECT REGISTER WITH SHARP LUXURY POPUP (Box er kona round hobe na)
+    window.emailRegGo = async function() {
         const name = (document.getElementById('emRegName').value || '').trim();
         const email = (document.getElementById('emRegEmail').value || '').trim();
-        const pass = document.getElementById('emRegPass').value || '';
+        const pass = (document.getElementById('emRegPass').value || '').trim();
+
         if (!name) { emMsg('আপনার নাম লিখুন', false); return; }
         if (!email || !pass) { emMsg('Email ও password দিন', false); return; }
         if (pass.length < 4) { emMsg('Password minimum 4 character', false); return; }
-        const orig = emBusy('btnEmReg', true);
-        if (window.openAuth3DModal) openAuth3DModal('loading', 'Creating Account...', 'Generating unique 8-char PP ID...');
+
+        const popup = document.getElementById('authSharpPopup');
+        const loadState = document.getElementById('sharpLoadingState');
+        const succState = document.getElementById('sharpSuccessState');
+        const errState = document.getElementById('sharpErrorState');
+
+        popup.classList.remove('hidden');
+        loadState.classList.remove('hidden');
+        succState.classList.add('hidden');
+        errState.classList.add('hidden');
 
         try {
             const res = await fetch(`${CF_API}/api/auth/register`, {
@@ -12070,22 +12125,63 @@
                 localStorage.setItem('ppm_user', JSON.stringify(data.user));
                 localStorage.removeItem('pp_logged_out');
                 applyUserToUI(data.user);
-                emBusy('btnEmReg', false, orig);
-                if (window.openAuth3DModal) openAuth3DModal('success', 'Account Created!', `🎉 আপনার ইউনিক PP ID: ${data.user.pp_id}`);
-                setTimeout(() => {
-                    if (window.showScreen) showScreen('screenGameSelect');
-                }, 1000);
+
+                // Populate success card
+                document.getElementById('sharpSuccessPPId').innerText = data.user.pp_id;
+                document.getElementById('sharpSuccessName').innerText = data.user.name;
+                document.getElementById('sharpSuccessEmail').innerText = data.user.email;
+
+                // Transition smoothly to success state!
+                loadState.classList.add('hidden');
+                succState.classList.remove('hidden');
             } else {
-                emMsg(data.error || 'Registration failed', false);
-                emBusy('btnEmReg', false, orig);
-                if (window.openAuth3DModal) openAuth3DModal('error', 'Registration Failed', data.error || 'Registration error');
+                document.getElementById('sharpErrorMsg').innerText = data.error || 'Registration failed';
+                loadState.classList.add('hidden');
+                errState.classList.remove('hidden');
             }
-        } catch (e) {
-            emMsg('সার্ভারে সমস্যা হয়েছে', false);
-            emBusy('btnEmReg', false, orig);
-            if (window.openAuth3DModal) openAuth3DModal('error', 'Network Error', 'Could not connect to server');
+        } catch(err) {
+            document.getElementById('sharpErrorMsg').innerText = 'সার্ভারের সাথে কানেক্ট করা যাচ্ছে না';
+            loadState.classList.add('hidden');
+            errState.classList.remove('hidden');
         }
     };
+    window.ppfb.registerEmail = window.emailRegGo;
+
+    window.closeSharpPopupAndEnter = function() {
+        document.getElementById('authSharpPopup').classList.add('hidden');
+        if (window.showScreen) showScreen('screenGameSelect');
+    };
+
+    // DIRECT LOGIN FUNCTION
+    window.emailLoginGo = async function() {
+        const email = (document.getElementById('emEmail').value || '').trim();
+        const pass = (document.getElementById('emPass').value || '').trim();
+        if (!email || !pass) { emMsg('Email ও password দিন', false); return; }
+
+        const orig = emBusy('btnEmLogin', true);
+        try {
+            const res = await fetch(`${CF_API}/api/auth/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password: pass })
+            });
+            const data = await res.json();
+            if (data.ok && data.user) {
+                localStorage.setItem('ppm_user', JSON.stringify(data.user));
+                localStorage.removeItem('pp_logged_out');
+                applyUserToUI(data.user);
+                emBusy('btnEmLogin', false, orig);
+                if (window.showScreen) showScreen('screenGameSelect');
+            } else {
+                emBusy('btnEmLogin', false, orig);
+                emMsg(data.error || 'Email or password incorrect', false);
+            }
+        } catch(e) {
+            emBusy('btnEmLogin', false, orig);
+            emMsg('সার্ভারে সমস্যা হয়েছে', false);
+        }
+    };
+    window.ppfb.loginEmail = window.emailLoginGo;
 
     // LOGOUT
     window.ppfb.logout = () => {
@@ -12227,7 +12323,6 @@
                 const u = JSON.parse(raw);
                 applyUserToUI(u);
                 if (window.showScreen) showScreen('screenGameSelect');
-                // Refresh live balance
                 fetch(`${CF_API}/api/user/profile?user_id=${u.pp_id}`)
                     .then(r => r.json())
                     .then(d => {
