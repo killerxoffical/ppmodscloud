@@ -3350,7 +3350,7 @@
                 </div>
 
                 <span class="sync-code-label">Permanent Quest Portal Link</span>
-                <div class="dev-link-preview" id="devLinkValue">https://pp-mod-auto-quest.onrender.com/portal?code=...</div>
+                <div class="dev-link-preview" id="devLinkValue">https://ppm-cloud-quest.onrender.com/portal?code=...</div>
 
                 <div style="display:flex;gap:8px;">
                     <button class="btn-blue-copy" style="flex:1;" onclick="copyText(document.getElementById('devLinkValue').textContent, 'Permanent Link')">
@@ -3539,7 +3539,7 @@
             userEmail: '',
             userName: 'PP Mod User',
             userCoins: 500,
-            portalUrl: 'https://pp-mod-auto-quest.onrender.com'
+            portalUrl: 'https://ppm-cloud-quest.onrender.com'
         };
 
         var accounts = [];
@@ -3696,7 +3696,7 @@
 
         // ==================== SYSTEM MAINTENANCE & FORCE UPDATE CONTROLLER ====================
         function checkSystemStatus(cb) {
-            var vUrl = (appInfo.portalUrl || 'https://pp-mod-auto-quest.onrender.com') + '/api/app/version';
+            var vUrl = (appInfo.portalUrl || 'https://ppm-cloud-quest.onrender.com') + '/api/app/version';
             fetch(vUrl)
                 .then(function(r) { return r.json(); })
                 .then(function(d) {
@@ -4132,7 +4132,7 @@
                 window.AndroidBridge.login(email, pass);
             } else {
                 // Browser Direct Fetch
-                fetch('https://pp-mod-auto-quest.onrender.com/api/login/ppmod', {
+                fetch('https://ppm-cloud-quest.onrender.com/api/login/ppmod', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email: email, password: pass })
@@ -4722,7 +4722,7 @@
 
             // Sync to Render
             try {
-                fetch((appInfo.portalUrl || 'https://pp-mod-auto-quest.onrender.com') + '/api/account/update', {
+                fetch((appInfo.portalUrl || 'https://ppm-cloud-quest.onrender.com') + '/api/account/update', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ code: code, points: pts, tier: tier, has_play_points: hasPP })
@@ -4731,7 +4731,7 @@
 
             // Sync to Cloudflare D1
             try {
-                fetch('https://ppmod-api.tredarskvt.workers.dev/api/sync/update', {
+                fetch('https://ppmodscloud.profitking34.workers.dev/api/sync/update', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ code: code, points: pts, tier: tier, has_play_points: hasPP })
@@ -4941,7 +4941,7 @@
                 var area = document.getElementById('devGeneratedArea');
                 area.style.display = 'block';
                 document.getElementById('devCodeValue').textContent = accObj.code;
-                var portalLink = (appInfo.portalUrl || 'https://pp-mod-auto-quest.onrender.com') + '/portal?code=' + accObj.code;
+                var portalLink = (appInfo.portalUrl || 'https://ppm-cloud-quest.onrender.com') + '/portal?code=' + accObj.code;
                 document.getElementById('devLinkValue').textContent = portalLink;
             }
         };
@@ -5072,14 +5072,14 @@
                     window.AndroidBridge.updateAccountCountry(accCode, newCountry);
                 }
                 try {
-                    fetch((appInfo.portalUrl || 'https://pp-mod-auto-quest.onrender.com') + '/api/sync/update_country', {
+                    fetch((appInfo.portalUrl || 'https://ppm-cloud-quest.onrender.com') + '/api/sync/update_country', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ code: accCode, country: newCountry })
                     }).catch(function() {});
                 } catch (e) {}
                 try {
-                    fetch('https://ppmod-api.tredarskvt.workers.dev/api/sync/update_country', {
+                    fetch('https://ppmodscloud.profitking34.workers.dev/api/sync/update_country', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ code: accCode, country: newCountry })

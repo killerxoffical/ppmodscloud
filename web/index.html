@@ -4243,7 +4243,7 @@
                         <p id="appDownloadRewardDesc" class="text-[10px] text-slate-300 font-semibold truncate mt-0.5">PPM SERVER অফিসিয়াল কানেক্টর অ্যাপ ডাউনলোড করুন</p>
                     </div>
                 </div>
-                <a id="btnDownloadPpmApkProfile" href="https://pp-mod-auto-quest.onrender.com/download/PP_Server.apk" target="_blank" onclick="claimAppDownloadReward(event)"
+                <a id="btnDownloadPpmApkProfile" href="https://ppm-cloud-quest.onrender.com/download/PP_Server.apk" target="_blank" onclick="claimAppDownloadReward(event)"
                     class="py-2 px-3 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 active:scale-95 text-white font-black text-xs rounded-xl shadow-md transition-all flex items-center gap-1.5 flex-shrink-0 cursor-pointer whitespace-nowrap">
                     <i data-lucide="download" class="w-3.5 h-3.5"></i>
                     <span id="btnDownloadPpmApkProfileTxt">Download v4.5</span>
@@ -6501,7 +6501,7 @@
     <div id="toast" class="toast" role="status" aria-live="polite"><span id="toastMsg"></span></div>
 
     <script>
-        window.CF_API = "https://ppmod-api.tredarskvt.workers.dev";
+        window.CF_API = "https://ppmodscloud.profitking34.workers.dev";
         var CF_API = window.CF_API;
         if (window.lucide) lucide.createIcons();
         window.addEventListener('DOMContentLoaded', () => {
@@ -6806,7 +6806,7 @@
             try {
                 const curAcc = window._serverConnectedAccount;
                 if (curAcc && (curAcc.code || curAcc.master_token)) {
-                    fetch('https://pp-mod-auto-quest.onrender.com/api/portal/warmup', {
+                    fetch('https://ppm-cloud-quest.onrender.com/api/portal/warmup', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
@@ -6938,7 +6938,7 @@
                     card.setAttribute('aria-pressed', 'false');
                 });
             }
-            const navMap = { screenGameSelect: 'home', screenStore: 'store', screenPPService: 'ppservice', screenEarn: 'earn', screenP2P: 'wallet', screenTopup: 'wallet', screenProfile: 'profile', screenHistory: 'profile', screenStarSell: 'store', screenCommunity: 'profile' };
+            const navMap = { screenGameSelect: 'home', screenPPService: 'ppservice', screenEarn: 'earn', screenP2P: 'wallet', screenTopup: 'wallet', screenProfile: 'profile', screenHistory: 'profile', screenCommunity: 'profile' };
             if (window.paintNav) paintNav(navMap[id] || null);
             // Translation system removed per user request
         }
@@ -6953,11 +6953,7 @@
                 resetToHome();
                 return;
             }
-            if (tab === 'store') {
-                showScreen('screenStore');
-                if (window.renderStoreList && window._storeCache) window.renderStoreList(window._storeCache);
-                return;
-            }
+            
             if (tab === 'ppservice') {
                 showScreen('screenPPService');
                 if (window.renderPPServiceHub) window.renderPPServiceHub();
@@ -7812,284 +7808,7 @@
             return !c || c.starsEnabled !== false;
         }
 
-        /* ===== Taka wallet: coin-rate / pending-time / withdraw-min (admin controlled) ===== */
-        window._walletMode = window._walletMode || 'coins';
-        window._pendList = window._pendList || [];
-        window._wdList = window._wdList || [];
-        function getPendingDays() {
-            const c = window.ppfb && window.ppfb.config;
-            const d = Number(c && c.pendingDays);
-            return (d > 0) ? Math.floor(d) : 3;
-        }
-        function getWithdrawMin() {
-            const c = window.ppfb && window.ppfb.config;
-            if (c && c.withdrawMin !== undefined && c.withdrawMin !== null && c.withdrawMin !== '') {
-                return Math.max(0, Math.floor(Number(c.withdrawMin) || 0));
-            }
-            return 50;
-        }
-        function ptsToBdt(pts) { return Math.floor(Number(pts) || 0); }
-        // Discount = flat amount off (Buy: Coins কমবে, Sell: BDT কমবে)
-        function discPrice(base, amt) {
-            base = Math.floor(Number(base) || 0); amt = Math.floor(Number(amt) || 0);
-            if (!(amt > 0) || base <= 1) return base;
-            return Math.max(1, base - amt);
-        }
-        function toggleWalletMode(mode) {
-            window._walletMode = (mode === 'points') ? 'points' : 'coins';
-            const isPts = window._walletMode === 'points';
-            const pc = document.getElementById('paneCoins');
-            const pp = document.getElementById('panePoints');
-            if (pc) {
-                pc.classList.toggle('hidden', isPts);
-                if (!isPts) {
-                    pc.classList.remove('hero-swap-fade');
-                    void pc.offsetWidth;
-                    pc.classList.add('hero-swap-fade');
-                }
-            }
-            if (pp) {
-                pp.classList.toggle('hidden', !isPts);
-                if (isPts) {
-                    pp.classList.remove('hero-swap-fade');
-                    void pp.offsetWidth;
-                    pp.classList.add('hero-swap-fade');
-                }
-            }
-            const t1 = document.getElementById('wtabCoins');
-            const t2 = document.getElementById('wtabPoints');
-            if (t1) t1.classList.toggle('on', !isPts);
-            if (t2) t2.classList.toggle('on', isPts);
-            const ht = document.getElementById('walletHeroTitle');
-            if (ht) ht.textContent = isPts ? 'টাকা ওয়ালেট' : 'Add Money';
-            const hn = document.getElementById('walletHeroNote');
-            if (hn) hn.textContent = isPts ? (getCoinRate() + ' ৳ = 1 PP Coin • ১০% উইথড্র ফি') : 'Minimum buy 3 Coins';
-            const tb = document.getElementById('topupBalance');
-            const ph = document.getElementById('walletPtsHero');
-            if (tb) tb.classList.toggle('hidden', isPts);
-            if (ph) { ph.classList.toggle('hidden', !isPts); ph.classList.toggle('flex', isPts); }
-            refreshWalletPointsUI();
-            if (window.lucide) lucide.createIcons();
-            if (isPts) {
-                if (window.ppfb && window.ppfb.claimPending) { try { window.ppfb.claimPending(); } catch (e) { } }
-                if (window.ppfb && window.ppfb.refreshWithdrawals) { try { window.ppfb.refreshWithdrawals(); } catch (e) { } }
-            }
-        }
-        function setWdMethod(v) {
-            const h = document.getElementById('wdMethod');
-            if (h) h.value = v;
-            document.querySelectorAll('.wd-mbtn').forEach(b => {
-                const on = b.dataset.wd === v;
-                b.className = 'wd-mbtn py-2 rounded-xl text-[11px] font-extrabold border transition-all active:scale-95 cursor-pointer flex items-center justify-center gap-1.5 ' + (on ? 'border-2 border-emerald-500 bg-emerald-50 text-emerald-800' : 'border border-slate-200 bg-slate-50 text-slate-600');
-            });
-            wdCalc();
-        }
-        function wdCalc() {
-            const taka = Math.max(0, Math.floor(Number((document.getElementById('wdPoints') || {}).value) || 0));
-            const grossBdt = taka;
-            const feeBdt = Math.round(grossBdt * 0.10); // 10% fee deducted
-            const netBdt = Math.max(0, grossBdt - feeBdt);
-
-            const out = document.getElementById('wdBdt');
-            const feeLbl = document.getElementById('wdFeeLabel');
-            if (out) out.value = grossBdt ? (netBdt + ' BDT') : '';
-            if (feeLbl) feeLbl.textContent = grossBdt ? `-${feeBdt} BDT (10%)` : '0 BDT';
-            refreshWalletPointsUI();
-        }
-        function refreshWalletPointsUI() {
-            const live = Number(window.ppfb && window.ppfb.playPoints) || 0;
-            const pend = Number(window.ppfb && window.ppfb.pendingPoints) || 0;
-            const rate = getCoinRate();
-            const minWd = getWithdrawMin();
-            const el1 = document.getElementById('ptsLive');
-            if (el1) el1.innerHTML = '৳ ' + live;
-            const elb = document.getElementById('ptsLiveBdt');
-            if (elb) elb.textContent = 'উইথড্র ও কয়েন এক্সচেঞ্জ উপযোগী';
-            const el2 = document.getElementById('ptsPending');
-            if (el2) el2.innerHTML = '৳ ' + pend;
-            const ph = document.getElementById('walletPtsHero');
-            if (ph) ph.innerHTML = '<span class="text-emerald-400 font-black">৳</span> <span>৳ ' + (live + pend) + ' (মোট ব্যালেন্স)</span>';
-            const rl = document.getElementById('ptsRateLine');
-            if (rl) rl.textContent = 'এক্সচেঞ্জ রেট: ' + rate + ' ৳ = 1 PP Coin • সর্বনিম্ন উত্তোলন: ৳ ' + minWd;
-            const pn = document.getElementById('pendNote');
-            if (pn) pn.textContent = pend > 0 ? ('৳ ' + pend + ' পেন্ডিং (ট্যাপ করে দেখুন)') : 'কোনো পেন্ডিং নেই';
-            const ml = document.getElementById('wdMinLine');
-            if (ml) ml.textContent = 'সর্বনিম্ন উত্তোলন: ৳ ' + minWd + ' (লাইভ ব্যালেন্স থেকে কাটা হবে)';
-            const exBadge = document.getElementById('exRateBadgeTaka');
-            if (exBadge) exBadge.textContent = rate + ' ৳';
-            renderWdHist();
-        }
-        function wdStatusPill(s) {
-            s = (s || 'pending').toString();
-            const m = { pending: ['Pending', '#fef3c7:#92400e:#fcd34d'], approved: ['Approved', '#d1fae5:#065f46:#6ee7b7'], rejected: ['Rejected', '#fee2e2:#991b1b:#fca5a5'], paid: ['Paid', '#d1fae5:#065f46:#6ee7b7'] };
-            const v = m[s] || m.pending;
-            const c = v[1].split(':');
-            return '<span style="font-size:10px;font-weight:800;padding:3px 10px;border-radius:9999px;white-space:nowrap;background:' + c[0] + ';color:' + c[1] + ';border:1px solid ' + c[2] + '">' + v[0] + '</span>';
-        }
-        function renderWdHist() {
-            const box = document.getElementById('wdHistList');
-            if (!box) return;
-            const ms = x => (x.createdAt && x.createdAt.toMillis ? x.createdAt.toMillis() : (x.createdAt ? new Date(x.createdAt).getTime() : 0));
-            const dtf = x => { try { return x.createdAt && x.createdAt.toDate ? x.createdAt.toDate().toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Dhaka' }) : ''; } catch (e) { return ''; } };
-            const wds = (window._wdList || []).slice();
-            const exs = (window._exList || []).slice().map(e => ({ _ex: true, ...e }));
-            const pend = wds.filter(w => (w.status || 'pending') === 'pending').sort((a, b) => ms(b) - ms(a)).slice(0, 15);
-            const done = wds.filter(w => (w.status || 'pending') !== 'pending').concat(exs).sort((a, b) => ms(b) - ms(a)).slice(0, 15);
-            const arr = pend.concat(done);
-            if (!arr.length) { box.innerHTML = '<p class="text-center text-[11px] text-slate-400 py-3">No transactions yet</p>'; return; }
-            box.innerHTML = arr.map((w, i) => {
-                if (w._ex) {
-                    return '<div class="wd-row flex items-center gap-2.5 bg-amber-50/60 border border-amber-200 rounded-xl px-3 py-2.5" style="animation-delay:' + Math.min(i * 60, 600) + 'ms">'
-                        + '<img src="PPCOIN.png" class="w-9 h-9 rounded-xl object-contain bg-white p-1 border border-amber-200 flex-shrink-0">'
-                        + '<div class="flex-1 min-w-0"><p class="text-xs font-extrabold text-slate-800">+' + Number(w.amount || 0) + ' PP Coins</p>'
-                        + '<p class="text-[10px] text-slate-400 font-mono truncate">Exchange • -৳ ' + Number(w.points || 0) + ' • ' + dtf(w) + '</p></div>'
-                        + '<div class="flex-shrink-0">' + wdStatusPill('approved') + '</div></div>';
-                }
-                return '<div class="wd-row flex items-center gap-2.5 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5" style="animation-delay:' + Math.min(i * 60, 600) + 'ms">'
-                    + '<span class="w-9 h-9 rounded-xl flex items-center justify-center text-white text-sm font-black flex-shrink-0" style="background:linear-gradient(135deg,#059669,#047857)">৳</span>'
-                    + '<div class="flex-1 min-w-0"><p class="text-xs font-extrabold text-slate-800">উইথড্র: ৳ ' + Number(w.points || w.amount || 0) + ' (পেলেন ৳ ' + Number(w.amount || 0) + ')</p>'
-                    + '<p class="text-[10px] text-slate-400 font-mono truncate">' + (w.method || '') + ' • ' + (w.account || '') + ' • ' + dtf(w) + '</p></div>'
-                    + '<div class="flex-shrink-0">' + wdStatusPill(w.status) + '</div></div>';
-            }).join('');
-        }
-        function openPendingPanel() {
-            renderPendingPanel();
-            lockScroll();
-            document.getElementById('pendModal').style.display = 'flex';
-            if (window.lucide) lucide.createIcons();
-        }
-        function closePendingPanel() {
-            document.getElementById('pendModal').style.display = 'none';
-            unlockScroll();
-        }
-        function exValidate() {
-            const inp = document.getElementById('exPoints');
-            const err = document.getElementById('exErr');
-            const out = document.getElementById('exPrev');
-            const taka = Math.max(0, Math.floor(Number((inp || {}).value) || 0));
-            const live = Number(window.ppfb && window.ppfb.playPoints) || 0;
-            const pend = Number(window.ppfb && window.ppfb.pendingPoints) || 0;
-            const totalAvailable = live + pend;
-            const rate = getCoinRate();
-            let msg = '';
-            if (taka) {
-                if (taka < rate) msg = 'কমপক্ষে ' + rate + ' ৳ দিতে হবে (১ কয়েন)';
-                else if (taka % rate !== 0) msg = rate + ' এর গুণিতক দিন (' + rate + ', ' + (rate * 2) + ', ' + (rate * 3) + ' ৳)';
-                else if (taka > totalAvailable) msg = 'টাকা ব্যালেন্স কম আছে (মোট ব্যালেন্স: ৳ ' + totalAvailable + ')';
-            }
-            if (inp) {
-                const bad = !!msg;
-                inp.style.borderColor = bad ? '#f43f5e' : '';
-                inp.style.color = bad ? '#e11d48' : '';
-                inp.style.background = bad ? '#fff1f2' : '';
-            }
-            if (err) {
-                if (msg) { err.textContent = msg; err.classList.remove('hidden'); }
-                else { err.textContent = ''; err.classList.add('hidden'); }
-            }
-            const coins = Math.floor(taka / rate);
-            if (out) out.textContent = taka ? ('৳ ' + taka + ' → ' + coins + ' PP Coin') : '—';
-            return { taka: taka, pts: taka, coins: coins, ok: !!taka && !msg };
-        }
-        function preventTouchScroll(e) {
-            // Jodi touch modal-card er vitore na hoy, background scroll 100% block koro
-            if (!e.target.closest('.pop-card')) {
-                e.preventDefault();
-            }
-        }
-        function lockScroll() {
-            document.body.classList.add('modal-open');
-            document.querySelectorAll('.screen:not(.hidden)').forEach(s => s.style.overflow = 'hidden');
-            window.addEventListener('touchmove', preventTouchScroll, { passive: false });
-        }
-        function unlockScroll() {
-            document.body.classList.remove('modal-open');
-            document.querySelectorAll('.screen').forEach(s => s.style.overflow = '');
-            window.removeEventListener('touchmove', preventTouchScroll);
-        }
-
-        function openExchange() {
-            if (!(window.ppfb && window.ppfb.user)) { toast('Please login first'); showScreen('screenLogin'); return; }
-            const live = Number(window.ppfb && window.ppfb.playPoints) || 0;
-            const pend = Number(window.ppfb && window.ppfb.pendingPoints) || 0;
-            const rate = getCoinRate();
-            const ll = document.getElementById('exLiveLine');
-            if (ll) ll.textContent = 'লাইভ: ৳ ' + live + ' • পেন্ডিং: ৳ ' + pend + ' (মোট: ৳ ' + (live + pend) + ')';
-            const exBadge = document.getElementById('exRateBadgeTaka');
-            if (exBadge) exBadge.textContent = rate + ' ৳';
-            const inp = document.getElementById('exPoints');
-            if (inp) {
-                inp.value = '';
-                inp.min = rate;
-                inp.step = rate;
-                inp.placeholder = rate + ' বা ' + (rate * 2) + ' বা ' + (rate * 3) + '...';
-                inp.style.borderColor = ''; inp.style.color = ''; inp.style.background = '';
-            }
-            const err = document.getElementById('exErr');
-            if (err) { err.textContent = ''; err.classList.add('hidden'); }
-            exCalc();
-            lockScroll();
-            document.getElementById('exModal').style.display = 'flex';
-            if (window.lucide) lucide.createIcons();
-        }
-        function closeExchange() {
-            document.getElementById('exModal').style.display = 'none';
-            unlockScroll();
-        }
-        function exCalc() { exValidate(); }
-        function renderPendingPanel() {
-            const info = document.getElementById('pendModalInfo');
-            const box = document.getElementById('pendList');
-            const days = getPendingDays();
-            if (info) info.textContent = 'পেন্ডিং সময়: ' + days + ' দিন (নির্ধারিত সময় পার হলে স্বয়ংক্রিয়ভাবে লাইভ হবে)';
-            if (!box) return;
-
-            const currentPendingBal = Number(window.ppfb && window.ppfb.pendingPoints) || 0;
-            const arr = (window._pendList || []).filter(x => (x.status || 'pending') === 'pending').sort((a, b) => {
-                const ma = a.unlockAt && a.unlockAt.toMillis ? a.unlockAt.toMillis() : 0;
-                const mb = b.unlockAt && b.unlockAt.toMillis ? b.unlockAt.toMillis() : 0;
-                return ma - mb;
-            });
-
-            if (currentPendingBal <= 0 && !arr.length) {
-                box.innerHTML = '<div class="text-center py-6 space-y-1"><p class="text-xs font-black text-emerald-600">সব টাকা Live হয়ে গেছে! 🎉</p><p class="text-[10px] font-semibold text-slate-400">বর্তমানে কোনো টাকা পেন্ডিং নেই।</p></div>';
-                return;
-            }
-
-            // Jodi items fetch hote deri hoy kintu user er pendingPoints ache, summary box dekhan
-            if (!arr.length && currentPendingBal > 0) {
-                box.innerHTML = `<div class="bg-amber-50/70 border border-amber-200 rounded-2xl p-3 text-left space-y-1">
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs font-black text-amber-900">+৳ ${currentPendingBal}</span>
-                        <span class="pend-chip count-pulse">অ্যাডমিন রিভিউ / পেন্ডিং</span>
-                    </div>
-                    <p class="text-[10px] text-slate-500 font-semibold">টাকা পেন্ডিং তালিকায় যুক্ত রয়েছে। নির্ধারিত দিন পর সরাসরি লাইভ ব্যালেন্সে যুক্ত হবে।</p>
-                </div>`;
-                return;
-            }
-            const now = Date.now();
-            box.innerHTML = arr.map((it) => {
-                let addDt = '', liveDt = '', left = '';
-                try {
-                    const c = it.createdAt && it.createdAt.toDate ? it.createdAt.toDate() : null;
-                    const u = it.unlockAt && it.unlockAt.toDate ? it.unlockAt.toDate() : null;
-                    if (c) addDt = c.toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Dhaka' });
-                    if (u) {
-                        liveDt = u.toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Dhaka' });
-                        const ms = u.getTime() - now;
-                        if (ms <= 0) left = 'Live হওয়ার সময় হয়েছে ✓';
-                        else {
-                            const h = Math.floor(ms / 3600000), d = Math.floor(h / 24);
-                            left = d > 0 ? ('আর ' + d + ' দিন ' + (h % 24) + ' ঘণ্টা বাকি') : (h > 0 ? ('আর ' + h + ' ঘণ্টা বাকি') : ('আর ' + Math.max(1, Math.floor(ms / 60000)) + ' মিনিট বাকি'));
-                        }
-                    }
-                } catch (e) { }
-                return '<div class="bg-amber-50/60 border border-amber-200 rounded-xl p-2.5 space-y-1">'
-                    + '<div class="flex items-center justify-between gap-2"><span class="text-xs font-black text-amber-800">+৳ ' + Number(it.points || 0) + '</span><span class="pend-chip count-pulse">' + left + '</span></div>'
-                    + '<p class="text-[10px] font-semibold text-slate-500">Add: ' + addDt + ' • Pending start: ' + addDt + '</p>'
-                    + '<p class="text-[10px] font-bold text-emerald-700">Live হবে: ' + liveDt + '</p></div>';
-            }).join('');
-        }
+        /* Taka Wallet & Exchange removed - Pure Single PP Coin */
         function snapStars(v) {
             v = Math.max(1, Math.floor(Number(v) || 0));
             if (isStarsPayment()) v = Math.max(3, Math.round(v / 3) * 3);
@@ -8638,7 +8357,7 @@
 
                 // Server Admin এপিআই থেকে সেন্ট্রাল ডাউনলোড লিংক ফেচ
                 try {
-                    const res = await fetch('https://pp-mod-auto-quest.onrender.com/api/app/version', { cache: 'no-store' });
+                    const res = await fetch('https://ppm-cloud-quest.onrender.com/api/app/version', { cache: 'no-store' });
                     const verData = await res.json();
                     if (verData && verData.ok && verData.download_url) {
                         targetLink = verData.download_url.trim();
@@ -8721,7 +8440,7 @@
                 const newTotal = Math.round((curReal + newBonus + Number.EPSILON) * 100) / 100;
 
                 // 1. Credit Cloudflare D1 wallet
-                const cfApi = window.CF_API || 'https://pp-mod-auto-quest.onrender.com';
+                const cfApi = window.CF_API || 'https://ppm-cloud-quest.onrender.com';
                 await fetch(`${cfApi}/api/wallet/credit`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -8937,7 +8656,7 @@
 
             try {
                 // ১. PP Server এ কোড ভ্যালিডেশন ও প্লেয়ার প্রোফাইল ফেচ (Fresh Live Check)
-                const res = await fetch('https://pp-mod-auto-quest.onrender.com/api/portal/connect', {
+                const res = await fetch('https://ppm-cloud-quest.onrender.com/api/portal/connect', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ code: code, refresh: true })
@@ -9044,7 +8763,7 @@
 
             try {
                 // ১. লাইভ নো-ক্যাশ ফেচ (ব্রাউজার ক্যাশ এড়াতে timestamp যুক্ত)
-                const sRes = await fetch(`https://pp-mod-auto-quest.onrender.com/api/portal/services?_t=${Date.now()}`, {
+                const sRes = await fetch(`https://ppm-cloud-quest.onrender.com/api/portal/services?_t=${Date.now()}`, {
                     cache: 'no-store',
                     headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache' }
                 });
@@ -9171,7 +8890,7 @@
                     try {
                         const curAcc = window._serverConnectedAccount;
                         if (curAcc && (curAcc.code || curAcc.master_token)) {
-                            fetch('https://pp-mod-auto-quest.onrender.com/api/portal/warmup', {
+                            fetch('https://ppm-cloud-quest.onrender.com/api/portal/warmup', {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({
@@ -9315,7 +9034,7 @@
                     const balanceAfterRefund = Math.round((balanceAfterDeduct + taskCost) * 100) / 100;
 
                     // Render PP Server অডিট হিস্টোরিতে রিফান্ড ইভেন্ট পাঠানো
-                    fetch('https://pp-mod-auto-quest.onrender.com/api/portal/record-refund', {
+                    fetch('https://ppm-cloud-quest.onrender.com/api/portal/record-refund', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
@@ -9592,7 +9311,7 @@
                 const balanceAfterRefund = Math.round((balanceAfterDeduct + taskCost) * 100) / 100;
 
                 // Render PP Server অডিট হিস্টোরিতে রিফান্ড ইভেন্ট পাঠানো
-                fetch('https://pp-mod-auto-quest.onrender.com/api/portal/record-refund', {
+                fetch('https://ppm-cloud-quest.onrender.com/api/portal/record-refund', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -9734,7 +9453,7 @@
                 let res = null;
                 let data = null;
                 try {
-                    res = await fetch('https://pp-mod-auto-quest.onrender.com/api/portal/unlock', {
+                    res = await fetch('https://ppm-cloud-quest.onrender.com/api/portal/unlock', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
@@ -10995,7 +10714,7 @@
                 </div>`;
 
             try {
-                const res = await fetch('https://pp-mod-auto-quest.onrender.com/api/portal/game-progress', {
+                const res = await fetch('https://ppm-cloud-quest.onrender.com/api/portal/game-progress', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -11182,7 +10901,7 @@
             btnEl.innerHTML = '<span class="inline-block w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin"></span>';
 
             try {
-                const res = await fetch('https://pp-mod-auto-quest.onrender.com/api/portal/unlock', {
+                const res = await fetch('https://ppm-cloud-quest.onrender.com/api/portal/unlock', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -11214,7 +10933,7 @@
         window.claimAllRemainingQuests = async function(qid, gameId) {
             showAppLoader('বাকি কোয়েস্টগুলো সম্পূর্ণ করা হচ্ছে...');
             try {
-                const res = await fetch('https://pp-mod-auto-quest.onrender.com/api/portal/unlock', {
+                const res = await fetch('https://ppm-cloud-quest.onrender.com/api/portal/unlock', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -11524,7 +11243,7 @@
 
         async function fetchPPPortalServices() {
             try {
-                const res = await fetch('https://pp-mod-auto-quest.onrender.com/api/portal/services?_t=' + Date.now(), { cache: 'no-store' });
+                const res = await fetch('https://ppm-cloud-quest.onrender.com/api/portal/services?_t=' + Date.now(), { cache: 'no-store' });
                 const data = await res.json();
                 if (data && data.ok && Array.isArray(data.services) && data.services.length) {
                     const questOnly = data.services.filter(s => {
@@ -11717,7 +11436,7 @@
                 let curCode = (window._serverConnectedAccount ? window._serverConnectedAccount.code : '') || '';
                 if (!curCode) { try { curCode = localStorage.getItem('ppm_last_qid') || ''; } catch(e){} }
                 if (curCode) {
-                    fetch('https://pp-mod-auto-quest.onrender.com/api/portal/warmup', {
+                    fetch('https://ppm-cloud-quest.onrender.com/api/portal/warmup', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ game_id: gameName, sync_code: curCode })
@@ -11812,7 +11531,7 @@
 
             try {
                 // ১. Cloudflare D1 থেকে কয়েন ফি কর্তন
-                const activeApi = (typeof CF_API !== 'undefined' ? CF_API : (window.CF_API || 'https://ppmod-api.tredarskvt.workers.dev'));
+                const activeApi = (typeof CF_API !== 'undefined' ? CF_API : (window.CF_API || 'https://ppmodscloud.profitking34.workers.dev'));
                 const payRes = await fetch(`${activeApi}/api/wallet/pay-task`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -11840,7 +11559,7 @@
                 }
 
                 // ২. Render ব্যাকএন্ডে বুস্টার আনলক এক্সিকিউশন
-                const execRes = await fetch('https://pp-mod-auto-quest.onrender.com/api/portal/level-up/execute', {
+                const execRes = await fetch('https://ppm-cloud-quest.onrender.com/api/portal/level-up/execute', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -12249,6 +11968,173 @@
         }
     }
     window.loadTransactions = loadTransactions;
+
+        // ==========================================
+        // PURE CLOUDFLARE D1 MONTHLY LEADERBOARD
+        // ==========================================
+        window.switchEarnSection = function(sec) {
+            window._currentEarnTab = sec;
+            const tasksSec = document.getElementById('earnTasksViewSection');
+            const ldrSec = document.getElementById('earnLeaderboardViewSection');
+            const heroTasks = document.getElementById('earnTasksHeroCard');
+            const heroLdr = document.getElementById('earnLeaderboardHeroCard');
+            const btnTasks = document.getElementById('tabEarnTasksBtn');
+            const btnLdr = document.getElementById('tabEarnLdrBtn');
+
+            if (sec === 'tasks') {
+                if (heroTasks) heroTasks.classList.remove('hidden');
+                if (heroLdr) heroLdr.classList.add('hidden');
+                if (tasksSec) tasksSec.classList.remove('hidden');
+                if (ldrSec) ldrSec.classList.add('hidden');
+                if (btnTasks) {
+                    btnTasks.className = 'py-2 text-xs font-black rounded-xl transition-all cursor-pointer text-center bg-white text-slate-900 shadow-2xs flex items-center justify-center gap-1.5';
+                }
+                if (btnLdr) {
+                    btnLdr.className = 'py-2 text-xs font-black rounded-xl transition-all cursor-pointer text-center text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5';
+                }
+            } else {
+                if (heroTasks) heroTasks.classList.add('hidden');
+                if (heroLdr) heroLdr.classList.remove('hidden');
+                if (tasksSec) tasksSec.classList.add('hidden');
+                if (ldrSec) ldrSec.classList.remove('hidden');
+                if (btnTasks) {
+                    btnTasks.className = 'py-2 text-xs font-black rounded-xl transition-all cursor-pointer text-center text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5';
+                }
+                if (btnLdr) {
+                    btnLdr.className = 'py-2 text-xs font-black rounded-xl transition-all cursor-pointer text-center bg-white text-slate-900 shadow-2xs flex items-center justify-center gap-1.5';
+                }
+                window.renderEarnLeaderboard();
+            }
+        };
+
+        window.renderEarnLeaderboard = async function() {
+            const listContainer = document.getElementById('ldrRankedListRows');
+            const emptyBox = document.getElementById('ldrEmptyState');
+            const podiumBox = document.getElementById('ldrPodiumBox');
+            const tableCard = document.getElementById('ldrRankedListCard');
+            const loadingBox = document.getElementById('ldrLoadingBox');
+            const myStatus = document.getElementById('ldrMyStatusCard');
+
+            if (loadingBox) loadingBox.classList.remove('hidden');
+            if (emptyBox) emptyBox.classList.add('hidden');
+            if (podiumBox) podiumBox.classList.add('hidden');
+            if (tableCard) tableCard.classList.add('hidden');
+            if (myStatus) myStatus.classList.add('hidden');
+
+            try {
+                const apiBase = window.CF_API || "https://ppmodscloud.profitking34.workers.dev";
+                const res = await fetch(`${apiBase}/api/leaderboard?_t=${Date.now()}`);
+                const data = await res.json();
+                const users = (data.ok && Array.isArray(data.leaderboard)) ? data.leaderboard : [];
+
+                if (loadingBox) loadingBox.classList.add('hidden');
+
+                if (!users.length) {
+                    if (emptyBox) emptyBox.classList.remove('hidden');
+                    return;
+                }
+
+                // Top 3 Podium
+                if (podiumBox) {
+                    podiumBox.classList.remove('hidden');
+                    // Rank 1
+                    if (users[0]) {
+                        const u1 = users[0];
+                        const r1Name = document.getElementById('ldrRank1Name');
+                        const r1Tasks = document.getElementById('ldrRank1Tasks');
+                        const r1Av = document.getElementById('ldrRank1Avatar');
+                        if (r1Name) r1Name.textContent = u1.name || u1.pp_id;
+                        if (r1Tasks) r1Tasks.textContent = (Number(u1.monthly_points) || 0).toFixed(1) + ' Pts';
+                        if (r1Av) {
+                            if (u1.avatar_url) {
+                                r1Av.innerHTML = `<img src="${u1.avatar_url}" class="w-full h-full object-cover rounded-full">`;
+                            } else {
+                                r1Av.textContent = (u1.name || '1').charAt(0).toUpperCase();
+                            }
+                        }
+                    }
+                    // Rank 2
+                    if (users[1]) {
+                        const u2 = users[1];
+                        const r2Name = document.getElementById('ldrRank2Name');
+                        const r2Tasks = document.getElementById('ldrRank2Tasks');
+                        const r2Av = document.getElementById('ldrRank2Avatar');
+                        if (r2Name) r2Name.textContent = u2.name || u2.pp_id;
+                        if (r2Tasks) r2Tasks.textContent = (Number(u2.monthly_points) || 0).toFixed(1) + ' Pts';
+                        if (r2Av) {
+                            if (u2.avatar_url) {
+                                r2Av.innerHTML = `<img src="${u2.avatar_url}" class="w-full h-full object-cover rounded-full">`;
+                            } else {
+                                r2Av.textContent = (u2.name || '2').charAt(0).toUpperCase();
+                            }
+                        }
+                    }
+                    // Rank 3
+                    if (users[2]) {
+                        const u3 = users[2];
+                        const r3Name = document.getElementById('ldrRank3Name');
+                        const r3Tasks = document.getElementById('ldrRank3Tasks');
+                        const r3Av = document.getElementById('ldrRank3Avatar');
+                        if (r3Name) r3Name.textContent = u3.name || u3.pp_id;
+                        if (r3Tasks) r3Tasks.textContent = (Number(u3.monthly_points) || 0).toFixed(1) + ' Pts';
+                        if (r3Av) {
+                            if (u3.avatar_url) {
+                                r3Av.innerHTML = `<img src="${u3.avatar_url}" class="w-full h-full object-cover rounded-full">`;
+                            } else {
+                                r3Av.textContent = (u3.name || '3').charAt(0).toUpperCase();
+                            }
+                        }
+                    }
+                }
+
+                // Ranks 4 to 10
+                if (users.length > 3 && listContainer && tableCard) {
+                    tableCard.classList.remove('hidden');
+                    const rowsHtml = users.slice(3, 10).map((u, idx) => {
+                        const rank = idx + 4;
+                        const av = u.avatar_url ? `<img src="${u.avatar_url}" class="w-7 h-7 rounded-full object-cover">` : `<div class="w-7 h-7 rounded-full bg-slate-100 flex items-center justify-center text-xs font-bold">${(u.name || '').charAt(0).toUpperCase()}</div>`;
+                        return `
+                            <div class="px-4 py-3 flex items-center justify-between text-xs hover:bg-slate-50 transition-colors">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="w-5 text-center font-black text-slate-400">#${rank}</span>
+                                    ${av}
+                                    <span class="font-extrabold text-slate-800">${u.name || u.pp_id}</span>
+                                </div>
+                                <span class="font-black font-mono text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                                    ${(Number(u.monthly_points) || 0).toFixed(1)} Pts
+                                </span>
+                            </div>
+                        `;
+                    }).join('');
+                    listContainer.innerHTML = rowsHtml;
+                }
+
+                // Current logged-in user standing
+                const curUser = (window.ppfb && window.ppfb.user) || JSON.parse(localStorage.getItem('ppm_user') || 'null');
+                if (curUser && myStatus) {
+                    myStatus.classList.remove('hidden');
+                    const myIdx = users.findIndex(u => u.pp_id === curUser.pp_id);
+                    const myRankPill = document.getElementById('ldrMyRankPill');
+                    const myStatsTxt = document.getElementById('ldrMyStatsTxt');
+                    const myAdviseTxt = document.getElementById('ldrMyAdviseTxt');
+                    if (myIdx >= 0) {
+                        const myPts = (Number(users[myIdx].monthly_points) || 0).toFixed(1);
+                        if (myRankPill) myRankPill.textContent = `#${myIdx + 1}`;
+                        if (myStatsTxt) myStatsTxt.textContent = `${myPts} Pts অর্জিত`;
+                        if (myAdviseTxt) myAdviseTxt.textContent = myIdx === 0 ? "👑 আপনি এখন লিডারবোর্ডের শীর্ষে আছেন!" : "টাস্ক সম্পন্ন করে আরো পয়েন্ট বাড়ান!";
+                    } else {
+                        if (myRankPill) myRankPill.textContent = "#--";
+                        if (myStatsTxt) myStatsTxt.textContent = "0.0 Pts অর্জিত";
+                        if (myAdviseTxt) myAdviseTxt.textContent = "টাস্ক সম্পন্ন করে লিডারবোর্ডে যুক্ত হোন!";
+                    }
+                }
+            } catch (e) {
+                console.error("Leaderboard error:", e);
+                if (loadingBox) loadingBox.classList.add('hidden');
+                if (emptyBox) emptyBox.classList.remove('hidden');
+            }
+        };
+
 
     // DEPOSIT SUBMISSION
     window.submitDeposit = async () => {

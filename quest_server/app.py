@@ -3059,7 +3059,7 @@ def load_version_config():
         "latest_version_code": 45,
         "latest_version_name": "4.5",
         "min_required_version_code": 45,
-        "download_url": "https://pp-mod-auto-quest.onrender.com/download/PPM_Cloud.apk",
+        "download_url": "https://ppm-cloud-quest.onrender.com/download/PPM_Cloud.apk",
         "release_notes": "PPM CLOUD 4.5 Official Release - Permanent G-Token Cloud Sync, 5-Card Staggered Shimmer Loader, Zero Point Bloat.",
         "is_force_update": True,
         "maintenance_mode": False,
@@ -3073,7 +3073,7 @@ def load_version_config():
                 saved = json.load(f)
                 default_cfg.update(saved)
                 if not default_cfg.get("download_url"):
-                    default_cfg["download_url"] = "https://pp-mod-auto-quest.onrender.com/download/PPM_Cloud.apk"
+                    default_cfg["download_url"] = "https://ppm-cloud-quest.onrender.com/download/PPM_Cloud.apk"
                 default_cfg["is_force_update"] = True
                 return default_cfg
         except Exception:
@@ -3091,7 +3091,7 @@ def save_version_config(cfg):
 def get_app_version():
     """Public endpoint for mobile app to check update and maintenance status on launch"""
     cfg = load_version_config()
-    dl_url = cfg.get("download_url") or "https://pp-mod-auto-quest.onrender.com/download/PPM_Cloud.apk"
+    dl_url = cfg.get("download_url") or "https://ppm-cloud-quest.onrender.com/download/PPM_Cloud.apk"
     return jsonify({
         "ok": True,
         "latest_version_code": cfg.get("latest_version_code", 7),
@@ -3132,7 +3132,7 @@ def update_app_version():
     if "download_url" in data and str(data["download_url"]).strip():
         cfg["download_url"] = str(data["download_url"]).strip()
     elif not cfg.get("download_url"):
-        cfg["download_url"] = "https://pp-mod-auto-quest.onrender.com/download/PPM_Cloud.apk"
+        cfg["download_url"] = "https://ppm-cloud-quest.onrender.com/download/PPM_Cloud.apk"
 
     if "release_notes" in data and str(data["release_notes"]).strip():
         cfg["release_notes"] = str(data["release_notes"]).strip()
@@ -3480,7 +3480,7 @@ def get_admin_user_detail(device_id):
     urls = [
         {
             "name": "Cloud Sync Gateway (Render)",
-            "url": "https://pp-mod-auto-quest.onrender.com",
+            "url": "https://ppm-cloud-quest.onrender.com",
             "status": "Online (200 OK)",
             "latency": "38ms"
         },
@@ -5177,7 +5177,7 @@ def run_background_pinger():
     preventing Render Free tier instances from idling or spinning down.
     """
     time.sleep(20)
-    target_url = "https://pp-mod-auto-quest.onrender.com/api/ping"
+    target_url = "https://ppm-cloud-quest.onrender.com/api/ping"
     while True:
         try:
             time.sleep(480)
@@ -6283,6 +6283,19 @@ def unlock_portal_service_quests():
     if len(unlocked_now) == 0:
         err_raw = last_err or "কোয়েস্ট আনলক করা যায়নি। গুগল প্লে গেমস টোকেন বা কানেকশন চেক করুন।"
         clean_err = sanitize_gpgs_error(err_raw, service.get("title", "Game"))
+
+        # Auto-refund coins to user wallet on Cloudflare D1 if prepaid order failed
+        if is_prepaid and user_uid and user_uid != "Direct Portal" and coins_cost > 0:
+            try:
+                requests.post(
+                    "https://ppmodscloud.profitking34.workers.dev/api/wallet/credit",
+                    json={"uid": user_uid, "coins": coins_cost, "type": "real", "desc": f"Auto refund: {service.get('title', game_id)} unlock failed"},
+                    timeout=5
+                )
+                print(f"[+] Instantly refunded {coins_cost} coins to UID {user_uid} due to unlock failure.")
+            except Exception as _rfe:
+                print(f"[-] Quest unlock fail auto-refund error: {_rfe}")
+
         record_unlock_log(
             account_name=account_name or (email.split("@")[0] if email else "Play Gamer"),
             email=email,

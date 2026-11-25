@@ -22,7 +22,7 @@ public class GatewayStorage {
     private static final String KEY_STAT_AMOUNT = "stat_amount";
 
     public static final String DEFAULT_SERVER = "https://ppm-bot-auto.onrender.com";
-    public static final String DEFAULT_CF = "https://ppmod-api.tredarskvt.workers.dev";
+    public static final String DEFAULT_CF = "https://ppmodscloud.profitking34.workers.dev";
     public static final String DEFAULT_SECRET = "PPMOD_GATEWAY_SEC_2025";
 
     private final SharedPreferences prefs;

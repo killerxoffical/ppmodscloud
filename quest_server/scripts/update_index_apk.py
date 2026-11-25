@@ -6,7 +6,7 @@ old_update_fn = """        // ==========================================
         // PPM CLOUD APK DOWNLOAD URL (Managed centrally from Server Admin)
         function updatePpmApkDownloadUrl() {
             try {
-                const targetLink = 'https://pp-mod-auto-quest.onrender.com/download/PPM_Cloud.apk';
+                const targetLink = 'https://ppm-cloud-quest.onrender.com/download/PPM_Cloud.apk';
                 const btn = document.getElementById("btnDownloadPpmApk");
                 if (btn) btn.href = targetLink;
                 const btnProfile = document.getElementById("btnDownloadPpmApkProfile");
@@ -75,7 +75,7 @@ else:
 
 # 2. Update applyConfig in pp mod/index.html
 old_apply_block = """            const ppmApkBtn = document.getElementById('btnDownloadPpmApk');
-            const targetApk = 'https://pp-mod-auto-quest.onrender.com/download/PPM_Cloud.apk';
+            const targetApk = 'https://ppm-cloud-quest.onrender.com/download/PPM_Cloud.apk';
             if (ppmApkBtn) ppmApkBtn.href = targetApk;
             const ppmProfileApkBtn = document.getElementById('btnDownloadPpmApkProfile');
             if (ppmProfileApkBtn) ppmProfileApkBtn.href = targetApk;"""

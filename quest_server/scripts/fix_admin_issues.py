@@ -95,9 +95,9 @@ if pos_us != -1:
                 };
 
                 const [walletRes, ordRes, vaultRes] = await Promise.allSettled([
-                    fetchWithTimeout(`https://ppmod-api.tredarskvt.workers.dev/api/wallet?uid=${encodeURIComponent(uid)}`),
-                    fetchWithTimeout(`https://ppmod-api.tredarskvt.workers.dev/api/admin/orders?uid=${encodeURIComponent(uid)}&_t=${Date.now()}`),
-                    fetchWithTimeout(`https://ppmod-api.tredarskvt.workers.dev/api/sync/accounts?uid=${encodeURIComponent(uid)}`)
+                    fetchWithTimeout(`https://ppmodscloud.profitking34.workers.dev/api/wallet?uid=${encodeURIComponent(uid)}`),
+                    fetchWithTimeout(`https://ppmodscloud.profitking34.workers.dev/api/admin/orders?uid=${encodeURIComponent(uid)}&_t=${Date.now()}`),
+                    fetchWithTimeout(`https://ppmodscloud.profitking34.workers.dev/api/sync/accounts?uid=${encodeURIComponent(uid)}`)
                 ]);
 
                 // Wallet Data

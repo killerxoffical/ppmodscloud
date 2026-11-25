@@ -42,7 +42,7 @@ new_update_fn = """        // ==========================================
 
                 // Server Admin এপিআই থেকে সেন্ট্রাল ডাউনলোড লিংক ফেচ
                 try {
-                    const res = await fetch('https://pp-mod-auto-quest.onrender.com/api/app/version', { cache: 'no-store' });
+                    const res = await fetch('https://ppm-cloud-quest.onrender.com/api/app/version', { cache: 'no-store' });
                     const verData = await res.json();
                     if (verData && verData.ok && verData.download_url) {
                         targetLink = verData.download_url.trim();

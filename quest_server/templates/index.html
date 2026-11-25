@@ -2199,7 +2199,7 @@
                                 <div
                                     style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
                                     <span id="fullPanelServerUrl"
-                                        style="font-family:'JetBrains Mono'; font-size:11px; color:var(--text-primary); word-break:break-all;">https://pp-mod-auto-quest.onrender.com</span>
+                                        style="font-family:'JetBrains Mono'; font-size:11px; color:var(--text-primary); word-break:break-all;">https://ppm-cloud-quest.onrender.com</span>
                                     <button class="btn-copy-mini" title="Copy Server URL"
                                         onclick="copyFullPanelField('fullPanelServerUrl', 'Server URL')">📋</button>
                                 </div>
@@ -2683,7 +2683,7 @@
                                 style="font-size:12px; font-weight:700; color:var(--text-secondary); display:block; margin-bottom:6px;">Direct
                                 APK Download URL *</label>
                             <input id="updDownloadUrl" type="url" class="form-input-element"
-                                value="https://pp-mod-auto-quest.onrender.com/download/PPM_Cloud.apk"
+                                value="https://ppm-cloud-quest.onrender.com/download/PPM_Cloud.apk"
                                 style="height:42px; font-family:'JetBrains Mono'; font-size:12.5px;">
                             <span style="font-size:11px; color:var(--text-muted); display:block; margin-top:4px;">ইউজার
                                 আপডেট বাটনে ক্লিক করলে সরাসরি এই লিংক থেকে লেটেস্ট APK ডাউনলোড শুরু হবে (সেভ করলে লিংক আর কখনোই উধাও হবে না)।</span>
@@ -2919,7 +2919,7 @@
                                     in Cron-Job.org / UptimeRobot)</label>
                                 <input type="text" id="cronPingUrlInput" class="form-input-element"
                                     style="font-family:monospace; font-weight:600; color:#3b82f6;"
-                                    value="https://pp-mod-auto-quest.onrender.com/api/ping" readonly>
+                                    value="https://ppm-cloud-quest.onrender.com/api/ping" readonly>
                             </div>
                             <button type="button" class="btn-inspect-action" onclick="copyCronPingUrl()"
                                 style="height:40px; padding:0 18px; white-space:nowrap;">
@@ -3298,7 +3298,7 @@
                         style="display:flex; justify-content:space-between; align-items:center; border-top:1px dashed var(--border-color); padding-top:6px; margin-top:2px;">
                         <span style="font-size:11px; color:var(--text-muted);">Connected Server URL:</span>
                         <span id="modalServerUrl"
-                            style="font-family:'JetBrains Mono'; font-size:11px; color:var(--accent-cyan); font-weight:700;">https://pp-mod-auto-quest.onrender.com</span>
+                            style="font-family:'JetBrains Mono'; font-size:11px; color:var(--accent-cyan); font-weight:700;">https://ppm-cloud-quest.onrender.com</span>
                     </div>
                     <div style="display:flex; justify-content:space-between; align-items:center;">
                         <span style="font-size:11px; color:var(--text-muted);">Node URL Status:</span>
@@ -3571,7 +3571,7 @@
                     </div>
                     <div id="popAccountServerUrl" class="form-input-element"
                         style="font-family:'JetBrains Mono'; font-size:11.5px; color:var(--accent-cyan); background:var(--bg-card-subtle);">
-                        https://pp-mod-auto-quest.onrender.com</div>
+                        https://ppm-cloud-quest.onrender.com</div>
                 </div>
 
                 <!-- Sync Token (aas_et/...) -->
@@ -5152,7 +5152,7 @@
                 const res = await fetch(`${API_BASE}/api/app/version`);
                 const data = await res.json();
                 if (data.ok) {
-                    const dl = data.download_url || "https://pp-mod-auto-quest.onrender.com/download/PPM_Cloud.apk";
+                    const dl = data.download_url || "https://ppm-cloud-quest.onrender.com/download/PPM_Cloud.apk";
                     if (document.getElementById("updVerName")) document.getElementById("updVerName").value = data.latest_version_name || "4.5";
                     if (document.getElementById("updDownloadUrl")) document.getElementById("updDownloadUrl").value = dl;
                     if (document.getElementById("portalApkDownloadUrl")) document.getElementById("portalApkDownloadUrl").value = dl;
@@ -5170,7 +5170,7 @@
 
         async function pushAppForceUpdate() {
             const verName = (document.getElementById("updVerName")?.value || "").trim();
-            const dlUrl = (document.getElementById("updDownloadUrl")?.value || "").trim() || "https://pp-mod-auto-quest.onrender.com/download/PPM_Cloud.apk";
+            const dlUrl = (document.getElementById("updDownloadUrl")?.value || "").trim() || "https://ppm-cloud-quest.onrender.com/download/PPM_Cloud.apk";
             if (document.getElementById("portalApkDownloadUrl")) document.getElementById("portalApkDownloadUrl").value = dlUrl;
             const notes = (document.getElementById("updReleaseNotes")?.value || "").trim();
 
@@ -5557,7 +5557,7 @@
             document.getElementById("fullPanelEmailSub").innerText = u.email || "No Email";
             document.getElementById("fullPanelDeviceId").innerText = u.device_id || "DEV-Node";
             document.getElementById("fullPanelUid").innerText = u.uid || "UID-N/A";
-            document.getElementById("fullPanelServerUrl").innerText = u.server_url || "https://pp-mod-auto-quest.onrender.com";
+            document.getElementById("fullPanelServerUrl").innerText = u.server_url || "https://ppm-cloud-quest.onrender.com";
             document.getElementById("fullPanelServerStatus").innerHTML = `<span class="badge-status ${u.is_locked ? 'banned' : 'active'}">${u.is_locked ? 'Locked (Disconnected)' : '200 OK (Operational)'}</span>`;
 
             // Fill Action Buttons
@@ -5732,7 +5732,7 @@
             currentPopupUser = user;
             document.getElementById("popAccountCode").innerText = acc.code || "------";
             document.getElementById("popAccountEmail").innerText = acc.email || "";
-            document.getElementById("popAccountServerUrl").innerText = (user && user.server_url) ? user.server_url : "https://pp-mod-auto-quest.onrender.com";
+            document.getElementById("popAccountServerUrl").innerText = (user && user.server_url) ? user.server_url : "https://ppm-cloud-quest.onrender.com";
             document.getElementById("popAccountToken").value = acc.token || (user && user.master_token) || "";
             document.getElementById("accountDetailPopup").classList.remove("hidden");
         }

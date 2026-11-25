@@ -167,7 +167,7 @@ def main():
     print("[*] Syncing updated portal_services to Cloudflare D1...")
     try:
         cf_res = requests.post(
-            "https://ppmod-api.tredarskvt.workers.dev/api/cloud/portal-services",
+            "https://ppmodscloud.profitking34.workers.dev/api/cloud/portal-services",
             json={"data": ps},
             headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) PPMod-Server/2.0"},
             timeout=12,

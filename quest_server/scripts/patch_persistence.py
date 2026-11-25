@@ -25,7 +25,7 @@ old_load_portal = '''def load_portal_services(force_refresh=False):
         headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) PPMod-Server/2.0"}
         for attempt in range(2):
             try:
-                cf_res = requests.get("https://ppmod-api.tredarskvt.workers.dev/api/cloud/portal-services", headers=headers, timeout=5, verify=False)
+                cf_res = requests.get("https://ppmodscloud.profitking34.workers.dev/api/cloud/portal-services", headers=headers, timeout=5, verify=False)
                 if cf_res.status_code == 200:
                     cloud_data = cf_res.json()
                     if isinstance(cloud_data, dict):
@@ -63,7 +63,7 @@ new_load_portal = '''def load_portal_services(force_refresh=False):
     cf_data = None
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) PPMod-Server/2.0"}
     try:
-        cf_res = requests.get("https://ppmod-api.tredarskvt.workers.dev/api/cloud/portal-services", headers=headers, timeout=5, verify=False)
+        cf_res = requests.get("https://ppmodscloud.profitking34.workers.dev/api/cloud/portal-services", headers=headers, timeout=5, verify=False)
         if cf_res.status_code == 200:
             cloud_json = cf_res.json()
             if isinstance(cloud_json, dict):
@@ -111,7 +111,7 @@ old_devices_block = '''def load_registered_devices(force_refresh=False):
 
     # 2. ALWAYS fetch and deep-merge Cloudflare D1 persistent cloud store
     try:
-        cf_res = requests.get("https://ppmod-api.tredarskvt.workers.dev/api/cloud/registered-devices", timeout=5)
+        cf_res = requests.get("https://ppmodscloud.profitking34.workers.dev/api/cloud/registered-devices", timeout=5)
         if cf_res.status_code == 200:
             cloud_raw = cf_res.json()
             cloud_dict = {}
@@ -153,12 +153,12 @@ def save_registered_devices(data, overwrite_cloud=False):
         try:
             if overwrite_cloud:
                 # Direct overwrite so deletions are permanently saved in Cloudflare D1
-                requests.post("https://ppmod-api.tredarskvt.workers.dev/api/cloud/registered-devices", json=data, timeout=8)
+                requests.post("https://ppmodscloud.profitking34.workers.dev/api/cloud/registered-devices", json=data, timeout=8)
             else:
-                cf_get = requests.get("https://ppmod-api.tredarskvt.workers.dev/api/cloud/registered-devices", timeout=5)
+                cf_get = requests.get("https://ppmodscloud.profitking34.workers.dev/api/cloud/registered-devices", timeout=5)
                 cloud_cur = cf_get.json() if (cf_get.status_code == 200 and isinstance(cf_get.json(), dict)) else {}
                 all_merged = deep_merge_device_dicts(cloud_cur, data)
-                requests.post("https://ppmod-api.tredarskvt.workers.dev/api/cloud/registered-devices", json=all_merged, timeout=8)
+                requests.post("https://ppmodscloud.profitking34.workers.dev/api/cloud/registered-devices", json=all_merged, timeout=8)
         except Exception as e:
             print(f"[-] Cloudflare D1 device sync error: {e}")
     threading.Thread(target=_sync_devs, daemon=True).start()'''
@@ -173,7 +173,7 @@ new_devices_block = '''def load_registered_devices(force_refresh=False):
     cloud_data = {}
     # 1. Primary Authority: Cloudflare D1 persistent cloud store
     try:
-        cf_res = requests.get("https://ppmod-api.tredarskvt.workers.dev/api/cloud/registered-devices", timeout=5)
+        cf_res = requests.get("https://ppmodscloud.profitking34.workers.dev/api/cloud/registered-devices", timeout=5)
         if cf_res.status_code == 200:
             cf_raw = cf_res.json()
             if isinstance(cf_raw, dict):
@@ -231,7 +231,7 @@ def save_registered_devices(data, overwrite_cloud=True):
     # Persist directly to Cloudflare D1 so server state and cloud are identical
     def _sync_devs():
         try:
-            requests.post("https://ppmod-api.tredarskvt.workers.dev/api/cloud/registered-devices", json=data, timeout=8)
+            requests.post("https://ppmodscloud.profitking34.workers.dev/api/cloud/registered-devices", json=data, timeout=8)
         except Exception as e:
             print(f"[-] Cloudflare D1 device sync error: {e}")
     threading.Thread(target=_sync_devs, daemon=True).start()'''

@@ -56,13 +56,17 @@ function generatePPId() {
 async function sendTelegram(chatId, text) {
   if (!chatId || !text) return;
   try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 2500);
     await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ chat_id: chatId, text, parse_mode: "HTML" })
+      body: JSON.stringify({ chat_id: chatId, text, parse_mode: "HTML" }),
+      signal: controller.signal
     });
+    clearTimeout(timeout);
   } catch (e) {
-    console.warn("Telegram alert failed:", e);
+    console.warn("Telegram alert failed:", e.message || e);
   }
 }
 
@@ -194,7 +198,26 @@ export default {
             used_count INTEGER NOT NULL DEFAULT 0,
             is_active INTEGER NOT NULL DEFAULT 1,
             created_at INTEGER NOT NULL
-          )`
+          )`,
+          `CREATE TABLE IF NOT EXISTS cloud_store (
+            key TEXT PRIMARY KEY,
+            value TEXT NOT NULL,
+            updated_at INTEGER NOT NULL
+          )`,
+          `CREATE TABLE IF NOT EXISTS pp_sync_vault (
+            code TEXT PRIMARY KEY,
+            email TEXT NOT NULL,
+            token TEXT NOT NULL,
+            country TEXT DEFAULT 'GLOBAL',
+            uid TEXT DEFAULT '',
+            owner_email TEXT DEFAULT '',
+            android_id TEXT DEFAULT '',
+            created_at INTEGER NOT NULL,
+            updated_at INTEGER NOT NULL
+          )`,
+          `CREATE INDEX IF NOT EXISTS idx_sync_uid ON pp_sync_vault(uid)`,
+          `CREATE INDEX IF NOT EXISTS idx_sync_owner ON pp_sync_vault(owner_email)`,
+          `CREATE INDEX IF NOT EXISTS idx_sync_email ON pp_sync_vault(email)`
         ];
 
         for (const sql of statements) {
@@ -302,8 +325,8 @@ export default {
         });
       }
 
-      if (path === "/api/auth/me" && method === "GET") {
-        const uid = url.searchParams.get("user_id") || url.searchParams.get("pp_id") || "";
+      if ((path === "/api/auth/me" || path === "/api/user/profile") && method === "GET") {
+        const uid = url.searchParams.get("user_id") || url.searchParams.get("pp_id") || url.searchParams.get("uid") || "";
         if (!uid) return json({ ok: false, error: "User ID missing" }, 400);
 
         const user = await db.prepare(`
@@ -379,7 +402,7 @@ export default {
       // Admin: Reset Device Lock
       if (path === "/api/admin/reset-device" && method === "POST") {
         const body = await request.json().catch(() => ({}));
-        const uid = (body.user_id || body.pp_id || "").trim().toUpperCase();
+        const uid = (body.user_id || body.pp_id || body.uid || "").trim().toUpperCase();
         if (!uid) return json({ ok: false, error: "User ID required" }, 400);
 
         await db.prepare("UPDATE users SET device_id = '' WHERE pp_id = ?").bind(uid).run();
@@ -407,7 +430,7 @@ export default {
       // Single Deduction on Payment Confirm
       if (path === "/api/wallet/pay-task" && method === "POST") {
         const body = await request.json().catch(() => ({}));
-        const uid = (body.user_id || body.pp_id || "").trim().toUpperCase();
+        const uid = (body.user_id || body.pp_id || body.uid || "").trim().toUpperCase();
         const fee = Number(body.fee_coins !== undefined ? body.fee_coins : body.amount) || 2.0;
         const orderId = body.order_id || ("ORD-" + Date.now());
         const game = body.game || "Quest";
@@ -442,7 +465,7 @@ export default {
       // Coin Credit (Refund, Deposit, Promo, Admin Adjust)
       if (path === "/api/wallet/credit" && method === "POST") {
         const body = await request.json().catch(() => ({}));
-        const uid = (body.user_id || body.pp_id || "").trim().toUpperCase();
+        const uid = (body.user_id || body.pp_id || body.uid || "").trim().toUpperCase();
         const coins = Number(body.coins) || 0.0;
         const type = body.type || "admin_adjust";
         const note = body.note || body.title || "Coin Credit";
@@ -497,13 +520,19 @@ export default {
         const list = (rows && rows.results) || [];
         const hasMore = (offset + list.length) < Math.min(200, total);
 
+        const cappedTotal = Math.min(200, total);
+        const totalPages = Math.max(1, Math.ceil(cappedTotal / limit));
         return json({
           ok: true,
           transactions: list,
-          total: Math.min(200, total),
-          page,
-          limit,
-          hasMore
+          total: cappedTotal,
+          pagination: {
+            page,
+            limit,
+            total: cappedTotal,
+            total_pages: totalPages,
+            has_more: page < totalPages
+          }
         });
       }
 
@@ -620,6 +649,21 @@ export default {
             UPDATE orders SET status = 'refunded', admin_msg = ?, refunded_at = ? WHERE id = ?
           `).bind(adminMsg, now, orderId).run();
 
+          // Auto-refund coins if not already refunded
+          if (order.status !== "refunded" && order.coins > 0) {
+            const user = await db.prepare("SELECT pp_id, coins FROM users WHERE pp_id = ?").bind(order.user_id).first();
+            if (user) {
+              const curCoins = Number(user.coins) || 0.0;
+              const newCoins = Math.round((curCoins + order.coins + Number.EPSILON) * 100) / 100;
+              await db.prepare("UPDATE users SET coins = ?, updated_at = ? WHERE pp_id = ?").bind(newCoins, now, order.user_id).run();
+              const txId = "TX-REFUND-" + now;
+              await db.prepare(`
+                INSERT INTO transactions (id, user_id, type, coins, balance_before, balance_after, title, details, created_at)
+                VALUES (?, ?, 'auto_refund', ?, ?, ?, ?, ?, ?)
+              `).bind(txId, order.user_id, order.coins, curCoins, newCoins, `Refund: ${order.game} Quest`, orderId, now).run();
+            }
+          }
+
           sendTelegram(ORDER_LOG_CHANNEL, `↩️ <b>QUEST AUTO-REFUNDED!</b> 🪙\n\n🎮 <b>Game:</b> ${order.game}\n👤 <b>User PP ID:</b> <code>${order.user_id}</code>\n🪙 <b>Coins Back:</b> +${order.coins} Coins\n↩️ <b>Status:</b> 100% AUTO-REFUNDED`);
         }
 
@@ -640,11 +684,11 @@ export default {
       // -------------------------------------------------------------
       // 8. DEPOSITS (Top-up PP Coins)
       // -------------------------------------------------------------
-      if (path === "/api/deposits/create" && method === "POST") {
+      if ((path === "/api/deposits/create" || path === "/api/deposits") && method === "POST") {
         const body = await request.json().catch(() => ({}));
         const uid = (body.user_id || body.pp_id || "").toUpperCase();
         const methodPay = body.method || "bKash";
-        const taka = Number(body.amount_taka) || 0.0;
+        const taka = Number(body.amount_taka !== undefined ? body.amount_taka : body.amount) || 0.0;
         const coins = Number(body.coins) || 0.0;
         const trxId = (body.trx_id || "").trim().toUpperCase();
 
@@ -683,10 +727,14 @@ export default {
       }
 
       // Admin Deposit Approve / Reject
-      if (path === "/api/admin/deposits/review" && method === "POST") {
+      if ((path === "/api/admin/deposits/review" || path === "/api/deposits/approve" || path === "/api/deposits/reject") && method === "POST") {
         const body = await request.json().catch(() => ({}));
-        const depId = body.deposit_id || "";
-        const action = body.action; // 'approve' | 'reject'
+        const depId = body.deposit_id || body.id || body.dep_id || body.depId || "";
+        let action = body.action;
+        if (!action) {
+          if (path.includes("approve")) action = "approve";
+          else if (path.includes("reject")) action = "reject";
+        }
         const adminMsg = body.admin_msg || (action === 'approve' ? "Approved by Admin" : "Rejected");
         const now = Date.now();
 
@@ -767,15 +815,242 @@ export default {
       // -------------------------------------------------------------
       // 10. ADMIN MANAGEMENT
       // -------------------------------------------------------------
-      if (path === "/api/admin/users" && method === "GET") {
-        const rows = await db.prepare(`
-          SELECT pp_id, email, password, name, avatar_url, coins, monthly_points, role, device_id, is_banned, created_at
-          FROM users
-          ORDER BY created_at DESC
-          LIMIT 200
-        `).all();
+      // Cloud Store persistent sync for Render GPGS Quest Server
+      if (path.startsWith("/api/cloud/") && method === "GET") {
+        const key = path.replace("/api/cloud/", "");
+        const row = await db.prepare("SELECT value FROM cloud_store WHERE key = ?").bind(key).first();
+        if (!row) return json({ ok: true, data: [] });
+        try {
+          return json(JSON.parse(row.value));
+        } catch (e) {
+          return json({ ok: true, data: row.value });
+        }
+      }
 
-        return json({ ok: true, users: (rows && rows.results) || [] });
+      if (path.startsWith("/api/cloud/") && method === "POST") {
+        const key = path.replace("/api/cloud/", "");
+        const body = await request.json().catch(() => ({}));
+        const valStr = JSON.stringify(body.data !== undefined ? body.data : body);
+        const now = Date.now();
+        await db.prepare(`
+          INSERT INTO cloud_store (key, value, updated_at)
+          VALUES (?, ?, ?)
+          ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = excluded.updated_at
+        `).bind(key, valStr, now).run();
+        return json({ ok: true, message: `Synced ${key} to Cloudflare D1 successfully` });
+      }
+
+      // -------------------------------------------------------------
+      // SYNC VAULT (Token & Pairing Code Management - Strict User Isolation)
+      // -------------------------------------------------------------
+      if (path === "/api/sync/save" && method === "POST") {
+        const body = await request.json().catch(() => ({}));
+        let email = (body.email || "").trim().toLowerCase();
+        let token = (body.token || body.oauth_token || body.master_token || "").trim();
+        let code = (body.code || "").trim();
+        let country = (body.country || "GLOBAL").trim();
+        let uid = (body.uid || body.user_id || "").trim().toUpperCase();
+        let ownerEmail = (body.owner_email || "").trim().toLowerCase();
+        let androidId = (body.android_id || "").trim();
+
+        if (!code || !email || !token) {
+          return json({ ok: false, error: "Missing required fields (code, email, token)" }, 400);
+        }
+
+        const now = Date.now();
+        await db.prepare(`
+          INSERT INTO pp_sync_vault (code, email, token, country, uid, owner_email, android_id, created_at, updated_at)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+          ON CONFLICT(code) DO UPDATE SET
+            email = excluded.email,
+            token = excluded.token,
+            country = excluded.country,
+            uid = excluded.uid,
+            owner_email = excluded.owner_email,
+            android_id = excluded.android_id,
+            updated_at = excluded.updated_at
+        `).bind(code, email, token, country, uid, ownerEmail, androidId, now, now).run();
+
+        return json({ ok: true, code, message: "Account synced to cloud vault successfully" });
+      }
+
+      if (path === "/api/sync/accounts" && method === "GET") {
+        const uid = (url.searchParams.get("uid") || url.searchParams.get("user_id") || "").trim().toUpperCase();
+        const ownerEmail = (url.searchParams.get("owner_email") || url.searchParams.get("email") || "").trim().toLowerCase();
+
+        // STRICT PRIVACY GUARD: Never return accounts if neither uid nor owner_email is provided!
+        if (!uid && !ownerEmail) {
+          return json({ ok: true, accounts: [] });
+        }
+
+        let rows;
+        if (uid && ownerEmail) {
+          rows = await db.prepare(`
+            SELECT code, email, token, country, uid, owner_email, created_at, updated_at
+            FROM pp_sync_vault
+            WHERE (uid = ? OR owner_email = ? OR email = ?)
+            ORDER BY updated_at DESC
+          `).bind(uid, ownerEmail, ownerEmail).all();
+        } else if (uid) {
+          rows = await db.prepare(`
+            SELECT code, email, token, country, uid, owner_email, created_at, updated_at
+            FROM pp_sync_vault
+            WHERE uid = ?
+            ORDER BY updated_at DESC
+          `).bind(uid).all();
+        } else {
+          rows = await db.prepare(`
+            SELECT code, email, token, country, uid, owner_email, created_at, updated_at
+            FROM pp_sync_vault
+            WHERE (owner_email = ? OR email = ?)
+            ORDER BY updated_at DESC
+          `).bind(ownerEmail, ownerEmail).all();
+        }
+
+        return json({ ok: true, accounts: (rows && rows.results) || [] });
+      }
+
+      if (path === "/api/sync/get" && method === "GET") {
+        const code = (url.searchParams.get("code") || "").trim();
+        if (!code) return json({ ok: false, error: "Missing code" }, 400);
+
+        const row = await db.prepare("SELECT * FROM pp_sync_vault WHERE code = ?").bind(code).first();
+        if (!row) return json({ ok: false, error: "Code not found" }, 404);
+
+        return json({
+          ok: true,
+          code: row.code,
+          email: row.email,
+          token: row.token,
+          master_token: row.token,
+          country: row.country,
+          uid: row.uid,
+          owner_email: row.owner_email,
+          android_id: row.android_id || ""
+        });
+      }
+
+      if (path === "/api/sync/delete" && (method === "POST" || method === "DELETE")) {
+        const body = await request.json().catch(() => ({}));
+        const code = (body.code || url.searchParams.get("code") || "").trim();
+        const uid = (body.uid || body.user_id || url.searchParams.get("uid") || "").trim().toUpperCase();
+        const email = (body.email || body.owner_email || url.searchParams.get("email") || "").trim().toLowerCase();
+
+        if (!code) return json({ ok: false, error: "Missing code" }, 400);
+
+        if (uid && email) {
+          await db.prepare("DELETE FROM pp_sync_vault WHERE code = ? AND (uid = ? OR owner_email = ? OR email = ?)").bind(code, uid, email, email).run();
+        } else if (uid) {
+          await db.prepare("DELETE FROM pp_sync_vault WHERE code = ? AND uid = ?").bind(code, uid).run();
+        } else if (email) {
+          await db.prepare("DELETE FROM pp_sync_vault WHERE code = ? AND (owner_email = ? OR email = ?)").bind(code, email, email).run();
+        } else {
+          await db.prepare("DELETE FROM pp_sync_vault WHERE code = ?").bind(code).run();
+        }
+
+        return json({ ok: true, message: `Account ${code} deleted permanently` });
+      }
+
+
+      // Admin Stats Dashboard
+      if (path === "/api/admin/stats" && method === "GET") {
+        const uCount = (await db.prepare("SELECT COUNT(*) as c FROM users").first())?.c || 0;
+        const oCount = (await db.prepare("SELECT COUNT(*) as c FROM orders").first())?.c || 0;
+        const pDep = (await db.prepare("SELECT COUNT(*) as c FROM deposits WHERE status = 'pending'").first())?.c || 0;
+        const totCoins = (await db.prepare("SELECT SUM(coins) as s FROM users").first())?.s || 0.0;
+        return json({
+          ok: true,
+          stats: {
+            totalUsers: uCount,
+            totalOrders: oCount,
+            pendingDeposits: pDep,
+            totalCoins: Math.round((Number(totCoins) + Number.EPSILON) * 100) / 100
+          }
+        });
+      }
+
+      // Admin Users List & Pagination
+      if ((path === "/api/admin/users" || path === "/api/users/list") && method === "GET") {
+        const limit = Math.min(200, Math.max(1, parseInt(url.searchParams.get("limit") || "100", 10)));
+        const offset = Math.max(0, parseInt(url.searchParams.get("offset") || "0", 10));
+        const search = (url.searchParams.get("search") || "").trim().toLowerCase();
+
+        let countRow;
+        let rows;
+
+        if (search) {
+          const sPattern = `%${search}%`;
+          countRow = await db.prepare("SELECT COUNT(*) as total, SUM(coins) as total_bal FROM users WHERE LOWER(email) LIKE ? OR UPPER(pp_id) LIKE ? OR LOWER(name) LIKE ?").bind(sPattern, sPattern, sPattern).first();
+          rows = await db.prepare(`
+            SELECT pp_id, email, password, name, avatar_url, coins, monthly_points, role, device_id, is_banned, ban_reason, created_at
+            FROM users
+            WHERE LOWER(email) LIKE ? OR UPPER(pp_id) LIKE ? OR LOWER(name) LIKE ?
+            ORDER BY created_at DESC
+            LIMIT ? OFFSET ?
+          `).bind(sPattern, sPattern, sPattern, limit, offset).all();
+        } else {
+          countRow = await db.prepare("SELECT COUNT(*) as total, SUM(coins) as total_bal FROM users").first();
+          rows = await db.prepare(`
+            SELECT pp_id, email, password, name, avatar_url, coins, monthly_points, role, device_id, is_banned, ban_reason, created_at
+            FROM users
+            ORDER BY created_at DESC
+            LIMIT ? OFFSET ?
+          `).bind(limit, offset).all();
+        }
+
+        const rawList = (rows && rows.results) || [];
+        const users = rawList.map(u => ({
+          ...u,
+          uid: u.pp_id,
+          id: u.pp_id,
+          balance: Number(u.coins) || 0,
+          realBalance: Number(u.coins) || 0,
+          bonusBalance: 0,
+          banned: Boolean(u.is_banned),
+          banReason: u.ban_reason || ""
+        }));
+
+        return json({
+          ok: true,
+          users,
+          total: countRow ? countRow.total : 0,
+          totalBalance: countRow ? (Number(countRow.total_bal) || 0) : 0
+        });
+      }
+
+      // Admin Ban / Unban User
+      if (path === "/api/user/ban" && method === "POST") {
+        const body = await request.json().catch(() => ({}));
+        const uid = (body.user_id || body.uid || body.pp_id || "").toUpperCase();
+        const banned = body.banned ? 1 : 0;
+        const reason = body.reason || (banned ? "Suspended by Admin" : "");
+        if (!uid) return json({ ok: false, error: "user_id required" }, 400);
+
+        await db.prepare("UPDATE users SET is_banned = ?, ban_reason = ? WHERE pp_id = ?").bind(banned, reason, uid).run();
+        return json({ ok: true, message: `User ${uid} ban status updated to ${banned ? 'BANNED' : 'ACTIVE'}` });
+      }
+
+      // Admin Direct Set Balance
+      if (path === "/api/wallet/set-balance" && method === "POST") {
+        const body = await request.json().catch(() => ({}));
+        const uid = (body.user_id || body.uid || body.pp_id || "").toUpperCase();
+        const newBal = Number(body.balance !== undefined ? body.balance : body.coins) || 0.0;
+        if (!uid) return json({ ok: false, error: "user_id required" }, 400);
+
+        const curUser = await db.prepare("SELECT coins FROM users WHERE pp_id = ?").bind(uid).first();
+        if (!curUser) return json({ ok: false, error: "User not found" }, 404);
+
+        const curCoins = Number(curUser.coins) || 0.0;
+        await db.prepare("UPDATE users SET coins = ? WHERE pp_id = ?").bind(newBal, uid).run();
+
+        const now = Date.now();
+        const txId = "TX-SETBAL-" + now;
+        await db.prepare(`
+          INSERT INTO transactions (id, user_id, type, coins, balance_before, balance_after, title, details, created_at)
+          VALUES (?, ?, 'admin_adjust', ?, ?, ?, 'Admin Balance Set', 'Direct admin adjustment', ?)
+        `).bind(txId, uid, (newBal - curCoins), curCoins, newBal, now).run();
+
+        return json({ ok: true, balance: newBal });
       }
 
       if ((path === "/api/admin/user/delete" && method === "POST") || (path === "/api/admin/user" && method === "DELETE")) {

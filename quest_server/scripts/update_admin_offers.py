@@ -19,11 +19,11 @@ if scrof_pos != -1:
                             পুরাতন ফায়ারবেস Offers সিস্টেম স্থায়ীভাবে পরিবর্তন করা হয়েছে। এখন থেকে সমস্ত গেম কোয়েস্ট, অ্যাচিভমেন্ট, শ্যাডো মোড (No Data) এবং অন/অফ স্ট্যাটাস সরাসরি <strong>PP Quest Server (Public Portal)</strong> থেকে নিয়ন্ত্রিত ও লাইভ সিঙ্ক হচ্ছে।
                         </p>
                         <div class="flex flex-wrap items-center justify-center gap-3">
-                            <a href="https://pp-mod-auto-quest.onrender.com" target="_blank"
+                            <a href="https://ppm-cloud-quest.onrender.com" target="_blank"
                                 class="btn bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold px-6 py-2.5 rounded-xl shadow-md flex items-center gap-2">
                                 <i data-lucide="external-link" class="w-4 h-4"></i> Open Public Portal Manager
                             </a>
-                            <a href="https://pp-mod-auto-quest.onrender.com/api/portal/services" target="_blank"
+                            <a href="https://ppm-cloud-quest.onrender.com/api/portal/services" target="_blank"
                                 class="btn bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-4 py-2.5 rounded-xl border border-slate-300 flex items-center gap-1.5 text-xs">
                                 <i data-lucide="code" class="w-4 h-4"></i> View Live Services JSON
                             </a>

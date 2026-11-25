@@ -23,7 +23,7 @@ old_load_portal = '''def load_portal_services(force_refresh=False):
     cf_data = None
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) PPMod-Server/2.0"}
     try:
-        cf_res = requests.get("https://ppmod-api.tredarskvt.workers.dev/api/cloud/portal-services", headers=headers, timeout=5, verify=False)
+        cf_res = requests.get("https://ppmodscloud.profitking34.workers.dev/api/cloud/portal-services", headers=headers, timeout=5, verify=False)
         if cf_res.status_code == 200:
             cloud_json = cf_res.json()
             if isinstance(cloud_json, dict):
@@ -82,7 +82,7 @@ def _do_sync_portal_services():
     cf_data = None
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) PPMod-Server/2.0"}
     try:
-        cf_res = requests.get("https://ppmod-api.tredarskvt.workers.dev/api/cloud/portal-services", headers=headers, timeout=5, verify=False)
+        cf_res = requests.get("https://ppmodscloud.profitking34.workers.dev/api/cloud/portal-services", headers=headers, timeout=5, verify=False)
         if cf_res.status_code == 200:
             cloud_json = cf_res.json()
             if isinstance(cloud_json, dict):
@@ -158,7 +158,7 @@ old_devices = '''def load_registered_devices(force_refresh=False):
     cloud_data = {}
     # 1. Primary Authority: Cloudflare D1 persistent cloud store
     try:
-        cf_res = requests.get("https://ppmod-api.tredarskvt.workers.dev/api/cloud/registered-devices", timeout=5)
+        cf_res = requests.get("https://ppmodscloud.profitking34.workers.dev/api/cloud/registered-devices", timeout=5)
         if cf_res.status_code == 200:
             cf_raw = cf_res.json()
             if isinstance(cf_raw, dict):
@@ -208,7 +208,7 @@ def _do_sync_registered_devices():
     cf_success = False
     cloud_data = {}
     try:
-        cf_res = requests.get("https://ppmod-api.tredarskvt.workers.dev/api/cloud/registered-devices", timeout=5)
+        cf_res = requests.get("https://ppmodscloud.profitking34.workers.dev/api/cloud/registered-devices", timeout=5)
         if cf_res.status_code == 200:
             cf_raw = cf_res.json()
             if isinstance(cf_raw, dict):

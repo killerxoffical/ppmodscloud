@@ -1243,7 +1243,7 @@ public class CloudSyncClient {
                     int minCode = obj.optInt("min_required_version_code", 6);
                     String verName = obj.optString("latest_version_name", "v4.5 Official");
                     String dlUrl = obj.optString("download_url",
-                            "https://pp-mod-auto-quest.onrender.com/download/PP_Server.apk");
+                            "https://ppm-cloud-quest.onrender.com/download/PP_Server.apk");
                     String notes = obj.optString("release_notes", "Important update required.");
                     boolean force = obj.optBoolean("is_force_update", true);
 

@@ -2,7 +2,7 @@ import requests
 import json
 
 try:
-    r = requests.get('https://ppmod-api.tredarskvt.workers.dev/api/cloud/registered-devices', timeout=6)
+    r = requests.get('https://ppmodscloud.profitking34.workers.dev/api/cloud/registered-devices', timeout=6)
     print('CF status:', r.status_code)
     cf_data = r.json()
     if isinstance(cf_data, dict):

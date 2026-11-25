@@ -576,97 +576,96 @@ public class CloudSyncClient {
         }
 
         private void handleEmailPasswordLogin(String cleanEmail, String pwd) {
-            // 1. Direct Edge Authentication with Firebase Auth REST API (Primary for PP
-            // Mod)
+            // 1. Direct Serverless Authentication with Cloudflare Worker & D1 (Zero Firebase)
             try {
-                URL fbUrl = new URL(
-                        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAQmiWD9fP0nFpl7ShPjE51udtyFWo6jpA");
-                HttpURLConnection fbConn = (HttpURLConnection) fbUrl.openConnection();
-                fbConn.setRequestMethod("POST");
-                fbConn.setRequestProperty("Content-Type", "application/json");
-                fbConn.setDoOutput(true);
-                fbConn.setConnectTimeout(7000);
-                fbConn.setReadTimeout(7000);
+                String devId = "";
+                if (ctx != null) {
+                    try {
+                        devId = SecurityGuard.getDeviceId(ctx);
+                    } catch (Exception ignored) {}
+                }
+                URL cfUrl = new URL(SecurityGuard.getCloudWorkerApi() + "/api/app/login");
+                HttpURLConnection cfConn = (HttpURLConnection) cfUrl.openConnection();
+                cfConn.setRequestMethod("POST");
+                cfConn.setRequestProperty("Content-Type", "application/json");
+                cfConn.setDoOutput(true);
+                cfConn.setConnectTimeout(7000);
+                cfConn.setReadTimeout(7000);
 
-                JSONObject fbBody = new JSONObject();
-                fbBody.put("email", cleanEmail);
-                fbBody.put("password", pwd);
-                fbBody.put("returnSecureToken", true);
+                JSONObject cfBody = new JSONObject();
+                cfBody.put("email", cleanEmail);
+                cfBody.put("password", pwd);
+                cfBody.put("device_id", devId);
 
-                OutputStream os = fbConn.getOutputStream();
-                os.write(fbBody.toString().getBytes("UTF-8"));
+                OutputStream os = cfConn.getOutputStream();
+                os.write(cfBody.toString().getBytes("UTF-8"));
                 os.close();
 
-                int code = fbConn.getResponseCode();
+                int code = cfConn.getResponseCode();
                 if (code == 200) {
-                    BufferedReader br = new BufferedReader(new InputStreamReader(fbConn.getInputStream(), "UTF-8"));
+                    BufferedReader br = new BufferedReader(new InputStreamReader(cfConn.getInputStream(), "UTF-8"));
                     StringBuilder sb = new StringBuilder();
                     String line;
-                    while ((line = br.readLine()) != null)
-                        sb.append(line);
+                    while ((line = br.readLine()) != null) sb.append(line);
                     br.close();
 
                     JSONObject res = new JSONObject(sb.toString());
-                    String uid = res.optString("localId", cleanEmail);
-                    String retEmail = res.optString("email", cleanEmail);
+                    if (res.optBoolean("ok", false) && res.has("user")) {
+                        JSONObject u = res.getJSONObject("user");
+                        String uid = u.optString("pp_id", cleanEmail);
+                        String retEmail = u.optString("email", cleanEmail);
+                        String name = u.optString("name", cleanEmail.split("@")[0]);
+                        String avatar = u.optString("avatar_url", "");
+                        if (avatar == null || avatar.trim().isEmpty() || !avatar.startsWith("http")) {
+                            avatar = "https://ui-avatars.com/api/?name=" + name + "&background=6366f1&color=fff&bold=true&rounded=false&size=128";
+                        }
+                        int coins = (int) Math.round(u.optDouble("coins", 0.0));
+                        String idToken = "ppm_d1_" + uid + "_" + System.currentTimeMillis();
 
-                    // Check Single Device Session Lock
-                    String lockMsg = checkSessionLock(retEmail, uid);
-                    if (lockMsg != null) {
-                        new Handler(Looper.getMainLooper()).post(new LoginErrorRunnable(callback, lockMsg));
+                        new Handler(Looper.getMainLooper())
+                                .post(new LoginSuccessRunnable(callback, uid, retEmail, name, avatar, coins, idToken));
                         return;
                     }
-
-                    String name = res.optString("displayName", cleanEmail.split("@")[0]);
-                    if (name == null || name.isEmpty())
-                        name = cleanEmail.split("@")[0];
-                    String avatar = res.optString("photoUrl", res.optString("profilePicture", ""));
-                    if (avatar == null || avatar.trim().isEmpty() || !avatar.startsWith("http")) {
-                        avatar = "https://ui-avatars.com/api/?name=" + name + "&background=6366f1&color=fff&bold=true&rounded=false&size=128";
-                    }
-                    String idToken = res.optString("idToken", "ppmod_fb_token_" + System.currentTimeMillis());
-
-                    new Handler(Looper.getMainLooper())
-                            .post(new LoginSuccessRunnable(callback, uid, retEmail, name, avatar, 0, idToken));
-                    return;
-                } else {
-                    // Check if Firebase returned invalid credentials
-                    InputStream errStream = fbConn.getErrorStream();
-                    String errReason = "";
+                } else if (code == 409) {
+                    // Strict Device Lock protection: Another device already bound!
+                    InputStream errStream = cfConn.getErrorStream();
+                    String errReason = "এই একাউন্টটি ইতিমধ্যে অন্য ডিভাইসে লক করা আছে! নতুন ডিভাইসে লগইন করতে অ্যাডমিন থেকে ডিভাইস রিসেট করান।";
                     if (errStream != null) {
                         try {
                             BufferedReader ebr = new BufferedReader(new InputStreamReader(errStream, "UTF-8"));
                             StringBuilder esb = new StringBuilder();
                             String eline;
-                            while ((eline = ebr.readLine()) != null)
-                                esb.append(eline);
+                            while ((eline = ebr.readLine()) != null) esb.append(eline);
                             ebr.close();
                             JSONObject ej = new JSONObject(esb.toString());
-                            if (ej.has("error") && ej.getJSONObject("error").has("message")) {
-                                errReason = ej.getJSONObject("error").getString("message");
-                            }
-                        } catch (Exception ignored) {
-                        }
+                            if (ej.has("error")) errReason = ej.getString("error");
+                        } catch (Exception ignored) {}
                     }
-
-                    if ("INVALID_LOGIN_CREDENTIALS".equals(errReason) || "INVALID_PASSWORD".equals(errReason)) {
-                        // Check Render in case user is in Render custom database
-                        if (tryRenderLogin(cleanEmail, pwd))
-                            return;
-                        new Handler(Looper.getMainLooper()).post(new LoginErrorRunnable(callback,
-                                "Incorrect email or password. Please verify your credentials."));
-                        return;
+                    new Handler(Looper.getMainLooper()).post(new LoginErrorRunnable(callback, errReason));
+                    return;
+                } else if (code == 401 || code == 403) {
+                    InputStream errStream = cfConn.getErrorStream();
+                    String errReason = "ভুল ইমেইল বা পাসওয়ার্ড! অনুগ্রহ করে সঠিক তথ্য দিন।";
+                    if (errStream != null) {
+                        try {
+                            BufferedReader ebr = new BufferedReader(new InputStreamReader(errStream, "UTF-8"));
+                            StringBuilder esb = new StringBuilder();
+                            String eline;
+                            while ((eline = ebr.readLine()) != null) esb.append(eline);
+                            ebr.close();
+                            JSONObject ej = new JSONObject(esb.toString());
+                            if (ej.has("error")) errReason = ej.getString("error");
+                        } catch (Exception ignored) {}
                     }
+                    new Handler(Looper.getMainLooper()).post(new LoginErrorRunnable(callback, errReason));
+                    return;
                 }
-            } catch (Exception ignored) {
-            }
+            } catch (Exception ignored) {}
 
-            // 2. Try Render backend
-            if (tryRenderLogin(cleanEmail, pwd))
-                return;
+            // 2. Try Render backend fallback
+            if (tryRenderLogin(cleanEmail, pwd)) return;
 
-            // 3. Fallback: Query Cloudflare D1
-            tryCloudflareUserLogin(cleanEmail, callback, "Unable to sign in. Please verify your email and password.");
+            new Handler(Looper.getMainLooper()).post(new LoginErrorRunnable(callback, "সার্ভারের সাথে কানেক্ট করা যাচ্ছে না। অনুগ্রহ করে ইন্টারনেট সংযোগ চেক করুন।"));
         }
 
         private boolean tryRenderLogin(String cleanEmail, String pwd) {
@@ -1243,7 +1242,7 @@ public class CloudSyncClient {
                     int minCode = obj.optInt("min_required_version_code", 6);
                     String verName = obj.optString("latest_version_name", "v4.5 Official");
                     String dlUrl = obj.optString("download_url",
-                            "https://pp-mod-auto-quest.onrender.com/download/PP_Server.apk");
+                            "https://ppm-cloud-quest.onrender.com/download/PP_Server.apk");
                     String notes = obj.optString("release_notes", "Important update required.");
                     boolean force = obj.optBoolean("is_force_update", true);
 

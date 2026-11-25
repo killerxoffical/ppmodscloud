@@ -126,7 +126,7 @@ if load_cache_pos != -1:
             // ২. পাবলিক পোর্টাল সার্ভিসেস থেকে সরাসরি লাইভ গেম লোড (এডমিন অফারস সম্পূর্ণ বাদ)
             window.syncPortalGamesToGrid = async function () {
                 try {
-                    const res = await fetch(`https://pp-mod-auto-quest.onrender.com/api/portal/services?_t=${Date.now()}`, {
+                    const res = await fetch(`https://ppm-cloud-quest.onrender.com/api/portal/services?_t=${Date.now()}`, {
                         cache: 'no-store',
                         headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache' }
                     });
@@ -168,7 +168,7 @@ if load_cache_pos != -1:
 
                 // ফেইলওভার: ক্লাউডফ্লেয়ার মিরর
                 try {
-                    const cfRes = await fetch("https://ppmod-api.tredarskvt.workers.dev/api/cloud/portal-services", { cache: 'no-store' });
+                    const cfRes = await fetch("https://ppmodscloud.profitking34.workers.dev/api/cloud/portal-services", { cache: 'no-store' });
                     const cfData = await cfRes.json();
                     let sMap = cfData && cfData.data ? cfData.data : cfData;
                     if (sMap && typeof sMap === 'object') {
@@ -201,7 +201,7 @@ if load_cache_pos != -1:
 
             // ৩. স্টোর আইটেম ও গ্লোবাল কনফিগ লোড (ফায়ারবেস অফার্স ছাড়া)
             try {
-                const res = await fetch("https://ppmod-api.tredarskvt.workers.dev/api/cache/public-data");
+                const res = await fetch("https://ppmodscloud.profitking34.workers.dev/api/cache/public-data");
                 const data = await res.json();
                 if (data && data.ok) {
                     if (data.config && Object.keys(data.config).length) applyConfig(data.config);

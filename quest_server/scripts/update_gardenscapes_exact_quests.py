@@ -87,7 +87,7 @@ print("[+] Updated portal_services_backup.json!")
 print("[*] Syncing updated portal_services to Cloudflare D1...")
 headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) PPMod-Server/2.0"}
 res = requests.post(
-    "https://ppmod-api.tredarskvt.workers.dev/api/cloud/portal-services",
+    "https://ppmodscloud.profitking34.workers.dev/api/cloud/portal-services",
     json={"data": ps},
     headers=headers,
     timeout=12,

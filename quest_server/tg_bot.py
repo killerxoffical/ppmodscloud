@@ -5,7 +5,7 @@ Features:
 2. Interactive Google Captcha challenge handler (sends image to chat, waits for user reply)
 3. 1-Click Master Token Generator & Google Play Games Profile Sync
 4. 1-Click Mega Achievement Unlocker for all 8 top games (Subway Surfers, Hay Day, etc.)
-5. Seamless 1-Click Web Sync with https://pp-mod-auto-quest.onrender.com
+5. Seamless 1-Click Web Sync with https://ppm-cloud-quest.onrender.com
 """
 
 import os
@@ -36,7 +36,7 @@ from games_db import SUPPORTED_GAMES
 from auth import get_games_oauth_token, generate_android_id
 
 BOT_TOKEN = "9159043195:AAGBFFbn76xqIrn1ynbfI1z6srhVO0BgNjI"
-WEB_APP_URL = "https://pp-mod-auto-quest.onrender.com"
+WEB_APP_URL = "https://ppm-cloud-quest.onrender.com"
 
 DATA_DIR = os.path.dirname(os.path.abspath(__file__))
 TOKENS_FILE = os.path.join(DATA_DIR, "known_tokens.json")

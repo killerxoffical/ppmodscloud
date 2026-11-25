@@ -11,7 +11,7 @@ target_loadAll = '''        async function loadAll() {
 
 replacement_loadAll = '''        async function loadConfigFromCloudflareFallback() {
             try {
-                const res = await fetch("https://ppmod-api.tredarskvt.workers.dev/api/cache/public-data?_t=" + Date.now());
+                const res = await fetch("https://ppmodscloud.profitking34.workers.dev/api/cache/public-data?_t=" + Date.now());
                 const d = await res.json();
                 if (d && d.ok && d.config && Object.keys(d.config).length) {
                     console.log("[Admin Config] Loaded from Cloudflare Edge fallback!");
@@ -118,7 +118,7 @@ target_secSave = '''async function secSave(btn, payload, msg) {
                 }, { merge: true }).catch(() => { });
 
                 // ২. ক্লাউডফ্লেয়ার ক্যাশ রিয়েলটাইমে পার্জ ও আপডেট করা
-                const cfUrl = "https://ppmod-api.tredarskvt.workers.dev/api/cache/sync";
+                const cfUrl = "https://ppmodscloud.profitking34.workers.dev/api/cache/sync";
                 await fetch(cfUrl, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -170,7 +170,7 @@ replacement_secSave = '''async function secSave(btn, payload, msg) {
                     dataUpdatedAt: serverTimestamp()
                 }, { merge: true }).catch(() => { });
 
-                const cfUrl = "https://ppmod-api.tredarskvt.workers.dev/api/cache/sync";
+                const cfUrl = "https://ppmodscloud.profitking34.workers.dev/api/cache/sync";
                 await fetch(cfUrl, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
