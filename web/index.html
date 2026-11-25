@@ -6503,6 +6503,71 @@
     <script>
         window.CF_API = "https://ppmodscloud.profitking34.workers.dev";
         var CF_API = window.CF_API;
+
+        const AVATAR_PRESETS = [
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzn6uplqxLbkia4Sy_PoGkzeqrCFqHgEJaGjCBG1nSkg&s=10',
+            'https://i.pinimg.com/736x/c1/a8/79/c1a879739da4e3f95e30f69db944c737.jpg',
+            'https://i.pinimg.com/474x/28/2d/f2/282df29c592fc83f709894d7d196cb46.jpg?nii=t',
+            'https://img.magnific.com/premium-vector/proanto-design_863867-2048.jpg?semt=ais_hybrid&w=740&q=80',
+            'https://i.pinimg.com/736x/8f/e0/77/8fe0770f3100072c2498b29e83125bac.jpg',
+            'https://i.pinimg.com/474x/16/22/ec/1622ec20148ae8fd1085d2dda1606227.jpg',
+            'https://i.pinimg.com/474x/90/97/31/90973171a4c8bd2aa954a467dd0a237b.jpg',
+            'https://i.pinimg.com/474x/a7/0b/b3/a70bb3a3b2734ae168dd1fa2535b1103.jpg',
+            'https://i.pinimg.com/474x/2b/da/b3/2bdab370fcda0c4b39a900af7718eb88.jpg',
+            'https://i.pinimg.com/474x/30/96/1d/30961dfef844ab4bde18f62c338ba01b.jpg',
+            'https://i.pinimg.com/474x/a5/b8/3b/a5b83bd1af5e44300b9d36d39d439978.jpg',
+            'https://i.pinimg.com/474x/b6/33/49/b63349870c0e2781089cd79cc0497c70.jpg',
+            'https://i.pinimg.com/474x/e9/b8/42/e9b842f910a968a7deef0e1c7f7a74d1.jpg'
+        ];
+        window.AVATAR_PRESETS = AVATAR_PRESETS;
+        window.AVATAR_FALLBACK = AVATAR_PRESETS[0];
+
+        window.ppfb = window.ppfb || {
+            config: { fee: 2, minDeposit: 15, coinRate: 5 },
+            balance: 0,
+            realBalance: 0,
+            bonusBalance: 0,
+            user: null,
+            ev() {},
+            refreshPay() {},
+            saveOrder() { return Promise.resolve(false); }
+        };
+
+        function getActiveUser() {
+            if (window.ppfb && window.ppfb.user && (window.ppfb.user.pp_id || window.ppfb.user.uid)) {
+                return window.ppfb.user;
+            }
+            try {
+                const raw = localStorage.getItem('ppm_user');
+                if (raw) {
+                    const u = JSON.parse(raw);
+                    if (u && (u.pp_id || u.uid || u.email)) {
+                        if (typeof window.applyUserToUI === 'function') {
+                            window.applyUserToUI(u);
+                        } else {
+                            const ppId = u.pp_id || u.uid || '';
+                            let photo = u.avatar_url || u.photoURL || u.avatar || '';
+                            if (!photo || photo.includes('dicebear')) photo = AVATAR_PRESETS[0];
+                            window.ppfb.user = {
+                                uid: ppId,
+                                displayName: u.name || u.displayName || 'User',
+                                email: u.email || '',
+                                photoURL: photo,
+                                pp_id: ppId,
+                                coins: Number(u.coins !== undefined ? u.coins : 0) || 0
+                            };
+                        }
+                        return window.ppfb.user;
+                    }
+                }
+            } catch (e) {}
+            return null;
+        }
+        window.getActiveUser = getActiveUser;
+
+        // Early sync from local storage
+        try { getActiveUser(); } catch(e){}
+
         if (window.lucide) lucide.createIcons();
         window.addEventListener('DOMContentLoaded', () => {
             const cards = document.querySelectorAll('.game-card');
@@ -7022,60 +7087,50 @@
         window.paintNav = paintNav;
 
         async function viewAllHistory() {
-            let u = (window.ppfb && window.ppfb.user) || (window.auth && window.auth.currentUser) || (window.FB && window.FB.auth && window.FB.auth.currentUser) || window.currentUser;
-            if (!u) {
-                const savedUid = localStorage.getItem('ppm_user_uid') || localStorage.getItem('pp_uid');
-                if (savedUid) u = { uid: savedUid };
-            }
-            if (!u || !u.uid) {
+            const u = getActiveUser();
+            if (!u || !u.pp_id) {
                 toast('Please login first');
                 showScreen('screenLogin');
                 return;
             }
 
-            // অবিলম্বে হিস্ট্রি স্ক্রিনে যাওয়া
             const scr = document.getElementById('screenHistory');
             if (scr) scr.scrollTop = 0;
             showScreen('screenHistory');
 
-            const box = document.getElementById('historyFullList');
-            const hc = document.getElementById('histCount');
-
-            // মেমোরিতে আগে থেকেই ডাটা থাকলে তৎক্ষণাৎ প্রদর্শন
-            if (window._histItemsArr && window._histItemsArr.length && typeof window.rebuildHist === 'function') {
-                window.rebuildHist();
-            } else if (box) {
-                if (hc) hc.textContent = '';
-                box.innerHTML = (typeof window.histSkeleton === 'function')
-                    ? window.histSkeleton()
-                    : '<p class="text-center text-xs text-slate-400 py-8 font-semibold">Loading history...</p>';
-            }
-
-            try {
-                if (typeof window.fetchHistItems === 'function') {
-                    await window.fetchHistItems(u);
-                }
-                if (typeof window.rebuildHist === 'function') {
-                    window.rebuildHist();
-                }
-            } catch (e) {
-                console.warn('History load error:', e);
-                if (box && (!window._histItemsArr || !window._histItemsArr.length)) {
-                    box.innerHTML = '<p class="text-center text-xs text-slate-400 py-8 font-semibold">No history yet</p>';
-                }
+            if (typeof window.loadTransactions === 'function') {
+                await window.loadTransactions(1);
             }
             if (window.lucide) { try { lucide.createIcons(); } catch (e) { } }
         }
         window.viewAllHistory = viewAllHistory;
 
         function goToProfile() {
-            if (!(window.ppfb && window.ppfb.user)) { toast('Please login first'); showScreen('screenLogin'); return; }
-            if (window.ppfb.openProfile) window.ppfb.openProfile();
-            else toast('Loading, please wait...');
+            const u = getActiveUser();
+            if (!u || !u.pp_id) {
+                toast('Please login first');
+                showScreen('screenLogin');
+                return;
+            }
+            if (typeof applyUserToUI === 'function') {
+                applyUserToUI(u);
+            }
+            showScreen('screenProfile');
+            const sc = document.getElementById('screenProfile');
+            if (sc) sc.scrollTop = 0;
+            if (typeof window.loadTransactions === 'function') {
+                window.loadTransactions(1);
+            }
+            if (window.lucide) { try { lucide.createIcons(); } catch (e) { } }
         }
+        window.goToProfile = goToProfile;
+        if (window.ppfb) window.ppfb.openProfile = goToProfile;
+        window.openEditProfile = () => openAvatarPicker();
+        window.setProfileUI = (usr) => { if (typeof applyUserToUI === 'function') applyUserToUI(usr); };
 
         window.openRewardsScreen = () => {
-            if (!(window.ppfb && window.ppfb.user)) { toast('Please login first'); showScreen('screenLogin'); return; }
+            const u = getActiveUser();
+            if (!u || !u.pp_id) { toast('Please login first'); showScreen('screenLogin'); return; }
             showScreen('screenRewards');
             if (window.renderLoyaltyStars) window.renderLoyaltyStars();
             renderRewardsHistory();
@@ -7413,8 +7468,8 @@
         };
 
         function openAvatarPicker(skipScreenChange = false) {
-            const u = (window.ppfb && window.ppfb.user) || (window.FB && window.FB.auth && window.FB.auth.currentUser) || (window.auth && window.auth.currentUser) || null;
-            if (!u) { toast('Please login first'); showScreen('screenLogin'); return; }
+            const u = getActiveUser();
+            if (!u || !u.pp_id) { toast('Please login first'); showScreen('screenLogin'); return; }
 
             const skel = document.getElementById('editProfileSkeleton');
             const cont = document.getElementById('editProfileContent');
@@ -7524,8 +7579,8 @@
 
         async function saveAvatar() {
             const url = (window._avatarSel || '').trim();
-            const u = (window.ppfb && window.ppfb.user) || null;
-            if (!u) { toast('Please login first'); return; }
+            const u = getActiveUser();
+            if (!u || !u.pp_id) { toast('Please login first'); return; }
 
             let newName = (document.getElementById('modalProfileName').value || '').trim();
             if (!newName) {
@@ -7643,7 +7698,16 @@
                 if (hnm) hnm.textContent = newName;
 
                 if (window.paintAvatar) window.paintAvatar();
-                setProfileUI(u);
+                if (typeof applyUserToUI === 'function') applyUserToUI(u);
+                try {
+                    const rawSaved = localStorage.getItem('ppm_user');
+                    if (rawSaved) {
+                        const parsedSaved = JSON.parse(rawSaved);
+                        parsedSaved.name = newName;
+                        if (url) parsedSaved.avatar_url = url;
+                        localStorage.setItem('ppm_user', JSON.stringify(parsedSaved));
+                    }
+                } catch(e){}
 
                 closeAvatarPicker();
                 toast(tgUnlinked ? 'টেলিগ্রাম আনলিঙ্ক ও প্রোফাইল সেভ হয়েছে!' : (tgUpdated ? '🎉 টেলিগ্রাম লিঙ্ক ও প্রোফাইল সেভ হয়েছে!' : '🎉 প্রোফাইল সফলভাবে সেভ হয়েছে!'));
@@ -7784,7 +7848,8 @@
         window.togglePass = togglePass;
 
         function enterTopup(from) {
-            if (!(window.ppfb && window.ppfb.user)) { toast('Please login first'); showScreen('screenLogin'); return; }
+            const u = getActiveUser();
+            if (!u || !u.pp_id) { toast('Please login first'); showScreen('screenLogin'); return; }
             window._topupReturn = from || 'payment';
             document.getElementById('screenTopup').scrollTop = 0;
             showScreen('screenTopup');
@@ -8123,7 +8188,8 @@
             if (!inp) { toast('Promo input not found'); return; }
             const code = (inp.value || '').trim();
             if (!code) { toast('Code likhun'); return; }
-            if (!(window.ppfb && window.ppfb.user)) { toast('Please login first'); showScreen('screenLogin'); return; }
+            const u = getActiveUser();
+            if (!u || !u.pp_id) { toast('Please login first'); showScreen('screenLogin'); return; }
             if (!window.ppfb || !window.ppfb.redeem) { toast('Loading, please wait...'); return; }
             const btn = document.querySelector('#screenProfile button[onclick="redeemGo()"]');
             window._redeeming = true;
@@ -11831,36 +11897,67 @@
 
     function applyUserToUI(u) {
         if (!u) return;
-        window.ppfb.user = {
-            uid: u.pp_id,
-            displayName: u.name,
-            email: u.email,
-            photoURL: u.avatar_url || (window.AVATAR_PRESETS && window.AVATAR_PRESETS[0]) || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzn6uplqxLbkia4Sy_PoGkzeqrCFqHgEJaGjCBG1nSkg&s=10',
-            pp_id: u.pp_id,
-            coins: Number(u.coins) || 0
-        };
+        const ppId = u.pp_id || u.uid || '';
+        const displayName = u.name || u.displayName || 'User';
+        const email = u.email || '';
+        let photo = u.avatar_url || u.photoURL || u.avatar || '';
+        if (!photo || photo.includes('dicebear')) {
+            photo = (window.AVATAR_PRESETS && window.AVATAR_PRESETS[0]) || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzn6uplqxLbkia4Sy_PoGkzeqrCFqHgEJaGjCBG1nSkg&s=10';
+        }
+        const coins = Number(u.coins !== undefined ? u.coins : (u.balance !== undefined ? u.balance : 0)) || 0;
 
+        window.ppfb = window.ppfb || {};
+        window.ppfb.user = {
+            uid: ppId,
+            displayName: displayName,
+            email: email,
+            photoURL: photo,
+            pp_id: ppId,
+            coins: coins
+        };
+        window.ppfb.avatar = photo;
+        window.ppfb.customName = displayName;
+
+        try {
+            if (ppId) {
+                localStorage.setItem('ppm_user_uid', ppId);
+                localStorage.setItem('pp_uid', ppId);
+            }
+        } catch(e){}
+
+        // Header Avatar
         const hAv = document.getElementById('avatarImg');
         if (hAv) {
-            hAv.src = window.ppfb.user.photoURL;
+            hAv.src = photo;
             hAv.classList.remove('hidden');
         }
         const hFall = document.getElementById('avatarFallback');
         if (hFall) hFall.classList.add('hidden');
 
+        // Profile Screen Elements
         const pUid = document.getElementById('profileScreenUid');
-        if (pUid) pUid.textContent = u.pp_id;
+        if (pUid) pUid.textContent = ppId || '—';
 
-        const pEmail = document.getElementById('profileScreenEmail');
-        if (pEmail) pEmail.textContent = u.email;
+        const pEmail = document.getElementById('profileHeaderEmail') || document.getElementById('profileEmail') || document.getElementById('profileScreenEmail');
+        if (pEmail) pEmail.textContent = email || '—';
 
-        const pName = document.getElementById('profileScreenName');
-        if (pName) pName.textContent = u.name;
+        const pName = document.getElementById('profileName') || document.getElementById('profileScreenName');
+        if (pName) pName.textContent = displayName;
 
-        const pAv = document.getElementById('profileAvatarImg');
-        if (pAv) pAv.src = window.ppfb.user.photoURL;
+        const pAv = document.getElementById('profilePhoto') || document.getElementById('profileAvatarImg');
+        if (pAv) pAv.src = photo;
 
-        setBalanceUI(u.coins || 0);
+        // Edit Profile Modal inputs
+        const mNm = document.getElementById('modalProfileName');
+        if (mNm && !mNm.value) mNm.value = displayName === 'User' ? '' : displayName;
+        const mAv = document.getElementById('avatarPreview') || document.getElementById('modalAvatarImg');
+        if (mAv) mAv.src = photo;
+        const mEm = document.getElementById('profileEmail');
+        if (mEm) mEm.textContent = email;
+        const mUid = document.getElementById('profileUid');
+        if (mUid) mUid.textContent = ppId;
+
+        setBalanceUI(coins);
     }
     window.applyUserToUI = applyUserToUI;
 
@@ -12190,7 +12287,8 @@
 
     // DEPOSIT SUBMISSION
     window.submitDeposit = async () => {
-        if (!window.ppfb.user) return toast('Please login first');
+        const u = getActiveUser();
+        if (!u || !u.pp_id) return toast('Please login first');
         const coins = parseInt(document.getElementById('coinAmount').value || '0', 10);
         const taka = parseInt(document.getElementById('takaAmount').value || '0', 10);
         const trxId = (document.getElementById('trxIdInput').value || '').trim();
@@ -12207,8 +12305,8 @@
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    user_id: window.ppfb.user.pp_id,
-                    user_email: window.ppfb.user.email,
+                    user_id: u.pp_id,
+                    user_email: u.email,
                     method: method,
                     amount: taka,
                     coins: coins,
@@ -12219,7 +12317,7 @@
             if (data.ok) {
                 alert(`✅ আপনার টপ-আপ রিকোয়েস্ট জমা হয়েছে (TrxID: ${trxId})! অ্যাডমিন চেক করে কয়েন যোগ করে দেবে।`);
                 document.getElementById('trxIdInput').value = '';
-                if (window.showScreen) showScreen('screenProfile');
+                goToProfile();
             } else {
                 alert(data.error || 'টপ-আপ সাবমিট করতে সমস্যা হয়েছে');
             }
@@ -12232,7 +12330,8 @@
 
     // DAILY BONUS CLAIM
     window.claimBonus = async () => {
-        if (!window.ppfb.user) return toast('Please login first');
+        const u = getActiveUser();
+        if (!u || !u.pp_id) return toast('Please login first');
         const btn = document.getElementById('bonusClaimBtn');
         if (btn) btn.disabled = true;
 
@@ -12240,7 +12339,7 @@
             const res = await fetch(`${CF_API}/api/earn/daily-claim`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ user_id: window.ppfb.user.pp_id })
+                body: JSON.stringify({ user_id: u.pp_id })
             });
             const data = await res.json();
             if (data.ok) {
@@ -12256,15 +12355,14 @@
         }
     };
 
-    // ON DOM READY: RESTORE SESSION FROM CLOUD
-    window.addEventListener('DOMContentLoaded', () => {
+    // RESTORE SESSION FROM CLOUD
+    function restoreSession() {
         try {
-            const raw = localStorage.getItem('ppm_user');
-            if (raw) {
-                const u = JSON.parse(raw);
+            const u = getActiveUser();
+            if (u && (u.pp_id || u.uid)) {
                 applyUserToUI(u);
                 if (window.showScreen) showScreen('screenGameSelect');
-                fetch(`${CF_API}/api/user/profile?user_id=${u.pp_id}`)
+                fetch(`${CF_API}/api/user/profile?user_id=${u.pp_id || u.uid}`)
                     .then(r => r.json())
                     .then(d => {
                         if (d.ok && d.user) {
@@ -12278,7 +12376,12 @@
         } catch (e) {
             if (window.showScreen) showScreen('screenLogin');
         }
-    });
+    }
+    if (document.readyState === 'loading') {
+        window.addEventListener('DOMContentLoaded', restoreSession);
+    } else {
+        restoreSession();
+    }
 </script>
 
 <!-- LUXURY SHARP AUTH POPUP (Box er kona round hobe na - Pure sharp luxury edges) -->
@@ -12304,12 +12407,10 @@
             bNav.classList.remove('hidden');
             bNav.style.display = '';
         }
-        try {
-            var raw = localStorage.getItem('ppm_user');
-            if (raw && window.applyUserToUI) {
-                window.applyUserToUI(JSON.parse(raw));
-            }
-        } catch(e){}
+        const u = getActiveUser();
+        if (u && window.applyUserToUI) {
+            window.applyUserToUI(u);
+        }
         if (typeof showScreen === 'function') {
             showScreen('screenGameSelect');
         } else {
