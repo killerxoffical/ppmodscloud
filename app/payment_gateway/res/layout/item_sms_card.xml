@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_card_sms"
+    android:padding="14dp"
+    android:layout_marginBottom="10dp">
+
+    <!-- Top Row: Method Badge, TrxID, Status Badge -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <!-- Method Badge (bKash / Nagad / Rocket) -->
+        <TextView
+            android:id="@+id/txtItemMethod"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="bKash"
+            android:textColor="#ffffff"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:background="@drawable/badge_pill_bkash"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="3dp" />
+
+        <!-- TrxID -->
+        <TextView
+            android:id="@+id/txtItemTrxId"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="10dp"
+            android:text="9K2L1M0N"
+            android:textColor="#ffffff"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:typeface="monospace" />
+
+        <!-- Status Badge -->
+        <TextView
+            android:id="@+id/txtItemStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="AUTO APPROVED"
+            android:textColor="#ffffff"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:background="@drawable/badge_pill_green"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="3dp" />
+    </LinearLayout>
+
+    <!-- Bottom Row: Amount, Merchant Balance, Time -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:id="@+id/txtItemAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="৳ 500"
+            android:textColor="#10b981"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtItemBalance"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="12dp"
+            android:text="Bal: ৳1,520"
+            android:textColor="#94a3b8"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/txtItemTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Just now"
+            android:textColor="#64748b"
+            android:textSize="11sp" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <radialGradient id="bg14" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#7f1d1d"/><stop offset="100%" stop-color="#2a0606"/>
+    </radialGradient>
+    <linearGradient id="dragonFire" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fde047"/><stop offset="50%" stop-color="#ea580c"/><stop offset="100%" stop-color="#b91c1c"/>
+    </linearGradient>
+  </defs>
+  <circle cx="64" cy="64" r="60" fill="url(#bg14)" stroke="#f97316" stroke-width="3"/>
+  <!-- Dragon Apex Head Silhouette -->
+  <path d="M36 86 C 36 60, 48 42, 64 26 C 68 40, 78 44, 94 48 C 84 56, 80 68, 86 78 C 76 74, 68 76, 62 88 C 58 76, 46 80, 36 86 Z" fill="url(#dragonFire)"/>
+  <!-- Glowing Eye -->
+  <polygon points="62,50 68,52 64,56" fill="#ffffff"/>
+  <!-- Horn Details -->
+  <path d="M64 26 C 70 20, 80 22, 88 28 C 80 34, 74 34, 68 38" fill="none" stroke="#fde047" stroke-width="3"/>
+</svg>

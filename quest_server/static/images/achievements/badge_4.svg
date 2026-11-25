@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <radialGradient id="bg4" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#14532d"/><stop offset="100%" stop-color="#052e16"/>
+    </radialGradient>
+    <linearGradient id="compassGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fde047"/><stop offset="100%" stop-color="#ca8a04"/>
+    </linearGradient>
+  </defs>
+  <circle cx="64" cy="64" r="60" fill="url(#bg4)" stroke="url(#compassGold)" stroke-width="3"/>
+  <circle cx="64" cy="64" r="46" fill="none" stroke="#22c55e" stroke-width="2" stroke-dasharray="4,4"/>
+  <!-- Compass Points -->
+  <polygon points="64,24 72,60 64,64 56,60" fill="#ef4444"/>
+  <polygon points="64,104 72,68 64,64 56,68" fill="#e2e8f0"/>
+  <polygon points="24,64 60,56 64,64 60,72" fill="#94a3b8"/>
+  <polygon points="104,64 68,56 64,64 68,72" fill="#cbd5e1"/>
+  <!-- Center Pin -->
+  <circle cx="64" cy="64" r="8" fill="url(#compassGold)"/>
+  <circle cx="64" cy="64" r="4" fill="#ffffff"/>
+  <!-- Direction Letters -->
+  <text x="64" y="22" font-family="sans-serif" font-size="12" font-weight="900" fill="#ef4444" text-anchor="middle">N</text>
+  <text x="64" y="116" font-family="sans-serif" font-size="11" font-weight="900" fill="#cbd5e1" text-anchor="middle">S</text>
+  <text x="115" y="68" font-family="sans-serif" font-size="11" font-weight="900" fill="#cbd5e1" text-anchor="middle">E</text>
+  <text x="13" y="68" font-family="sans-serif" font-size="11" font-weight="900" fill="#cbd5e1" text-anchor="middle">W</text>
+</svg>

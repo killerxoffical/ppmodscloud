@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <radialGradient id="bg5" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#422006"/><stop offset="100%" stop-color="#1c0d02"/>
+    </radialGradient>
+    <linearGradient id="coinGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a"/><stop offset="50%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#b45309"/>
+    </linearGradient>
+    <linearGradient id="ppGreen" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#34d399"/><stop offset="100%" stop-color="#059669"/></linearGradient>
+    <linearGradient id="ppBlue" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#60a5fa"/><stop offset="100%" stop-color="#2563eb"/></linearGradient>
+    <linearGradient id="ppYellow" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fde047"/><stop offset="100%" stop-color="#d97706"/></linearGradient>
+    <linearGradient id="ppRed" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#f87171"/><stop offset="100%" stop-color="#dc2626"/></linearGradient>
+  </defs>
+  <circle cx="64" cy="64" r="60" fill="url(#bg5)" stroke="url(#coinGold)" stroke-width="3"/>
+  <circle cx="64" cy="64" r="48" fill="url(#coinGold)"/>
+  <circle cx="64" cy="64" r="42" fill="#78350f"/>
+  <circle cx="64" cy="64" r="38" fill="url(#coinGold)"/>
+  <!-- Play Points Triangle Segments -->
+  <polygon points="64,36 86,64 64,64" fill="url(#ppGreen)"/>
+  <polygon points="64,36 42,64 64,64" fill="url(#ppBlue)"/>
+  <polygon points="42,64 64,92 64,64" fill="url(#ppRed)"/>
+  <polygon points="86,64 64,92 64,64" fill="url(#ppYellow)"/>
+  <circle cx="64" cy="64" r="6" fill="#ffffff"/>
+</svg>

@@ -1,0 +1,10 @@
+name = "ppmodscloud"
+main = "worker.js"
+compatibility_date = "2024-11-01"
+
+# Cloudflare D1 Database binding
+# Cloudflare ড্যাশবোর্ডে D1 ডাটাবেজ বানানোর পর database_id এখানে বসবে:
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "ppmcloud-db"
+# database_id = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"

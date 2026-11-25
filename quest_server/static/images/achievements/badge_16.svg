@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <radialGradient id="bg16" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#172554"/><stop offset="100%" stop-color="#030712"/>
+    </radialGradient>
+    <linearGradient id="infinityGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a"/><stop offset="50%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#a855f7"/>
+    </linearGradient>
+    <filter id="infGlow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <circle cx="64" cy="64" r="60" fill="url(#bg16)" stroke="url(#infinityGold)" stroke-width="3"/>
+  <!-- Infinity Loop -->
+  <path d="M44 50 C 32 50, 24 64, 44 76 C 58 84, 70 44, 84 52 C 104 64, 96 78, 84 78 C 70 78, 58 38, 44 50 Z" fill="none" stroke="url(#infinityGold)" stroke-width="8" stroke-linecap="round" filter="url(#infGlow)"/>
+  <!-- Cosmic Star Sparkles -->
+  <circle cx="38" cy="36" r="2" fill="#ffffff"/>
+  <circle cx="90" cy="34" r="2.5" fill="#fde047"/>
+  <circle cx="64" cy="64" r="3" fill="#ffffff"/>
+</svg>

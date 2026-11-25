@@ -1,0 +1,3059 @@
+{
+  "53": {
+    "service_id": "srv_53",
+    "game_id": "53",
+    "title": "Arknights: Endfield",
+    "package": "com.gryphline.endfield.gp",
+    "developer": "GRYPHLINE",
+    "category": "Action & RPG",
+    "icon": "https://play-lh.googleusercontent.com/l6FVNa293RykBWy88TqEhUakIcGSC8bRygSnKOBgztln48JX-WzMWnrBAETrKZsxDNC4HhwCsvfle_UI7rBE=s0-br30",
+    "section": "quest_unlocker",
+    "enabled": true,
+    "total_quests_count": 15,
+    "selected_quests_count": 1,
+    "selected_quest_ids": [
+      "CgkI1OrtgvEKEAIQAQ"
+    ],
+    "selected_quests": [
+      {
+        "id": "CgkI1OrtgvEKEAIQAQ",
+        "name": "Process: Awakening",
+        "description": "Complete the main mission [Chapter Ⅰ Process Ⅰ: Awakening]",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/m-Xzv0fhAuFu0gPY3mzvclvmHAMfxOGwqphiPRIUCuOWmgS7gB6ZEodwY14cS0r-7X0"
+      }
+    ],
+    "all_quests": [
+      {
+        "id": "CgkI1OrtgvEKEAIQAQ",
+        "name": "Process: Awakening",
+        "description": "Complete the main mission [Chapter Ⅰ Process Ⅰ: Awakening]",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/m-Xzv0fhAuFu0gPY3mzvclvmHAMfxOGwqphiPRIUCuOWmgS7gB6ZEodwY14cS0r-7X0"
+      },
+      {
+        "id": "CgkI1OrtgvEKEAIQAA",
+        "name": "Basic Training",
+        "description": "Upgrade 1 operator to Level 20",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/9ZNjKY6anSkQ2aMkN4GBeyxvm2bAJOJ_mp-z-XOceP7RAbrGJ2J4F7bWuxZUp4guNZw"
+      },
+      {
+        "id": "CgkI1OrtgvEKEAIQAg",
+        "name": "Coordinate Log",
+        "description": "Unlock 2 TP Points in Valley IV",
+        "experiencePoints": 500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/w56MSQeI2_j42o5UorQTnluc2kjaiyWREY1jBUmYFtPnrn7JPj9WC6SF5Q5Gy0m_1J8"
+      },
+      {
+        "id": "CgkI1OrtgvEKEAIQAw",
+        "name": "Hand in Hand",
+        "description": "Perform 20 combos during combat",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/q_oU5Ezqw16BWO79QeTka9Rsi9KIwcvc1Vc9si9qnxUrboB-BOz_rz9NGXgqblOn3tI"
+      },
+      {
+        "id": "CgkI1OrtgvEKEAIQBA",
+        "name": "Recognition & Connection",
+        "description": "Repair shared facilities from other users 5 times",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/5FsLZ5lX7fu48Z4E5NrNu3qvemwrBx9C7AU2vOPycT8N5Z14tQ2NVL4yGP0ltx-mGA"
+      },
+      {
+        "id": "CgkI1OrtgvEKEAIQBw",
+        "name": "Protocol ε 20.00m",
+        "description": "Hit an enemy after falling from a height of at least 20 meters",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/gjbGxocq8QCwdjj0Am9IbQrRvlryS6UrOG963VEpaKtitT2IFo8jYEcyYusCIgT-Exs"
+      }
+    ],
+    "created_at": "2026-11-20 13:43:01",
+    "updated_at": "2026-11-20 13:43:01",
+    "id": "53",
+    "client_sig": "978a77bfed2e9ed5d0ead626a1bf8ab1cd7a28e7"
+  },
+  "24": {
+    "service_id": "srv_24",
+    "game_id": "24",
+    "title": "Pokémon Masters EX",
+    "package": "com.dena.a12026418",
+    "developer": "DeNA Co., Ltd.",
+    "category": "Popular Games",
+    "icon": "https://play-lh.googleusercontent.com/Sh6nvwhh0fz2iA_yCf-SsaJ0ceHHL-DKgv5nGr5yd3m5DyTFdZQAsjp5-14kA5bNCc5zxzXkj5oOVSghU04ZfA=s0-br30",
+    "section": "quest_unlocker",
+    "enabled": true,
+    "total_quests_count": 10,
+    "selected_quests_count": 2,
+    "selected_quest_ids": [
+      "CgkIxNGLuvsSEAIQAg",
+      "CgkIxNGLuvsSEAIQAw"
+    ],
+    "selected_quests": [
+      {
+        "id": "CgkIxNGLuvsSEAIQAg",
+        "name": "Complete the designated area 2",
+        "description": "Complete: A Friendly New Rival\n×1",
+        "experiencePoints": 1000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/JVSjkI_LnE5FmJdUGTsj8wIRq8AHVmmtlno9NQ-OGZ1csyuyC52tsRQTQuL3Tl7Hcn7K"
+      },
+      {
+        "id": "CgkIxNGLuvsSEAIQAw",
+        "name": "Complete the designated area 3",
+        "description": "Complete: Kindling Friendship\n×1",
+        "experiencePoints": 1000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/k9wbU6wAnxeUEvzemkZqXueF1CqPJaIjw7kCgsgnmV7bORh_8kj8lBgpDgtO-6C5JsE7"
+      }
+    ],
+    "all_quests": [
+      {
+        "id": "CgkIxNGLuvsSEAIQAg",
+        "name": "Complete the designated area 2",
+        "description": "Complete: A Friendly New Rival\n×1",
+        "experiencePoints": 1000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/JVSjkI_LnE5FmJdUGTsj8wIRq8AHVmmtlno9NQ-OGZ1csyuyC52tsRQTQuL3Tl7Hcn7K"
+      },
+      {
+        "id": "CgkIxNGLuvsSEAIQAw",
+        "name": "Complete the designated area 3",
+        "description": "Complete: Kindling Friendship\n×1",
+        "experiencePoints": 1000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/k9wbU6wAnxeUEvzemkZqXueF1CqPJaIjw7kCgsgnmV7bORh_8kj8lBgpDgtO-6C5JsE7"
+      },
+      {
+        "id": "CgkIxNGLuvsSEAIQAA",
+        "name": "Complete the designated area 1",
+        "description": "Complete: The More the Merrier\n×1",
+        "experiencePoints": 1000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/u9M4lO3o1OxzT3oxUTaSi35em1BuhSJ5FyQYciY_jBUYaqGT2-qTXuQot7j5N-r4DxNE"
+      },
+      {
+        "id": "CgkIxNGLuvsSEAIQBA",
+        "name": "Complete the designated area 4",
+        "description": "Complete: A Blossoming Flower\n×1",
+        "experiencePoints": 1000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/gQb1yt8_9LJbESgZrVNxosrbBCWP1pPIJGVfgpwBWq2nzaQRP3lAjoIceRiJwXfuPeA"
+      },
+      {
+        "id": "CgkIxNGLuvsSEAIQBQ",
+        "name": "Complete the designated area 5",
+        "description": "Complete: Prepare for Takeoff!\n×1",
+        "experiencePoints": 1000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/AwiJqjK-yvw2Lphk51VRcWtTTbM-A_hukIRuFmiv_1e3OjFZcCIQZAhCkH_ShsJ8xA"
+      },
+      {
+        "id": "CgkIxNGLuvsSEAIQBg",
+        "name": "Complete the designated area 6",
+        "description": "Complete: A Newfound Confidence\n×1",
+        "experiencePoints": 1000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/7HwZtwsFvL18U61mzqRVTcPfKPDFdQ-yaKpgtEWG12s-ILCwyV-coKJypaSRfFhNyLcc"
+      }
+    ],
+    "created_at": "2026-11-20 13:44:44",
+    "updated_at": "2026-11-20 13:44:44",
+    "id": "24",
+    "client_sig": "1f166dcc0fac8a6c8c5d11679e33f7596de8e0f4"
+  },
+  "54": {
+    "service_id": "srv_54",
+    "game_id": "54",
+    "title": "Food Hunt: Pixel Puzzle",
+    "package": "com.vigafun.funfinity.foodhunt",
+    "developer": "EVERFUN",
+    "category": "Puzzle & Brain Games",
+    "icon": "https://play-lh.googleusercontent.com/f7HHbEOewA0rIk299hsDv6vN4Iz_W5OvivKF2lMKOKzttF1g4lp8kE7qDAUGlJLAelw56TSRd6V5y4SFGCKp=s0-br30",
+    "section": "quest_unlocker",
+    "enabled": true,
+    "total_quests_count": 20,
+    "selected_quests_count": 20,
+    "selected_quest_ids": [
+      "CgkI5eaLrqsZEAIQJw",
+      "CgkI5eaLrqsZEAIQKQ",
+      "CgkI5eaLrqsZEAIQKg",
+      "CgkI5eaLrqsZEAIQKA",
+      "CgkI5eaLrqsZEAIQKw",
+      "CgkI5eaLrqsZEAIQAw",
+      "CgkI5eaLrqsZEAIQBA",
+      "CgkI5eaLrqsZEAIQBQ",
+      "CgkI5eaLrqsZEAIQBg",
+      "CgkI5eaLrqsZEAIQBw",
+      "CgkI5eaLrqsZEAIQCA",
+      "CgkI5eaLrqsZEAIQCQ",
+      "CgkI5eaLrqsZEAIQCg",
+      "CgkI5eaLrqsZEAIQCw",
+      "CgkI5eaLrqsZEAIQDA",
+      "CgkI5eaLrqsZEAIQDQ",
+      "CgkI5eaLrqsZEAIQDg",
+      "CgkI5eaLrqsZEAIQDw",
+      "CgkI5eaLrqsZEAIQEA",
+      "CgkI5eaLrqsZEAIQEQ"
+    ],
+    "selected_quests": [
+      {
+        "id": "CgkI5eaLrqsZEAIQJw",
+        "name": "Ready to Play!",
+        "description": "Complete First Tutorial",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/QNdVPc5Z6VfV2K11At4KM9_FqlUV8ZSZoJ4LQuiWHpZxcaW9Xf_9G-looxvsAe17fRg"
+      },
+      {
+        "id": "CgkI5eaLrqsZEAIQKQ",
+        "name": "Ants Away!",
+        "description": "Clear your first ant box.",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/rDvkQS4B_tWgMSjsbezLcV0zG16CQfIGFU_BTedXB9EwUVRV4kxrMSx9H9uRJPeG7dY"
+      },
+      {
+        "id": "CgkI5eaLrqsZEAIQKg",
+        "name": "Ant Army",
+        "description": "Release 100 ants.",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/legGqFX-jlaUhlKMBcxvRPeNM50_jx7RK4Wd9eY6Z5_PBfevhko6IZ1Ke311D6LNEpTW"
+      },
+      {
+        "id": "CgkI5eaLrqsZEAIQKA",
+        "name": "First Steps",
+        "description": "Complete 1 levels.",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/tP5aWUmlA4_OyoR9Y7MoSNAkElkRZJeMd4Cux6hXbSL5v03eD6RybBGbTY6oQx42kX8Y"
+      },
+      {
+        "id": "CgkI5eaLrqsZEAIQKw",
+        "name": "Ready to Boost",
+        "description": "Unlock first Booster",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/YZcM21smRUcVp-Dek9ibKse9aDT4PCW_03q3lj1BfiXbCZFGrDxW94EwJg0lKfzljjDP"
+      },
+      {
+        "id": "CgkI5eaLrqsZEAIQAw",
+        "name": "Getting Hungry",
+        "description": "Complete 10 levels.",
+        "experiencePoints": 500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/kWr2-lGycc8uka22dNk-Bks0LMCS6JJjeMaimnjXlDtZOt__6OOpzvLP975odmgldcY"
+      },
+      {
+        "id": "CgkI5eaLrqsZEAIQBA",
+        "name": "Food Explorer",
+        "description": "Complete 50 levels.",
+        "experiencePoints": 1000,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/TM_GhxkQS2GRefMvSROyfVktfiXH09noVpf9-3Oo0q7bASMn9dSGnzkToXqgBZUpX6s"
+      },
+      {
+        "id": "CgkI5eaLrqsZEAIQBQ",
+        "name": "Food Master",
+        "description": "Complete 100 levels.",
+        "experiencePoints": 2000,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/OjU9bo0cjsp1iS_Y0AHeidUe_w1nczZCCB-dY2wokqwtSe8ZhCWSHBdXseTheeWwjg"
+      },
+      {
+        "id": "CgkI5eaLrqsZEAIQBg",
+        "name": "Ultimate Hunter",
+        "description": "Complete 250 levels.",
+        "experiencePoints": 4000,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/SmxSWG-2wpa-xRqDiFE6wWfjqvpGyHm2uIptBSG_AtD7T9B7SfknOyFZsNTqA4asD4M"
+      },
+      {
+        "id": "CgkI5eaLrqsZEAIQBw",
+        "name": "Legendary Feast",
+        "description": "Complete 500 levels.",
+        "experiencePoints": 7500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/YqWQqEz5cZTN-AVC84aNtmKzkukSHZuSJG8C7bBdgoHM2MZd1M_9IMW3cI3g9jUmfTA"
+      },
+      {
+        "id": "CgkI5eaLrqsZEAIQCA",
+        "name": "First Boost",
+        "description": "Use 10 boosters.",
+        "experiencePoints": 500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/x3fwO_pIP-i-4G5Xhup9Trn14SDGQlqjz6pjVwrm3vp_bP07uAuinjVWY69TGsOwtmHF"
+      },
+      {
+        "id": "CgkI5eaLrqsZEAIQCQ",
+        "name": "Booster Fan",
+        "description": "Use 50 boosters",
+        "experiencePoints": 1500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/6zyZnp9OH9MlLkDbDI2WhElFT-BO3vdNUNDFp2lduHvpklAKjGAG7tYL4WIjeU7MrUg"
+      },
+      {
+        "id": "CgkI5eaLrqsZEAIQCg",
+        "name": "Power Player",
+        "description": "Use 200 boosters",
+        "experiencePoints": 4000,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/jMne3MNhbC0n-V8Ooya7ovjojE9ieFuGA9ITBC6-NAvG6nQ7ASG9zhz1x_TsFx_Slg"
+      },
+      {
+        "id": "CgkI5eaLrqsZEAIQCw",
+        "name": "Perfect Solver I",
+        "description": "Complete 10 levels without using boosters",
+        "experiencePoints": 1500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/IqzhZilUDSztOMJotmZaiVCy4AxrhAyVAj1g802J6tQ-zFqREH-rtupmtWV0zZX9jfo"
+      },
+      {
+        "id": "CgkI5eaLrqsZEAIQDA",
+        "name": "Perfect Solver II",
+        "description": "Complete 30 levels without using boosters",
+        "experiencePoints": 3000,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/jrqZZHaANua7QaxqsVZ4qxCyvUNU7KBpYSQTaIDtflOP5V7NfQrTwBRcgrsdyjwqew"
+      },
+      {
+        "id": "CgkI5eaLrqsZEAIQDQ",
+        "name": "Perfect Solver III",
+        "description": "Complete 50 levels without using boosters",
+        "experiencePoints": 5000,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/8Im7jRUO8e-VLvWBpdxZXyOX41Ezv4ScC5QTuc-vQtyXUYOq0ITRCLnUttBSdyxpPsI"
+      },
+      {
+        "id": "CgkI5eaLrqsZEAIQDg",
+        "name": "Sharp Eyes",
+        "description": "Complete 25 levels on the first attempt",
+        "experiencePoints": 3000,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/NOrjlBzSW8LuFXfmfI0P48THsK-wskkawc8iUIErxaD7kBt1Z5I50V7l2Q0Ww8ateUw"
+      },
+      {
+        "id": "CgkI5eaLrqsZEAIQDw",
+        "name": "Keen Observer",
+        "description": "Complete 50 levels on the first attempt",
+        "experiencePoints": 6000,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/Moi6JiVZkcEcJiWnBFQPuBDrlubWs4kIW_qfK4vmBlgFFrbsfir-R_r_0q-oimW8Cg"
+      },
+      {
+        "id": "CgkI5eaLrqsZEAIQEA",
+        "name": "Daily Diner",
+        "description": "Play the game for 7 consecutive days",
+        "experiencePoints": 2500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/Mkbt-lNXVlxogRIBd76ZCWtl6eR87Z_8g8FuwT81Qp2HTLBVcU8ZgSl2spkxnSdQ8iiM"
+      },
+      {
+        "id": "CgkI5eaLrqsZEAIQEQ",
+        "name": "Food Hunt Champion",
+        "description": "Reach level 1000",
+        "experiencePoints": 15000,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/RRpZXxo12hDzckMa8UQv0nNCxw47Jcpbn7ffH95BwtTpytSbJ5Hg0HRtr0U9FM1__U4"
+      }
+    ],
+    "all_quests": [
+      {
+        "id": "CgkI5eaLrqsZEAIQJw",
+        "name": "Ready to Play!",
+        "description": "Complete First Tutorial",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/QNdVPc5Z6VfV2K11At4KM9_FqlUV8ZSZoJ4LQuiWHpZxcaW9Xf_9G-looxvsAe17fRg"
+      },
+      {
+        "id": "CgkI5eaLrqsZEAIQKQ",
+        "name": "Ants Away!",
+        "description": "Clear your first ant box.",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/rDvkQS4B_tWgMSjsbezLcV0zG16CQfIGFU_BTedXB9EwUVRV4kxrMSx9H9uRJPeG7dY"
+      },
+      {
+        "id": "CgkI5eaLrqsZEAIQKg",
+        "name": "Ant Army",
+        "description": "Release 100 ants.",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/legGqFX-jlaUhlKMBcxvRPeNM50_jx7RK4Wd9eY6Z5_PBfevhko6IZ1Ke311D6LNEpTW"
+      },
+      {
+        "id": "CgkI5eaLrqsZEAIQKA",
+        "name": "First Steps",
+        "description": "Complete 1 levels.",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/tP5aWUmlA4_OyoR9Y7MoSNAkElkRZJeMd4Cux6hXbSL5v03eD6RybBGbTY6oQx42kX8Y"
+      },
+      {
+        "id": "CgkI5eaLrqsZEAIQKw",
+        "name": "Ready to Boost",
+        "description": "Unlock first Booster",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/YZcM21smRUcVp-Dek9ibKse9aDT4PCW_03q3lj1BfiXbCZFGrDxW94EwJg0lKfzljjDP"
+      },
+      {
+        "id": "CgkI5eaLrqsZEAIQAw",
+        "name": "Getting Hungry",
+        "description": "Complete 10 levels.",
+        "experiencePoints": 500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/kWr2-lGycc8uka22dNk-Bks0LMCS6JJjeMaimnjXlDtZOt__6OOpzvLP975odmgldcY"
+      },
+      {
+        "id": "CgkI5eaLrqsZEAIQBA",
+        "name": "Food Explorer",
+        "description": "Complete 50 levels.",
+        "experiencePoints": 1000,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/TM_GhxkQS2GRefMvSROyfVktfiXH09noVpf9-3Oo0q7bASMn9dSGnzkToXqgBZUpX6s"
+      },
+      {
+        "id": "CgkI5eaLrqsZEAIQBQ",
+        "name": "Food Master",
+        "description": "Complete 100 levels.",
+        "experiencePoints": 2000,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/OjU9bo0cjsp1iS_Y0AHeidUe_w1nczZCCB-dY2wokqwtSe8ZhCWSHBdXseTheeWwjg"
+      },
+      {
+        "id": "CgkI5eaLrqsZEAIQBg",
+        "name": "Ultimate Hunter",
+        "description": "Complete 250 levels.",
+        "experiencePoints": 4000,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/SmxSWG-2wpa-xRqDiFE6wWfjqvpGyHm2uIptBSG_AtD7T9B7SfknOyFZsNTqA4asD4M"
+      },
+      {
+        "id": "CgkI5eaLrqsZEAIQBw",
+        "name": "Legendary Feast",
+        "description": "Complete 500 levels.",
+        "experiencePoints": 7500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/YqWQqEz5cZTN-AVC84aNtmKzkukSHZuSJG8C7bBdgoHM2MZd1M_9IMW3cI3g9jUmfTA"
+      },
+      {
+        "id": "CgkI5eaLrqsZEAIQCA",
+        "name": "First Boost",
+        "description": "Use 10 boosters.",
+        "experiencePoints": 500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/x3fwO_pIP-i-4G5Xhup9Trn14SDGQlqjz6pjVwrm3vp_bP07uAuinjVWY69TGsOwtmHF"
+      },
+      {
+        "id": "CgkI5eaLrqsZEAIQCQ",
+        "name": "Booster Fan",
+        "description": "Use 50 boosters",
+        "experiencePoints": 1500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/6zyZnp9OH9MlLkDbDI2WhElFT-BO3vdNUNDFp2lduHvpklAKjGAG7tYL4WIjeU7MrUg"
+      },
+      {
+        "id": "CgkI5eaLrqsZEAIQCg",
+        "name": "Power Player",
+        "description": "Use 200 boosters",
+        "experiencePoints": 4000,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/jMne3MNhbC0n-V8Ooya7ovjojE9ieFuGA9ITBC6-NAvG6nQ7ASG9zhz1x_TsFx_Slg"
+      },
+      {
+        "id": "CgkI5eaLrqsZEAIQCw",
+        "name": "Perfect Solver I",
+        "description": "Complete 10 levels without using boosters",
+        "experiencePoints": 1500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/IqzhZilUDSztOMJotmZaiVCy4AxrhAyVAj1g802J6tQ-zFqREH-rtupmtWV0zZX9jfo"
+      },
+      {
+        "id": "CgkI5eaLrqsZEAIQDA",
+        "name": "Perfect Solver II",
+        "description": "Complete 30 levels without using boosters",
+        "experiencePoints": 3000,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/jrqZZHaANua7QaxqsVZ4qxCyvUNU7KBpYSQTaIDtflOP5V7NfQrTwBRcgrsdyjwqew"
+      },
+      {
+        "id": "CgkI5eaLrqsZEAIQDQ",
+        "name": "Perfect Solver III",
+        "description": "Complete 50 levels without using boosters",
+        "experiencePoints": 5000,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/8Im7jRUO8e-VLvWBpdxZXyOX41Ezv4ScC5QTuc-vQtyXUYOq0ITRCLnUttBSdyxpPsI"
+      },
+      {
+        "id": "CgkI5eaLrqsZEAIQDg",
+        "name": "Sharp Eyes",
+        "description": "Complete 25 levels on the first attempt",
+        "experiencePoints": 3000,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/NOrjlBzSW8LuFXfmfI0P48THsK-wskkawc8iUIErxaD7kBt1Z5I50V7l2Q0Ww8ateUw"
+      },
+      {
+        "id": "CgkI5eaLrqsZEAIQDw",
+        "name": "Keen Observer",
+        "description": "Complete 50 levels on the first attempt",
+        "experiencePoints": 6000,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/Moi6JiVZkcEcJiWnBFQPuBDrlubWs4kIW_qfK4vmBlgFFrbsfir-R_r_0q-oimW8Cg"
+      },
+      {
+        "id": "CgkI5eaLrqsZEAIQEA",
+        "name": "Daily Diner",
+        "description": "Play the game for 7 consecutive days",
+        "experiencePoints": 2500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/Mkbt-lNXVlxogRIBd76ZCWtl6eR87Z_8g8FuwT81Qp2HTLBVcU8ZgSl2spkxnSdQ8iiM"
+      },
+      {
+        "id": "CgkI5eaLrqsZEAIQEQ",
+        "name": "Food Hunt Champion",
+        "description": "Reach level 1000",
+        "experiencePoints": 15000,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/RRpZXxo12hDzckMa8UQv0nNCxw47Jcpbn7ffH95BwtTpytSbJ5Hg0HRtr0U9FM1__U4"
+      }
+    ],
+    "created_at": "2026-11-20 13:45:04",
+    "updated_at": "2026-11-20 13:45:04",
+    "id": "54",
+    "client_sig": "56db718b6b1a1430fbd0a46d58e6ea4f1a6e0f8b"
+  },
+  "47": {
+    "service_id": "srv_47",
+    "game_id": "47",
+    "title": "Evony: The King's Return",
+    "package": "com.topgamesinc.evony",
+    "developer": "TG Inc.",
+    "category": "Popular Games",
+    "icon": "https://play-lh.googleusercontent.com/O_2KnfGM5WwoQrZVXoyHJEv-NyyZf3Nv6zYe3uQCtAFHzx8v4PT4Sb9oaSRoJDQ9Z8RDAYfHZh-_23TkBRSGRQ=s0-br30",
+    "section": "quest_unlocker",
+    "enabled": true,
+    "total_quests_count": 25,
+    "selected_quests_count": 2,
+    "selected_quest_ids": [
+      "CgkI3fiGx4gPEAIQGg",
+      "CgkI3fiGx4gPEAIQGw"
+    ],
+    "selected_quests": [
+      {
+        "id": "CgkI3fiGx4gPEAIQGg",
+        "name": "Well-seasoned General",
+        "description": "Own 1 Lv9 General",
+        "experiencePoints": 1000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/J04q2YA5l7zgUmaagYeXtyGQdIq-LJiJbC96lRirx9_oaUgylp2kiY-JHLpUJ4Bxp4Y"
+      },
+      {
+        "id": "CgkI3fiGx4gPEAIQGw",
+        "name": "Recruit More",
+        "description": "Own 1 Epic Historic General",
+        "experiencePoints": 1500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/ey-ZwpxsCXDpq3j7yEjZ6p5U0yK6r_r9Vu3XoZLtHhlMhsBrp-zGcyg1Peh_2R5MrA"
+      }
+    ],
+    "all_quests": [
+      {
+        "id": "CgkI3fiGx4gPEAIQGg",
+        "name": "Well-seasoned General",
+        "description": "Own 1 Lv9 General",
+        "experiencePoints": 1000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/J04q2YA5l7zgUmaagYeXtyGQdIq-LJiJbC96lRirx9_oaUgylp2kiY-JHLpUJ4Bxp4Y"
+      },
+      {
+        "id": "CgkI3fiGx4gPEAIQGw",
+        "name": "Recruit More",
+        "description": "Own 1 Epic Historic General",
+        "experiencePoints": 1500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/ey-ZwpxsCXDpq3j7yEjZ6p5U0yK6r_r9Vu3XoZLtHhlMhsBrp-zGcyg1Peh_2R5MrA"
+      },
+      {
+        "id": "CgkI3fiGx4gPEAIQFw",
+        "name": "Rename",
+        "description": "Use City Name Change 1 time",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/SK5-y7_hXbMjb2HCYcIvNT0Vc3rAZxovxIe4U06dMaL0SMumgiQixEZBgPp1wpvNgS8"
+      },
+      {
+        "id": "CgkI3fiGx4gPEAIQGA",
+        "name": "Working Together",
+        "description": "Join or create an Alliance",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/pdDbWLdkygMWhK9B-aq_DvniV86kvqWmFPUwDPtBLr7U7OYGpMtTnW6YWuvFtsZjsd4"
+      },
+      {
+        "id": "CgkI3fiGx4gPEAIQGQ",
+        "name": "Development",
+        "description": "Upgrade the Keep to level 7",
+        "experiencePoints": 1500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/I1oQlQpHrU0XzqzE8Az38R6iq-Gk8fgrDgm4llCcXDHGg04FFmLLk5J-mwx9PXN_k-0"
+      },
+      {
+        "id": "CgkI3fiGx4gPEAIQCA",
+        "name": "War Readiness",
+        "description": "Upgrade to Lv5 Rally Spot",
+        "experiencePoints": 1500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/sgWA12YqArdcr2X6-RPDbh7Hiw5syTK4Ik0LErO3o0Udsn7IdYCkiWYu0mAGBiSqOQ"
+      }
+    ],
+    "created_at": "2026-11-20 13:45:19",
+    "updated_at": "2026-11-20 13:55:13",
+    "id": "47",
+    "client_sig": "4013e37cec52744bb3dc4af2406e222053c0de1a"
+  },
+  "48": {
+    "service_id": "srv_48",
+    "game_id": "48",
+    "title": "Triple Match 3D",
+    "package": "com.master.triple3d.find",
+    "developer": "Boombox Games LTD",
+    "category": "Popular Games",
+    "icon": "https://play-lh.googleusercontent.com/j_2GiIwfJGQDF3erVUhHRTJfMpOyk3Tyl85J8LbN3v6Qu7tNn_lLfDE5Oho_f-ikT5m_EBvEKpVBBQJb8MH2Ww8=s0-br30",
+    "section": "quest_unlocker",
+    "enabled": true,
+    "total_quests_count": 63,
+    "selected_quests_count": 2,
+    "selected_quest_ids": [
+      "CgkIzpafh9gDEAIQBg",
+      "CgkIzpafh9gDEAIQEA"
+    ],
+    "selected_quests": [
+      {
+        "id": "CgkIzpafh9gDEAIQBg",
+        "name": "Novice player",
+        "description": "Win 20 levels ",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/TVX2Y7MLOPycytIPTENxAcKyvdwA_tbCCmvscsjFvq8UAt76SuDkl6WcxIwD-1Es7nY"
+      },
+      {
+        "id": "CgkIzpafh9gDEAIQEA",
+        "name": "Novice star collector",
+        "description": "Collect 15 stars",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/JUrdhOjuaqpmfNwJM49eEx_Y2btMSYrCKPnUKlxsn4O__EuZQQUP0yJfvZlLnHXcQTI"
+      }
+    ],
+    "all_quests": [
+      {
+        "id": "CgkIzpafh9gDEAIQBg",
+        "name": "Novice player",
+        "description": "Win 20 levels ",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/TVX2Y7MLOPycytIPTENxAcKyvdwA_tbCCmvscsjFvq8UAt76SuDkl6WcxIwD-1Es7nY"
+      },
+      {
+        "id": "CgkIzpafh9gDEAIQEA",
+        "name": "Novice star collector",
+        "description": "Collect 15 stars",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/JUrdhOjuaqpmfNwJM49eEx_Y2btMSYrCKPnUKlxsn4O__EuZQQUP0yJfvZlLnHXcQTI"
+      },
+      {
+        "id": "CgkIzpafh9gDEAIQBw",
+        "name": "Beginner player",
+        "description": "Win 50 levels",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/nnFiuyp85u7UCv3OnFpSWEIqzicuxfOSxsNiUb77Say9BZjChCV7vp_W6PlZEemTeg"
+      },
+      {
+        "id": "CgkIzpafh9gDEAIQCA",
+        "name": "Intermediate player",
+        "description": "Win 200 levels",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/2Py2Hwkxk8vrEBqt8Go1kGrL71kNTl4tAWB6TmJriILCIwFRrWXazBvkH4cQW2zbYw"
+      },
+      {
+        "id": "CgkIzpafh9gDEAIQCQ",
+        "name": "Advanced player",
+        "description": "Win 500 levels",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/jviLlI-1IR3AgTJcTDhta13crotc3HPNc6KoY3QIk2i_x2ZiffUG1qnxXgyipLPBlja1"
+      },
+      {
+        "id": "CgkIzpafh9gDEAIQCg",
+        "name": "Proficient player",
+        "description": "Win 1,000 levels",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/PwHF_b9hgrtYjo9dUBjwrofBDw1gMpmw12tKkOLTAXGnLCdHyVO3US6Iev9mWG3QF7U"
+      }
+    ],
+    "created_at": "2026-11-20 13:53:25",
+    "updated_at": "2026-11-20 13:53:25",
+    "id": "48",
+    "client_sig": "6875004da4d1373a5a1c72662bdb492353b06716"
+  },
+  "4": {
+    "service_id": "srv_4",
+    "game_id": "4",
+    "title": "8 Ball Pool",
+    "package": "com.miniclip.eightballpool",
+    "developer": "Miniclip.com",
+    "category": "Sports & Billiards",
+    "icon": "https://play-lh.googleusercontent.com/F2_Kbn1-vQePDh_Y0qNCDhkmpEK5qdEyPwcJqwXho54ZVG4w6Szt32VHsyPzeVLPR2kfYI62-hGmNpQoDxS-wQ=s0-br30",
+    "section": "quest_unlocker",
+    "enabled": true,
+    "total_quests_count": 158,
+    "selected_quests_count": 3,
+    "selected_quest_ids": [
+      "CgkI0MydwKUUEAIQCA",
+      "CgkI0MydwKUUEAIQFg",
+      "CgkI0MydwKUUEAIQmQE"
+    ],
+    "selected_quests": [
+      {
+        "id": "CgkI0MydwKUUEAIQCA",
+        "name": "Max Power",
+        "description": "Win a game while only applying maximum power to your shots",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.ggpht.com/abR6nXxfcds4PgwCAQ5iBGN1D-pv_LnaQTjW242uwcVo5b5mt3MNvyT6m-3BCfPZQzQ"
+      },
+      {
+        "id": "CgkI0MydwKUUEAIQFg",
+        "name": "Half Power",
+        "description": "Win while never going above half power on the cue",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh4.ggpht.com/z2XL4kT3YUVJHBULorGVNoYjBeADeRcb7U1VYNEHXi2gLl_hoQOSxO9GUTTSKFffsw"
+      },
+      {
+        "id": "CgkI0MydwKUUEAIQmQE",
+        "name": "Trophy Veteran",
+        "description": "Win 10 trophies",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/2OJPIPcJTGPOVuTISjvHLo4H2xhFWQ8ZiKNq9t0IXdNlkKt64KlHTLjkZ7prWk9gGgTN"
+      }
+    ],
+    "all_quests": [
+      {
+        "id": "CgkI0MydwKUUEAIQCA",
+        "name": "Max Power",
+        "description": "Win a game while only applying maximum power to your shots",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.ggpht.com/abR6nXxfcds4PgwCAQ5iBGN1D-pv_LnaQTjW242uwcVo5b5mt3MNvyT6m-3BCfPZQzQ"
+      },
+      {
+        "id": "CgkI0MydwKUUEAIQFg",
+        "name": "Half Power",
+        "description": "Win while never going above half power on the cue",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh4.ggpht.com/z2XL4kT3YUVJHBULorGVNoYjBeADeRcb7U1VYNEHXi2gLl_hoQOSxO9GUTTSKFffsw"
+      },
+      {
+        "id": "CgkI0MydwKUUEAIQmQE",
+        "name": "Trophy Veteran",
+        "description": "Win 10 trophies",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/2OJPIPcJTGPOVuTISjvHLo4H2xhFWQ8ZiKNq9t0IXdNlkKt64KlHTLjkZ7prWk9gGgTN"
+      },
+      {
+        "id": "CgkI0MydwKUUEAIQAQ",
+        "name": "8 Ball Win",
+        "description": "Win a game",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh6.ggpht.com/910N0LE7fk2fLcvy0fF67UVnJ_FhzMPgYNAkG61Se1-rTESZP1YTc1khmZ_eO9cjnY8"
+      },
+      {
+        "id": "CgkI0MydwKUUEAIQAg",
+        "name": "8 Ball Veteran",
+        "description": "Win 10 games",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh4.ggpht.com/g0flvdkcwFraU6BOVBZ45jlTCgoE5Ub2qWRyMPP3aS9jQA-DUBTDjQXrJvYz7KZYaA"
+      },
+      {
+        "id": "CgkI0MydwKUUEAIQAw",
+        "name": "8 Ball Pro",
+        "description": "Win 100 games",
+        "experiencePoints": 1000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh6.ggpht.com/ROHEGdxyClke-4zihtGr6KqJ3Xo1bmJdgmqxjEzM7icJwUDnkJll8taPI-5EGtGP8uQ"
+      }
+    ],
+    "created_at": "2026-11-20 13:54:43",
+    "updated_at": "2026-11-20 13:54:43",
+    "id": "4",
+    "client_sig": "87615343657c0a98155d71ec5a3158218b9a9f62"
+  },
+  "34": {
+    "service_id": "srv_34",
+    "game_id": "34",
+    "title": "Domino Dreams™",
+    "package": "com.screenshake.dominodreams",
+    "developer": "SuperPlay.",
+    "category": "Popular Games",
+    "icon": "https://play-lh.googleusercontent.com/KPBcFtNGNn3cMtgFthtbrWL0COVs5bINj1aQYniBa6JxgI-FAkce2czhVONttEtLQXnfd0X5rHA6YGMHp3nfWw=s0-br30",
+    "section": "quest_unlocker",
+    "enabled": true,
+    "total_quests_count": 14,
+    "selected_quests_count": 2,
+    "selected_quest_ids": [
+      "CgkIh9OY-ugGEAIQAw",
+      "CgkIh9OY-ugGEAIQCQ"
+    ],
+    "selected_quests": [
+      {
+        "id": "CgkIh9OY-ugGEAIQAw",
+        "name": "First win",
+        "description": "Win a Level",
+        "experiencePoints": 1000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/ukcwamS4Ps-xGRrzcNwnr0zl-Ao4jub0GjoBA4OAtW7uH8EP7_87XDvgW3Qy6QHjRihI"
+      },
+      {
+        "id": "CgkIh9OY-ugGEAIQCQ",
+        "name": "Buddy bonus",
+        "description": "Send a friend invite",
+        "experiencePoints": 5000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/ryvDnnc_rWrcS7uKK3uYEle-sTf2afP7D86EaEfywrQBvay4MRuuOYbpdYHr2zhXmD1M"
+      }
+    ],
+    "all_quests": [
+      {
+        "id": "CgkIh9OY-ugGEAIQAw",
+        "name": "First win",
+        "description": "Win a Level",
+        "experiencePoints": 1000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/ukcwamS4Ps-xGRrzcNwnr0zl-Ao4jub0GjoBA4OAtW7uH8EP7_87XDvgW3Qy6QHjRihI"
+      },
+      {
+        "id": "CgkIh9OY-ugGEAIQCQ",
+        "name": "Buddy bonus",
+        "description": "Send a friend invite",
+        "experiencePoints": 5000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/ryvDnnc_rWrcS7uKK3uYEle-sTf2afP7D86EaEfywrQBvay4MRuuOYbpdYHr2zhXmD1M"
+      },
+      {
+        "id": "CgkIh9OY-ugGEAIQCA",
+        "name": "Welcome!",
+        "description": "Install Domino Dreams",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/QatcwfR5Wy2Nn2m8LEQWKvObjdMp9-9jea8gfN6xk_H1VmB_f-ST3A51Bks9lzuv5jkz"
+      },
+      {
+        "id": "CgkIh9OY-ugGEAIQDg",
+        "name": "Always on time",
+        "description": "Collect hourly bonus",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/rfdC8lmSgBphhoizQ6OhBdre1pLvijPzOKgPZCsA3ljutUeTsBKNAmqRfDXbGoHiG1U"
+      },
+      {
+        "id": "CgkIh9OY-ugGEAIQBA",
+        "name": "Time Keeper",
+        "description": "Collect hourly bonus 20 times",
+        "experiencePoints": 5000,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/2B9TZiGrimStGP5Zr1K8Ki4AWHWes3EeEJeo0NSmGzVqsA6h4t2jJ9jdtl8WSAoJeQ"
+      },
+      {
+        "id": "CgkIh9OY-ugGEAIQBg",
+        "name": "High roller",
+        "description": "Make a purchase",
+        "experiencePoints": 5000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/gW3fPLbO40i45PeKbyIQxWfWgaZk35T2YNEdvTseR8RdWr9VkzduH3DK_xBC10ruJg"
+      }
+    ],
+    "created_at": "2026-11-20 13:54:57",
+    "updated_at": "2026-11-20 13:54:57",
+    "id": "34",
+    "client_sig": "324fe0f6c2a2517e1fea9115831df068d8415597"
+  },
+  "27": {
+    "service_id": "srv_27",
+    "game_id": "27",
+    "title": "Marvel Contest of Champions",
+    "package": "com.kabam.marvelbattle",
+    "developer": "Kabam Games, Inc.",
+    "category": "Popular Games",
+    "icon": "https://play-lh.googleusercontent.com/Qu9lyWmuzXotmEhWMckhfk4gUamTPNSjbcZGfrwE0N_qzltBKTyHdDqbcD9-HgRPD9vJCPrTQNOdAjKXZmZxKSY=s0-br30",
+    "section": "quest_unlocker",
+    "enabled": true,
+    "total_quests_count": 36,
+    "selected_quests_count": 3,
+    "selected_quest_ids": [
+      "CgkI35qWta0OEAIQDg",
+      "CgkI35qWta0OEAIQDw",
+      "CgkI35qWta0OEAIQEA"
+    ],
+    "selected_quests": [
+      {
+        "id": "CgkI35qWta0OEAIQDg",
+        "name": "2-Star Champion",
+        "description": "Collect a 2-star Champion.",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh4.ggpht.com/eQZCuWSWX8YAP7UUU2YPJF3y0M2Tyv1iioWX70_xz8LFEDK_M7ofafQA946MWTHF-w"
+      },
+      {
+        "id": "CgkI35qWta0OEAIQDw",
+        "name": "3-Star Champion",
+        "description": "Collect a 3-star Champion.",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh4.ggpht.com/HqILLXt6RU-aF7yCMl3K-A-mBZD0MwS5o3Qu1Ql2BT2_6VbVLw1-Uv0cK9Szh4xmuwk"
+      },
+      {
+        "id": "CgkI35qWta0OEAIQEA",
+        "name": "4-Star Champion",
+        "description": "Collect a 4-star Champion.",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh5.ggpht.com/KyZ6-gikz_dAYIHDeyV7dkeKvi93ErrwuOiOIP5bhtUqgeQFmoGa67zLQj7oT7roWX8"
+      }
+    ],
+    "all_quests": [
+      {
+        "id": "CgkI35qWta0OEAIQDg",
+        "name": "2-Star Champion",
+        "description": "Collect a 2-star Champion.",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh4.ggpht.com/eQZCuWSWX8YAP7UUU2YPJF3y0M2Tyv1iioWX70_xz8LFEDK_M7ofafQA946MWTHF-w"
+      },
+      {
+        "id": "CgkI35qWta0OEAIQDw",
+        "name": "3-Star Champion",
+        "description": "Collect a 3-star Champion.",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh4.ggpht.com/HqILLXt6RU-aF7yCMl3K-A-mBZD0MwS5o3Qu1Ql2BT2_6VbVLw1-Uv0cK9Szh4xmuwk"
+      },
+      {
+        "id": "CgkI35qWta0OEAIQEA",
+        "name": "4-Star Champion",
+        "description": "Collect a 4-star Champion.",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh5.ggpht.com/KyZ6-gikz_dAYIHDeyV7dkeKvi93ErrwuOiOIP5bhtUqgeQFmoGa67zLQj7oT7roWX8"
+      },
+      {
+        "id": "CgkI35qWta0OEAIQAQ",
+        "name": "The Contest",
+        "description": "Complete Act 1.",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh6.ggpht.com/4Nn_4tALi1pKZT0LHXCD403mGssaLojJWJ4gAIzHaIjbRffhDTrXAT_CDB-pLQpwq44U"
+      },
+      {
+        "id": "CgkI35qWta0OEAIQAg",
+        "name": "By The Book",
+        "description": "Complete any Chapter.",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.ggpht.com/ol-DROmtBaCyVoqDEpny_hI9lhImOI_3SXy3QGG3eh4bL7eyO-8pdz1szkyJ81tvKC4"
+      },
+      {
+        "id": "CgkI35qWta0OEAIQAw",
+        "name": "Escalation",
+        "description": "Complete Act 2.",
+        "experiencePoints": 1000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh4.ggpht.com/mQXrCSV90zrh3gsh3iBe-oEQrNVHEOjuCZ-hXDMahOlxX8TD32_d1Snxjb1xetdjgdHK"
+      }
+    ],
+    "created_at": "2026-11-20 13:55:28",
+    "updated_at": "2026-11-20 13:55:28",
+    "id": "27",
+    "client_sig": "bdff84511d367e926ed15cf6609bf0c815c8e846"
+  },
+  "40": {
+    "service_id": "srv_40",
+    "game_id": "40",
+    "title": "Yalla Ludo - Ludo&Jackaroo",
+    "package": "com.yalla.yallagames",
+    "developer": "Aviva Sun",
+    "category": "Popular Games",
+    "icon": "https://play-lh.googleusercontent.com/_B8WTUQVNhy4frnK0ekTvxNUpYDL-HYfeJvM8jo7Zw58N-RoAWD2gC4ksVp5KDNdtiYDGBMo3DVBo8bcBkxBLw=s0-br30",
+    "section": "quest_unlocker",
+    "enabled": true,
+    "total_quests_count": 16,
+    "selected_quests_count": 2,
+    "selected_quest_ids": [
+      "CgkI0peF5c8REAIQAw",
+      "CgkI0peF5c8REAIQBg"
+    ],
+    "selected_quests": [
+      {
+        "id": "CgkI0peF5c8REAIQAw",
+        "name": "First Domino Win",
+        "description": "Win a Domino game",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/lzDMfdR_D5TzioLuMqiaU39ODvMJVtZclISydFGQ6oO_hFNna7BCiLfY_ZU-_nmJACM"
+      },
+      {
+        "id": "CgkI0peF5c8REAIQBg",
+        "name": "Party Newcomer",
+        "description": "Enter a chatroom for the first time",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/foxZ2_gikmOmkqYqKrLuPgIFKqxqF5f2wpm7hu3une215pvh43-xbkRXo27nTuAqdqk"
+      }
+    ],
+    "all_quests": [
+      {
+        "id": "CgkI0peF5c8REAIQAw",
+        "name": "First Domino Win",
+        "description": "Win a Domino game",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/lzDMfdR_D5TzioLuMqiaU39ODvMJVtZclISydFGQ6oO_hFNna7BCiLfY_ZU-_nmJACM"
+      },
+      {
+        "id": "CgkI0peF5c8REAIQBg",
+        "name": "Party Newcomer",
+        "description": "Enter a chatroom for the first time",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/foxZ2_gikmOmkqYqKrLuPgIFKqxqF5f2wpm7hu3une215pvh43-xbkRXo27nTuAqdqk"
+      },
+      {
+        "id": "CgkI0peF5c8REAIQAQ",
+        "name": "Fresh Start",
+        "description": "Register a Yalla Ludo account",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/xMN5eGgcLtLCCTBX_NLtgPstWvIfYykWB94RaaH_aeuoRe1tszQG268eSchWql9cXqk"
+      },
+      {
+        "id": "CgkI0peF5c8REAIQAg",
+        "name": "First Ludo Win",
+        "description": "Win a Ludo game",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/8jsxlxYFSd3i66_piURtrE0HaHzl87atqDIPM_pNvVnW-4-GTQssnuulRlSdldsREIE"
+      },
+      {
+        "id": "CgkI0peF5c8REAIQBA",
+        "name": "First Jackaroo Win",
+        "description": "Win a Jackaroo game",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/c0RMQaNxDH0MM2hnzSHVG8TXI0i0MMJfnR1nrDKCuxq3KZXgsjqa2nfAkkVNjxePTaQB"
+      },
+      {
+        "id": "CgkI0peF5c8REAIQBQ",
+        "name": "First Snakes & Ladders Win",
+        "description": "Win a Snakes & Ladders game",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/L9DdMLbop7WixyZcqo7nQ3t4fzMOz8lmNG8UGIKFlu2QsYuVv8PWw6d3Esr9zH1YMLE"
+      }
+    ],
+    "created_at": "2026-11-20 13:56:37",
+    "updated_at": "2026-11-20 13:56:37",
+    "id": "40",
+    "client_sig": "a2affbd64ef6b3658c32e592acc23ac1e507643d"
+  },
+  "8": {
+    "service_id": "srv_8",
+    "game_id": "8",
+    "title": "Gossip Harbor®: Merge & Story",
+    "package": "com.mergegames.gossipharbor",
+    "client_sig": "58e71785c961e7328ea9c76de647f8f6c4403b39",
+    "developer": "Microfun Limited",
+    "category": "Puzzle & Merge",
+    "icon": "https://play-lh.googleusercontent.com/VIv1J5fPLy-r9KrlA4WhLvzTboMphqs_jo_U9OqLyOmkr1AGAZ-nzIPo74_VISY7Ul28ZkObCkvlyyWPd_50=s0-br30",
+    "section": "quest_unlocker",
+    "enabled": true,
+    "total_quests_count": 16,
+    "selected_quests_count": 3,
+    "selected_quest_ids": [
+      "CgkI3YvxrpUIEAIQAQ",
+      "CgkI3YvxrpUIEAIQBw",
+      "CgkI3YvxrpUIEAIQDA"
+    ],
+    "selected_quests": [
+      {
+        "id": "CgkI3YvxrpUIEAIQAQ",
+        "name": "Starter Snack Bar",
+        "description": "Complete 5 orders",
+        "experiencePoints": 1000,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 5,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/YuuMHNKQ30LfFQUbW74wDvddPpaipfSRMcyECiHniEWIPnBC8MAayLHbgenvumcQsIk"
+      },
+      {
+        "id": "CgkI3YvxrpUIEAIQBw",
+        "name": "Welcome to Brimwave",
+        "description": "Complete Day 1 of the story",
+        "experiencePoints": 1000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/hQkDXRODRdIdPRkX7sMd24506yhww4oJ5TBcH3Kb7WeZlCBakcPOyYZqFXBatRdj7jkO"
+      },
+      {
+        "id": "CgkI3YvxrpUIEAIQDA",
+        "name": "Leveled Up",
+        "description": "Reach Level 6",
+        "experiencePoints": 2000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/Hl5HkZl2l6wuV6fHL32KJSEACnR9fY23oQAj0k0ie2wVPsWFo9TzK6v12-0REjRRT6E"
+      }
+    ],
+    "all_quests": [
+      {
+        "id": "CgkI3YvxrpUIEAIQAQ",
+        "name": "Starter Snack Bar",
+        "description": "Complete 5 orders",
+        "experiencePoints": 1000,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 5,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/YuuMHNKQ30LfFQUbW74wDvddPpaipfSRMcyECiHniEWIPnBC8MAayLHbgenvumcQsIk"
+      },
+      {
+        "id": "CgkI3YvxrpUIEAIQBw",
+        "name": "Welcome to Brimwave",
+        "description": "Complete Day 1 of the story",
+        "experiencePoints": 1000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/hQkDXRODRdIdPRkX7sMd24506yhww4oJ5TBcH3Kb7WeZlCBakcPOyYZqFXBatRdj7jkO"
+      },
+      {
+        "id": "CgkI3YvxrpUIEAIQDA",
+        "name": "Leveled Up",
+        "description": "Reach Level 6",
+        "experiencePoints": 2000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/Hl5HkZl2l6wuV6fHL32KJSEACnR9fY23oQAj0k0ie2wVPsWFo9TzK6v12-0REjRRT6E"
+      },
+      {
+        "id": "CgkI3YvxrpUIEAIQAg",
+        "name": "Beginner Bistro",
+        "description": "Complete 10 orders",
+        "experiencePoints": 1000,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 10,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/ITLcBPNttveElkd2IUYwkmFThxd0MJi-gLu9ZFOZU13yMIbEXJrkWrc7ftgLhuPxG6c"
+      },
+      {
+        "id": "CgkI3YvxrpUIEAIQAw",
+        "name": "Growing Griller",
+        "description": "Complete 100 orders",
+        "experiencePoints": 2000,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 100,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/9Fz_c4FHTlRdnX9J6V9cwYQrmA_vGkGieU5e4TfLCSxUmD6O49kxNCPjvoTEbWlt6zz3"
+      },
+      {
+        "id": "CgkI3YvxrpUIEAIQBA",
+        "name": "Delightful Diner",
+        "description": "Complete 500 orders",
+        "experiencePoints": 5000,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 500,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/C4T9eqquBLo1QGqnCPoqZMBMjzMhby5PS9FyRC42f9PF_VokVCdAM-32uNL4v8lAZ_s"
+      }
+    ],
+    "created_at": "2026-11-20 13:58:11",
+    "updated_at": "2026-11-21 09:58:11",
+    "id": "8"
+  },
+  "37": {
+    "service_id": "srv_37",
+    "game_id": "37",
+    "title": "War Machines：Tanks Battle Game",
+    "package": "com.fungames.battletanksbeta",
+    "developer": "Wildlife Studios",
+    "category": "Popular Games",
+    "icon": "https://play-lh.googleusercontent.com/bkzoRJZfTQNKKQSDBsedwOg8lMl4bepJiueo7DLDWS82sRRsEWhwKZPkHCuLxvDKeS8y977LbhjqPDJK4NaQiA=s0-br30",
+    "section": "quest_unlocker",
+    "enabled": true,
+    "total_quests_count": 16,
+    "selected_quests_count": 4,
+    "selected_quest_ids": [
+      "CgkI4pKymoMTEAIQCA",
+      "CgkI4pKymoMTEAIQCQ",
+      "CgkI4pKymoMTEAIQCg",
+      "CgkI4pKymoMTEAIQAQ"
+    ],
+    "selected_quests": [
+      {
+        "id": "CgkI4pKymoMTEAIQCA",
+        "name": "First Step!",
+        "description": "Win a battle",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/DPyHqju-snZ3aZ0UYDdy_g6qAI7NvpLtfblGfuQ2_UEUH20ABh3OU6s90AwL8g4Mkfs"
+      },
+      {
+        "id": "CgkI4pKymoMTEAIQCQ",
+        "name": "Tank! What tank!",
+        "description": "Destroy a Tank\nExplode a Tank",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/z8RlVvKuo_X952sa9l52M9TBk_H0bp03BR7SZ3OaEShxvDz2gOI5D9WK9RisiY8Smvk"
+      },
+      {
+        "id": "CgkI4pKymoMTEAIQCg",
+        "name": "Pimp My Tank!",
+        "description": "Make your first tank upgrade",
+        "experiencePoints": 1000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/HQN5rXWQWPDN-q7DJNXFHB5X-11TGdlQULxXGq0U3CqQSO-cuUp6-PnSZMqlulyuWiKj"
+      },
+      {
+        "id": "CgkI4pKymoMTEAIQAQ",
+        "name": "Soldier",
+        "description": "Reach Soldier rank",
+        "experiencePoints": 1000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/DCLmSVDcKiNerViYGsqhxY28G-tcqF37yYbbn4cV71SHckMYNDgHv4rN_e3Fb18khA"
+      }
+    ],
+    "all_quests": [
+      {
+        "id": "CgkI4pKymoMTEAIQCA",
+        "name": "First Step!",
+        "description": "Win a battle",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/DPyHqju-snZ3aZ0UYDdy_g6qAI7NvpLtfblGfuQ2_UEUH20ABh3OU6s90AwL8g4Mkfs"
+      },
+      {
+        "id": "CgkI4pKymoMTEAIQCQ",
+        "name": "Tank! What tank!",
+        "description": "Destroy a Tank\nExplode a Tank",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/z8RlVvKuo_X952sa9l52M9TBk_H0bp03BR7SZ3OaEShxvDz2gOI5D9WK9RisiY8Smvk"
+      },
+      {
+        "id": "CgkI4pKymoMTEAIQCg",
+        "name": "Pimp My Tank!",
+        "description": "Make your first tank upgrade",
+        "experiencePoints": 1000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/HQN5rXWQWPDN-q7DJNXFHB5X-11TGdlQULxXGq0U3CqQSO-cuUp6-PnSZMqlulyuWiKj"
+      },
+      {
+        "id": "CgkI4pKymoMTEAIQAQ",
+        "name": "Soldier",
+        "description": "Reach Soldier rank",
+        "experiencePoints": 1000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/DCLmSVDcKiNerViYGsqhxY28G-tcqF37yYbbn4cV71SHckMYNDgHv4rN_e3Fb18khA"
+      },
+      {
+        "id": "CgkI4pKymoMTEAIQCw",
+        "name": "What's in the Box?!",
+        "description": "Open a chest (garage only)",
+        "experiencePoints": 1000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/HB-jgH-28GF_3HmjCN1iEU9fShoiin54k8bWHtKIq3AYGqAARjhVOCS5IenzEtzeKoM"
+      },
+      {
+        "id": "CgkI4pKymoMTEAIQAg",
+        "name": "Sergeant",
+        "description": "Reach Sergeant rank",
+        "experiencePoints": 2000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/_TKo6ekZBgx6zPWT2Fd5sW0DGROY4IfhtzGzM_feu-fcRz8Qr9ek_vIX_1GuHzKSSZg"
+      }
+    ],
+    "created_at": "2026-11-20 13:58:38",
+    "updated_at": "2026-11-20 13:58:38",
+    "id": "37",
+    "client_sig": "8411caa8d4e81dcbc141178586b55181c8370603"
+  },
+  "10": {
+    "service_id": "srv_10",
+    "game_id": "10",
+    "title": "Angry Birds 2",
+    "package": "com.rovio.baba",
+    "developer": "Rovio Entertainment",
+    "category": "Casual & Slingshot",
+    "icon": "https://play-lh.googleusercontent.com/XrA1acf-l1YT0jw0QTxWqpJLE_TYSgdGpWE1vrEepFpA2128Zx4to0ARPvKFdhT5vAc0LHHC7xAAwa8aABIFeg=s0-br30",
+    "section": "quest_unlocker",
+    "enabled": true,
+    "total_quests_count": 49,
+    "selected_quests_count": 2,
+    "selected_quest_ids": [
+      "CgkI0_fOz_QKEAIQGA",
+      "CgkI0_fOz_QKEAIQGQ"
+    ],
+    "selected_quests": [
+      {
+        "id": "CgkI0_fOz_QKEAIQGA",
+        "name": "Feathery Hills Complete!",
+        "description": "Beat the King pig in Feathery Hills",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/7KzLGlhmMrMkAAyBPLmJQ0yYH8IreZ0A3hxYFjEW7SDAxawkrS_qo_FzmltUvozGsw"
+      },
+      {
+        "id": "CgkI0_fOz_QKEAIQGQ",
+        "name": "New Pork City Complete!",
+        "description": "Beat the King pig in New Pork City",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/R2gTNEW7jJy003mvAy2Fv10wITXoMFRTvH3xii2JVI7vButUo9C3KnOLbakYqLIjMQg"
+      }
+    ],
+    "all_quests": [
+      {
+        "id": "CgkI0_fOz_QKEAIQGA",
+        "name": "Feathery Hills Complete!",
+        "description": "Beat the King pig in Feathery Hills",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/7KzLGlhmMrMkAAyBPLmJQ0yYH8IreZ0A3hxYFjEW7SDAxawkrS_qo_FzmltUvozGsw"
+      },
+      {
+        "id": "CgkI0_fOz_QKEAIQGQ",
+        "name": "New Pork City Complete!",
+        "description": "Beat the King pig in New Pork City",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/R2gTNEW7jJy003mvAy2Fv10wITXoMFRTvH3xii2JVI7vButUo9C3KnOLbakYqLIjMQg"
+      },
+      {
+        "id": "CgkI0_fOz_QKEAIQAQ",
+        "name": "Party Popper",
+        "description": "Pop 30 pigs",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/o71b3apIx9FMf99-LdVuHhpqq7mJPgPUjRzJ__qYZKguItphjAMmGYyPs3WERWbEbykK"
+      },
+      {
+        "id": "CgkI0_fOz_QKEAIQAg",
+        "name": "Super Popper",
+        "description": "Pop 300 pigs",
+        "experiencePoints": 1000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/Gu11MVRs3eoxmkQH8Tbm2ZH7_APVU4ygSxGXDgX9N37vDn-QZcG9ViHDvSj2PlKEJA"
+      },
+      {
+        "id": "CgkI0_fOz_QKEAIQAw",
+        "name": "Starstruck",
+        "description": "Get 3 stars in a five-room level",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/LuMo1hr7IwlR86bGlN1kpWn2jgYvw0gBH7-Xu52LG4ecn9RafXyT2cf9ALVu54LxUA"
+      },
+      {
+        "id": "CgkI0_fOz_QKEAIQBA",
+        "name": "Picky",
+        "description": "Change the selected card in the slingshot 3 times",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/fHWlI-7iFVf0bkNjeFNeFkxrE9t7T9xd3iV8IqaT4vGDqC9EpEK3FLc3UBmaQqwTefY"
+      }
+    ],
+    "created_at": "2026-11-20 13:58:58",
+    "updated_at": "2026-11-20 13:58:58",
+    "id": "10",
+    "client_sig": "66da9177253113474f6b3043b89e0667902cf115"
+  },
+  "11": {
+    "service_id": "srv_11",
+    "game_id": "11",
+    "title": "Free Fire MAX",
+    "package": "com.dts.freefiremax",
+    "developer": "Garena International",
+    "category": "Battle Royale",
+    "icon": "https://play-lh.googleusercontent.com/CHTegoh7kat0rwX0gsbqrAAepT4qYASGwJi-KyAdcxVlnQxN3pe4ahKNe6lh4_vOCutj-oQp6rWRoBKiuxvdEw=s0-br30",
+    "section": "quest_unlocker",
+    "enabled": true,
+    "total_quests_count": 16,
+    "selected_quests_count": 2,
+    "selected_quest_ids": [
+      "CgkIj8Cd_rMFEAIQHg",
+      "CgkIj8Cd_rMFEAIQIQ"
+    ],
+    "selected_quests": [
+      {
+        "id": "CgkIj8Cd_rMFEAIQHg",
+        "name": "Taste of Victory",
+        "description": "Win 1 CS match",
+        "experiencePoints": 1000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/6KUTE-DMrW6JNcMtUbeeTxhJyM_KrKx4G1f3Vr4ZPNkwRQg_LIsnln-KowXwg_qsedS4"
+      },
+      {
+        "id": "CgkIj8Cd_rMFEAIQIQ",
+        "name": "Going for Coins!",
+        "description": "Loot Coin Machine 1 time in BR",
+        "experiencePoints": 1000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/vq_kSDk8b1G2x3lb6A5XeFvZsFHmL5jo3oZj1k_CXeSLnRvOReW9LK7f3478P6rDbCo"
+      }
+    ],
+    "all_quests": [
+      {
+        "id": "CgkIj8Cd_rMFEAIQHg",
+        "name": "Taste of Victory",
+        "description": "Win 1 CS match",
+        "experiencePoints": 1000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/6KUTE-DMrW6JNcMtUbeeTxhJyM_KrKx4G1f3Vr4ZPNkwRQg_LIsnln-KowXwg_qsedS4"
+      },
+      {
+        "id": "CgkIj8Cd_rMFEAIQIQ",
+        "name": "Going for Coins!",
+        "description": "Loot Coin Machine 1 time in BR",
+        "experiencePoints": 1000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/vq_kSDk8b1G2x3lb6A5XeFvZsFHmL5jo3oZj1k_CXeSLnRvOReW9LK7f3478P6rDbCo"
+      },
+      {
+        "id": "CgkIj8Cd_rMFEAIQJQ",
+        "name": "BR Rookie No More",
+        "description": "Eliminate 15 enemies in BR mode",
+        "experiencePoints": 3000,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 15,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/j4VmiHzoDaHFReOi9OWwwtI1BY7vDgtJukJU_w5Ovk-XJ0U8O6QxjykXhCnQqshv46Ff"
+      },
+      {
+        "id": "CgkIj8Cd_rMFEAIQIg",
+        "name": "CS Rookie No More",
+        "description": "Eliminate 30 enemies in CS mode",
+        "experiencePoints": 3000,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 30,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/vIyFF6u-HX2fn7VQ2FLZ39JSHxWmpnSbLM98S1dBjSU1kUri7uJkqSuD2ac9xia4RxYJ"
+      },
+      {
+        "id": "CgkIj8Cd_rMFEAIQJw",
+        "name": "BR Warmup",
+        "description": "Play 15 BR matches",
+        "experiencePoints": 3000,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 15,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/sbkVGyTT1dWq9pGO2_IG1eJIIcZT_heoZxk9wNO7A-z5Zs8aFpEMg3p6UEFwwYJ7Xg"
+      },
+      {
+        "id": "CgkIj8Cd_rMFEAIQGQ",
+        "name": "CS Warmup",
+        "description": "Play 15 CS matches",
+        "experiencePoints": 3000,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 15,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/KcrmpKvuBAZ6YbimGziW36Gb-O91YL6dcNJswvkteTEyBj4k4x56lOz98x6iHutPvp60"
+      }
+    ],
+    "created_at": "2026-11-20 13:59:10",
+    "updated_at": "2026-11-20 13:59:10",
+    "id": "11",
+    "client_sig": "5b320be50be7e5d01e5608b666432be0a9449794"
+  },
+  "36": {
+    "service_id": "srv_36",
+    "game_id": "36",
+    "title": "Lords Mobile: Kingdom Wars",
+    "package": "com.igg.android.lordsmobile",
+    "developer": "IGG.COM",
+    "category": "Popular Games",
+    "icon": "https://play-lh.googleusercontent.com/9gTDGNC_Ly7dWNWcfZtnBKdIY8a9REzuWMCC89ycYugXGvWgAPDo4GgnyitrX2LpMqE-1yb_2CDFugre9QVKfg=s0-br30",
+    "section": "quest_unlocker",
+    "enabled": true,
+    "total_quests_count": 65,
+    "selected_quests_count": 2,
+    "selected_quest_ids": [
+      "CgkIxunC2d8JEAIQAg",
+      "CgkIxunC2d8JEAIQDg"
+    ],
+    "selected_quests": [
+      {
+        "id": "CgkIxunC2d8JEAIQAg",
+        "name": "Upgrade Castle to Lv 5",
+        "description": "Upgrade Castle to Lv 5",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/s_c2fFZPkZ2GZ3pKfSa_FOPLTyhHN3LxsmpLH5AcsW71wK-WhvC2d9L9KFJ597C6uxk"
+      },
+      {
+        "id": "CgkIxunC2d8JEAIQDg",
+        "name": "Complete Skirmish 2 Ridge Attack",
+        "description": "Complete Skirmish 2 Ridge Attack",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/2BeJw6xFLApYCcxWs-XEiFBMw0swpYE25z2ovZmu8qVpgkdTHeWVQ1f_svFM13hRAg"
+      }
+    ],
+    "all_quests": [
+      {
+        "id": "CgkIxunC2d8JEAIQAg",
+        "name": "Upgrade Castle to Lv 5",
+        "description": "Upgrade Castle to Lv 5",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/s_c2fFZPkZ2GZ3pKfSa_FOPLTyhHN3LxsmpLH5AcsW71wK-WhvC2d9L9KFJ597C6uxk"
+      },
+      {
+        "id": "CgkIxunC2d8JEAIQDg",
+        "name": "Complete Skirmish 2 Ridge Attack",
+        "description": "Complete Skirmish 2 Ridge Attack",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/2BeJw6xFLApYCcxWs-XEiFBMw0swpYE25z2ovZmu8qVpgkdTHeWVQ1f_svFM13hRAg"
+      },
+      {
+        "id": "CgkIxunC2d8JEAIQAw",
+        "name": "Upgrade Castle to Lv 10",
+        "description": "Upgrade Castle to Lv 10",
+        "experiencePoints": 1000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/K7UYx_Qq49tGvGEV9dt23eBVFVTYkDZWt1vd6qSvm1Kfvdp8V4hHgAHOaPXWxw9gHD4"
+      },
+      {
+        "id": "CgkIxunC2d8JEAIQBA",
+        "name": "Upgrade Castle to Lv 15",
+        "description": "Upgrade Castle to Lv 15",
+        "experiencePoints": 2000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/I2Hgs8-cZcj1hNV7m0vstM63ocqCem_WuA5VuZdLJSV_ZF5SU74rLnPFO0NDYqwpIok"
+      },
+      {
+        "id": "CgkIxunC2d8JEAIQBQ",
+        "name": "Upgrade Castle to Lv 20",
+        "description": "Upgrade Castle to Lv 20",
+        "experiencePoints": 3000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/F1fgIW7hO-3OLGs8D7Sza6Ibbz8gY-5nWwnPp32nFLNkIMAr3Nmcz0sTZRMS3UNhmGg"
+      },
+      {
+        "id": "CgkIxunC2d8JEAIQBg",
+        "name": "Upgrade Castle to Lv 25",
+        "description": "Upgrade Castle to Lv 25",
+        "experiencePoints": 5000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/OoLR-qok1kGS51BUpu-XEVIxbErmTvf6KIV91GfDWp1CiRj8Nlqlwe7y3Fj3tSECXts"
+      }
+    ],
+    "created_at": "2026-11-20 13:59:30",
+    "updated_at": "2026-11-20 13:59:30",
+    "id": "36",
+    "client_sig": "75adf545f77fee9de110d4ddfae60bb3b9b17dad"
+  },
+  "41": {
+    "service_id": "srv_41",
+    "game_id": "41",
+    "title": "Disney Solitaire",
+    "package": "com.superplaystudios.disneysolitairedreams",
+    "developer": "SuperPlay.",
+    "category": "Popular Games",
+    "icon": "https://play-lh.googleusercontent.com/BpyKPyeCiAoCtYP23WtOoHW1G_4IAGUyk4G6V_5YNmXomuBwNC5ZnSq5OfxejW-Ufuukma8-UYZirB2wz3m8UnM=s0-br30",
+    "section": "quest_unlocker",
+    "enabled": true,
+    "total_quests_count": 56,
+    "selected_quests_count": 3,
+    "selected_quest_ids": [
+      "CgkI8pC4lO4PEAIQCQ",
+      "CgkI8pC4lO4PEAIQHQ",
+      "CgkI8pC4lO4PEAIQHg"
+    ],
+    "selected_quests": [
+      {
+        "id": "CgkI8pC4lO4PEAIQCQ",
+        "name": "Winner I",
+        "description": "Win 15 levels",
+        "experiencePoints": 500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/M3D2aVAu8KRPRBoe5aMNg5j1JaJChlGVfv2jfzKQB5qUrfBXIlPbB2DL53l_71rX4A"
+      },
+      {
+        "id": "CgkI8pC4lO4PEAIQHQ",
+        "name": "Wild One I",
+        "description": "Use a Wild card",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/qJC-f41vRE9IpCdXDIHwsYxjog-Gc3tfatUfhj49iwJmlUMTazCo9n2om6fuf0Gf9g"
+      },
+      {
+        "id": "CgkI8pC4lO4PEAIQHg",
+        "name": "Stock Strategist I",
+        "description": "Use Extra Stock in a level",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/MqVjNyNoqwoLxKcs2brg4HlwjQCvXkrdP2cEjAFy_osswFNpvsehjfSaVn7rl65F4F0V"
+      }
+    ],
+    "all_quests": [
+      {
+        "id": "CgkI8pC4lO4PEAIQCQ",
+        "name": "Winner I",
+        "description": "Win 15 levels",
+        "experiencePoints": 500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/M3D2aVAu8KRPRBoe5aMNg5j1JaJChlGVfv2jfzKQB5qUrfBXIlPbB2DL53l_71rX4A"
+      },
+      {
+        "id": "CgkI8pC4lO4PEAIQHQ",
+        "name": "Wild One I",
+        "description": "Use a Wild card",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/qJC-f41vRE9IpCdXDIHwsYxjog-Gc3tfatUfhj49iwJmlUMTazCo9n2om6fuf0Gf9g"
+      },
+      {
+        "id": "CgkI8pC4lO4PEAIQHg",
+        "name": "Stock Strategist I",
+        "description": "Use Extra Stock in a level",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/MqVjNyNoqwoLxKcs2brg4HlwjQCvXkrdP2cEjAFy_osswFNpvsehjfSaVn7rl65F4F0V"
+      },
+      {
+        "id": "CgkI8pC4lO4PEAIQBA",
+        "name": "Movie Buff I",
+        "description": "Complete a scene",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/TBZd4OZrGcR-FOl7zPTnp4rKGesGYuOmSWivq8cppdXI4UxAo50LcoUQxCNaQ34txak"
+      },
+      {
+        "id": "CgkI8pC4lO4PEAIQBQ",
+        "name": "Movie Buff II",
+        "description": "Complete 3 scenes",
+        "experiencePoints": 1000,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/ZcJmpSRDK8An7JDCFPa0t1ppakVr9p4IICchAR7WzEfEVJlghRg5Yi6PDmwJiBGsmU9_"
+      },
+      {
+        "id": "CgkI8pC4lO4PEAIQBg",
+        "name": "Movie Buff III",
+        "description": "Complete 9 scenes",
+        "experiencePoints": 1500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/HYeFmg1k3YNhaGRHYwsfkVsM3MGhZyWswM5a7wVOUDAJ-VCRXZ1GFu2P_PrIjfGGm-5m"
+      }
+    ],
+    "created_at": "2026-11-20 13:59:42",
+    "updated_at": "2026-11-20 13:59:42",
+    "id": "41",
+    "client_sig": "f4fae8bc569bff15bfff3c726faba2cabbc24479"
+  },
+  "26": {
+    "service_id": "srv_26",
+    "game_id": "26",
+    "title": "Dice Dreams™️",
+    "package": "com.superplaystudios.dicedreams",
+    "developer": "SuperPlay.",
+    "category": "Popular Games",
+    "icon": "https://play-lh.googleusercontent.com/5MLgC2WWXcq1Pol8qRAXOKzIJY9qySkjF43DnWyd5F9fPj_heinHeIxvgIpPQwcaQ1w-mUzUmoP1Xeslf29irg=s0-br30",
+    "section": "quest_unlocker",
+    "enabled": true,
+    "total_quests_count": 21,
+    "selected_quests_count": 2,
+    "selected_quest_ids": [
+      "CgkI8ujCoPoIEAIQRw",
+      "CgkI8ujCoPoIEAIQPg"
+    ],
+    "selected_quests": [
+      {
+        "id": "CgkI8ujCoPoIEAIQRw",
+        "name": "First Kingdom",
+        "description": "Complete kingdom 1",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/e0APQxuvBHEiqoFlFiGRfgNKSTTNq3D0eCZvY09_Wy0h6bTxq2n7SaZRqSSoPpzq9g"
+      },
+      {
+        "id": "CgkI8ujCoPoIEAIQPg",
+        "name": "Power Roll!",
+        "description": "Roll bet x2 1 time",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/kJ-_RqL7_V5tT0DPr35GAeH11wfldjU_O1Sq0nlqIa9-4QAMq4evuUuusFmvE_f5lYU"
+      }
+    ],
+    "all_quests": [
+      {
+        "id": "CgkI8ujCoPoIEAIQRw",
+        "name": "First Kingdom",
+        "description": "Complete kingdom 1",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/e0APQxuvBHEiqoFlFiGRfgNKSTTNq3D0eCZvY09_Wy0h6bTxq2n7SaZRqSSoPpzq9g"
+      },
+      {
+        "id": "CgkI8ujCoPoIEAIQPg",
+        "name": "Power Roll!",
+        "description": "Roll bet x2 1 time",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/kJ-_RqL7_V5tT0DPr35GAeH11wfldjU_O1Sq0nlqIa9-4QAMq4evuUuusFmvE_f5lYU"
+      },
+      {
+        "id": "CgkI8ujCoPoIEAIQSA",
+        "name": "Install The Game",
+        "description": "Install The Game for the first time",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/n-Wa9WADBc_oxr1dRi_VsQn3oKbFxH33iFQOid3YZWLeVxvfBzri0yH8ZKFxEBiysA"
+      },
+      {
+        "id": "CgkI8ujCoPoIEAIQSw",
+        "name": "Hi-Yah!",
+        "description": "Fight 1 time",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/btBgmmPQrVFPT5dw1Tbh6N2LvZ4Cxqergoz2_HI9N8F0f7FJQkUSkfptlocuH8ALaGg"
+      },
+      {
+        "id": "CgkI8ujCoPoIEAIQQw",
+        "name": "Getting Serious",
+        "description": "Make a purchase",
+        "experiencePoints": 5000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/mqzD5eoLvRDsfKtqf55yob95Xji6YEy7Gh1xU7Orw7uf-q4d093SBDv4Xl_1mSJPNcz-"
+      },
+      {
+        "id": "CgkI8ujCoPoIEAIQQQ",
+        "name": "Dice Beginner",
+        "description": "Roll 100 times",
+        "experiencePoints": 500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/khO6kgwY_U51n-ggCkmlJSuWVV8gnhdESi3GVyYICfpbCxAFhVv-m_iC_6MRaEMOQ4Q"
+      }
+    ],
+    "created_at": "2026-11-20 13:59:53",
+    "updated_at": "2026-11-20 13:59:53",
+    "id": "26",
+    "client_sig": "e1be3c523dc73eddea9460c71e25cc0a4065e6d8"
+  },
+  "39": {
+    "service_id": "srv_39",
+    "game_id": "39",
+    "title": "Best Fiends - Match 3 Puzzles",
+    "package": "com.Seriously.BestFiends",
+    "developer": "Playtika",
+    "category": "Popular Games",
+    "icon": "https://play-lh.googleusercontent.com/f8uOEX90LCMfmR8DBJ_VSL70hOTwE0EnaIhuId6wQSNb0U3qX4X6PEaGvA7yfgsIsC-r6LV7FLQgsEnPTmRfJw=s0-br30",
+    "section": "quest_unlocker",
+    "enabled": true,
+    "total_quests_count": 40,
+    "selected_quests_count": 2,
+    "selected_quest_ids": [
+      "CgkI-P-r3fwaEAIQBQ",
+      "CgkI-P-r3fwaEAIQEA"
+    ],
+    "selected_quests": [
+      {
+        "id": "CgkI-P-r3fwaEAIQBQ",
+        "name": "Blue Rescuer",
+        "description": "Find a Blue Fiend.",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/yqyCu04pDnNrkMJlWVYiq8OH3iA-ttWsNgAoLVO2o3WWE5wSdXDMcta1OGD3gQ-F2II"
+      },
+      {
+        "id": "CgkI-P-r3fwaEAIQEA",
+        "name": "Green Glades Guardian",
+        "description": "Beat level 20 to complete the Green Glades.",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/RNnDCVVgdAOs0_TBk9g31lXHJ94D6cUa0TM4nBrbHkiFL83TI8AmYxl7ErSJ5lRNtoA"
+      }
+    ],
+    "all_quests": [
+      {
+        "id": "CgkI-P-r3fwaEAIQBQ",
+        "name": "Blue Rescuer",
+        "description": "Find a Blue Fiend.",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/yqyCu04pDnNrkMJlWVYiq8OH3iA-ttWsNgAoLVO2o3WWE5wSdXDMcta1OGD3gQ-F2II"
+      },
+      {
+        "id": "CgkI-P-r3fwaEAIQEA",
+        "name": "Green Glades Guardian",
+        "description": "Beat level 20 to complete the Green Glades.",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/RNnDCVVgdAOs0_TBk9g31lXHJ94D6cUa0TM4nBrbHkiFL83TI8AmYxl7ErSJ5lRNtoA"
+      },
+      {
+        "id": "CgkI-P-r3fwaEAIQAg",
+        "name": "Yellow Rescuer",
+        "description": "Find a Yellow Fiend.",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/kN3TH1bfpdnxfxbl0_26qN32fHWp9dJ00T7SEfhdaSmL0OIf-PALXymH7OP-xLTuzXE"
+      },
+      {
+        "id": "CgkI-P-r3fwaEAIQAw",
+        "name": "Purple Rescuer",
+        "description": "Find a Purple Fiend.",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/YG8UPAuYiR9M06L6l-CMQj8W8_OEfzyv0nKpGFE84fUax42fxV5FMfvOKef3ZRZTkA"
+      },
+      {
+        "id": "CgkI-P-r3fwaEAIQBA",
+        "name": "Green Rescuer",
+        "description": "Find a Green Fiend.",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/hkENsF3WhpslDjeVmrhZHuMhBlLFQtHKtbh4qrdioVMaxSOZSSdDhEvuTPMoMq1yEt4"
+      },
+      {
+        "id": "CgkI-P-r3fwaEAIQBg",
+        "name": "Red Rescuer",
+        "description": "Find a Red Fiend.",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/OkM9pXTv5KGgsDuLO_HSW5Y7QFwjzYpoEmmXcc6hQgAt_esW-yXl9qfmN-TvPhJwxHg"
+      }
+    ],
+    "created_at": "2026-11-20 14:00:07",
+    "updated_at": "2026-11-20 14:00:07",
+    "id": "39",
+    "client_sig": "a1c592da9733a4898b89321b98be2fd6a3d543ab"
+  },
+  "5": {
+    "service_id": "srv_5",
+    "game_id": "5",
+    "title": "Hay Day",
+    "package": "com.supercell.hayday",
+    "developer": "Supercell",
+    "category": "Casual & Farming",
+    "icon": "https://play-lh.googleusercontent.com/f_ANUktbqGVjj9DNAzZ7ZOAV2JjZfb72BbGhd1ooXdIIki9zeInSwK6RRfaRpX8cdzm9BGfWTMEa1CHJ80XxCw=s0-br30",
+    "section": "quest_unlocker",
+    "enabled": true,
+    "total_quests_count": 108,
+    "selected_quests_count": 2,
+    "selected_quest_ids": [
+      "CgkIndvy4_keEAIQDQ",
+      "CgkIndvy4_keEAIQHw"
+    ],
+    "selected_quests": [
+      {
+        "id": "CgkIndvy4_keEAIQDQ",
+        "name": "Patronage",
+        "description": "Sell goods to visiting customers 8 times",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.ggpht.com/5Wa71xSyunkmdGGjD-W1T32AOoqad6wXg-ieprnJD13Wtfb2JbUGRSYwd_0TkVyoydc"
+      },
+      {
+        "id": "CgkIndvy4_keEAIQHw",
+        "name": "Egghead",
+        "description": "Collect 12 eggs",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.ggpht.com/5Wa71xSyunkmdGGjD-W1T32AOoqad6wXg-ieprnJD13Wtfb2JbUGRSYwd_0TkVyoydc"
+      }
+    ],
+    "all_quests": [
+      {
+        "id": "CgkIndvy4_keEAIQDQ",
+        "name": "Patronage",
+        "description": "Sell goods to visiting customers 8 times",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.ggpht.com/5Wa71xSyunkmdGGjD-W1T32AOoqad6wXg-ieprnJD13Wtfb2JbUGRSYwd_0TkVyoydc"
+      },
+      {
+        "id": "CgkIndvy4_keEAIQHw",
+        "name": "Egghead",
+        "description": "Collect 12 eggs",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.ggpht.com/5Wa71xSyunkmdGGjD-W1T32AOoqad6wXg-ieprnJD13Wtfb2JbUGRSYwd_0TkVyoydc"
+      },
+      {
+        "id": "CgkIndvy4_keEAIQBA",
+        "name": "Dream Farm",
+        "description": "Invest 100 coins in decorating your farm.",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.ggpht.com/5Wa71xSyunkmdGGjD-W1T32AOoqad6wXg-ieprnJD13Wtfb2JbUGRSYwd_0TkVyoydc"
+      },
+      {
+        "id": "CgkIndvy4_keEAIQBQ",
+        "name": "Dream Farm II",
+        "description": "Invest 2,500 coins in decorating your farm",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.ggpht.com/5Wa71xSyunkmdGGjD-W1T32AOoqad6wXg-ieprnJD13Wtfb2JbUGRSYwd_0TkVyoydc"
+      },
+      {
+        "id": "CgkIndvy4_keEAIQBg",
+        "name": "Dream Farm III",
+        "description": "Invest 50,000 coins in decorating your farm",
+        "experiencePoints": 1000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.ggpht.com/5Wa71xSyunkmdGGjD-W1T32AOoqad6wXg-ieprnJD13Wtfb2JbUGRSYwd_0TkVyoydc"
+      },
+      {
+        "id": "CgkIndvy4_keEAIQBw",
+        "name": "Beep Beep",
+        "description": "Complete 20 truck deliveries",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.ggpht.com/5Wa71xSyunkmdGGjD-W1T32AOoqad6wXg-ieprnJD13Wtfb2JbUGRSYwd_0TkVyoydc"
+      }
+    ],
+    "created_at": "2026-11-20 14:00:26",
+    "updated_at": "2026-11-20 14:00:26",
+    "id": "5",
+    "client_sig": "1e7c404b0ee0749cf936606c3ec34cf9d3283be3"
+  },
+  "25": {
+    "service_id": "srv_25",
+    "game_id": "25",
+    "title": "Pokémon TCG Pocket",
+    "package": "jp.pokemon.pokemontcgp",
+    "developer": "The Pok%C3%A9mon Company",
+    "category": "Popular Games",
+    "icon": "https://play-lh.googleusercontent.com/p_05nasYCOpKzbj4n-j6qFrWRu5mb4oBFiulf9kc-SdLssRKbIqIt8u-XkI2R07vfHh0KE_Vr4L8R0l7c3JTWw=s0-br30",
+    "section": "quest_unlocker",
+    "enabled": true,
+    "total_quests_count": 24,
+    "selected_quests_count": 4,
+    "selected_quest_ids": [
+      "CgkIg7-InK8eEAIQAQ",
+      "CgkIg7-InK8eEAIQDQ",
+      "CgkIg7-InK8eEAIQDg",
+      "CgkIg7-InK8eEAIQEg"
+    ],
+    "selected_quests": [
+      {
+        "id": "CgkIg7-InK8eEAIQAQ",
+        "name": "Use pack stamina to open booster packs 1",
+        "description": "Use pack stamina to open 4 booster packs",
+        "experiencePoints": 500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/2ysSsSD7FE3Y8YsvSFK7zmZ4jh_3wcxY_bXes-31_THvL41tpwMIhOl2ce1JOiE6P4U"
+      },
+      {
+        "id": "CgkIg7-InK8eEAIQDQ",
+        "name": "Wonder pick 1",
+        "description": "Wonder pick 1 time",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/pMZS-BZjJgLnKwDImt-Ch_xOowgLQXMSkm-Fq5XBMXWxzxvzAqhX9f_PojfHAnYQvg"
+      },
+      {
+        "id": "CgkIg7-InK8eEAIQDg",
+        "name": "Win solo battles 1",
+        "description": "Win 1 solo battle",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/VKEATTtbq10mkEyH_F8fIYplk0Bo8ihq8aSJakNArPB2fbQT6DTdoEGye3WtFHOY6g"
+      },
+      {
+        "id": "CgkIg7-InK8eEAIQEg",
+        "name": "Win versus battles 1",
+        "description": "Win 5 versus battles",
+        "experiencePoints": 1000,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/ieFdQdRhJAANoKwZiyUv1M45n785V3TX7vdpFLQ6yk2znShfGfwI3hg2XkujF2oQmg"
+      }
+    ],
+    "all_quests": [
+      {
+        "id": "CgkIg7-InK8eEAIQAQ",
+        "name": "Use pack stamina to open booster packs 1",
+        "description": "Use pack stamina to open 4 booster packs",
+        "experiencePoints": 500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/2ysSsSD7FE3Y8YsvSFK7zmZ4jh_3wcxY_bXes-31_THvL41tpwMIhOl2ce1JOiE6P4U"
+      },
+      {
+        "id": "CgkIg7-InK8eEAIQDQ",
+        "name": "Wonder pick 1",
+        "description": "Wonder pick 1 time",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/pMZS-BZjJgLnKwDImt-Ch_xOowgLQXMSkm-Fq5XBMXWxzxvzAqhX9f_PojfHAnYQvg"
+      },
+      {
+        "id": "CgkIg7-InK8eEAIQDg",
+        "name": "Win solo battles 1",
+        "description": "Win 1 solo battle",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/VKEATTtbq10mkEyH_F8fIYplk0Bo8ihq8aSJakNArPB2fbQT6DTdoEGye3WtFHOY6g"
+      },
+      {
+        "id": "CgkIg7-InK8eEAIQEg",
+        "name": "Win versus battles 1",
+        "description": "Win 5 versus battles",
+        "experiencePoints": 1000,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/ieFdQdRhJAANoKwZiyUv1M45n785V3TX7vdpFLQ6yk2znShfGfwI3hg2XkujF2oQmg"
+      },
+      {
+        "id": "CgkIg7-InK8eEAIQBQ",
+        "name": "Raise your player level",
+        "description": "Reach player level 3",
+        "experiencePoints": 500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/Tv1FRnJTA5fWN8Tabfcq7ZY_zYcQlNhAt-Lf7PH7yYVGHV6al_UA8nEAUU4zGZaaJjo"
+      },
+      {
+        "id": "CgkIg7-InK8eEAIQAg",
+        "name": "Use pack stamina to open booster packs 2",
+        "description": "Use pack stamina to open 30 booster packs",
+        "experiencePoints": 1000,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/KWi7zVIUgZXnxXXEj9f4dkN_vc4yB0YiinALs3l5RA_AWqcSaLULsa4tKEWV_4SO"
+      }
+    ],
+    "created_at": "2026-11-20 14:01:55",
+    "updated_at": "2026-11-20 14:01:55",
+    "id": "25",
+    "client_sig": "c50b2f056cc84fcf8752e6c23bd3819128b923a2"
+  },
+  "38": {
+    "service_id": "srv_38",
+    "game_id": "38",
+    "title": "Summoners War",
+    "package": "com.com2us.smon.normal.freefull.google.kr.android.common",
+    "developer": "Com2uS",
+    "category": "Popular Games",
+    "icon": "https://play-lh.googleusercontent.com/MUCpc9V1KmbWYb2Cv6p3aSVyzBo-uuG_iMPWY0vZSRh9cpDadSM07vaWHJXE6Yrpxj-wH1y55mO6Bo6B3_2k=s0-br30",
+    "section": "quest_unlocker",
+    "enabled": true,
+    "total_quests_count": 25,
+    "selected_quests_count": 3,
+    "selected_quest_ids": [
+      "CgkIi9-Vv5oZEAIQDg",
+      "CgkIi9-Vv5oZEAIQEg",
+      "CgkIi9-Vv5oZEAIQFA"
+    ],
+    "selected_quests": [
+      {
+        "id": "CgkIi9-Vv5oZEAIQDg",
+        "name": "Joy of Victory",
+        "description": "Beat another player in the Arena",
+        "experiencePoints": 3000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/m9qut5aelYIlv01I2bMipL4mOZbkR48OOkDX-imihaSnVj2VXkBuSOCzumuHWjMmx34"
+      },
+      {
+        "id": "CgkIi9-Vv5oZEAIQEg",
+        "name": "Monster Transformed",
+        "description": "Awaken a monster once",
+        "experiencePoints": 4000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/OoSEI4FO-2viDuC9ExtTBBVf5vOCF0nQi7R-6YJ2hl67QkllQdKFrvrBhAyI3gHZJyz9"
+      },
+      {
+        "id": "CgkIi9-Vv5oZEAIQFA",
+        "name": "Celestial Island",
+        "description": "2nd Expansion",
+        "experiencePoints": 3000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/GAFaowXtV5ynKoa9F5c4sJyT2nEBCkpOObhrxfkuDtPM6rEo06h5MfeBAR7F_KZh-0s"
+      }
+    ],
+    "all_quests": [
+      {
+        "id": "CgkIi9-Vv5oZEAIQDg",
+        "name": "Joy of Victory",
+        "description": "Beat another player in the Arena",
+        "experiencePoints": 3000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/m9qut5aelYIlv01I2bMipL4mOZbkR48OOkDX-imihaSnVj2VXkBuSOCzumuHWjMmx34"
+      },
+      {
+        "id": "CgkIi9-Vv5oZEAIQEg",
+        "name": "Monster Transformed",
+        "description": "Awaken a monster once",
+        "experiencePoints": 4000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/OoSEI4FO-2viDuC9ExtTBBVf5vOCF0nQi7R-6YJ2hl67QkllQdKFrvrBhAyI3gHZJyz9"
+      },
+      {
+        "id": "CgkIi9-Vv5oZEAIQFA",
+        "name": "Celestial Island",
+        "description": "2nd Expansion",
+        "experiencePoints": 3000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/GAFaowXtV5ynKoa9F5c4sJyT2nEBCkpOObhrxfkuDtPM6rEo06h5MfeBAR7F_KZh-0s"
+      },
+      {
+        "id": "CgkIi9-Vv5oZEAIQAg",
+        "name": "Set Your Budget",
+        "description": "Produce a total of 30,000 Mana",
+        "experiencePoints": 2500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/oQXxMrqNd21ZMKR_t9tc83r5HdIGLEAxcx2R5d9Uriz4IpjcZ51CLLQ2-RsqY3QvgCU"
+      },
+      {
+        "id": "CgkIi9-Vv5oZEAIQAw",
+        "name": "Equip a Rune Set",
+        "description": "Apply 1 Rune Set Effect",
+        "experiencePoints": 3000,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/quSVmfoyNc9fUyWfEKS-oAcRacL6dcs4SNL9QiTi4xhStK1y5sZ19ykDdQC2A9kMvBE"
+      },
+      {
+        "id": "CgkIi9-Vv5oZEAIQBA",
+        "name": "Garen Forest Peace",
+        "description": "Clear the Garen Forest in Hard Mode",
+        "experiencePoints": 3500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/iNjK-YcqrOAwU6lS7q81XQhuaLgf_tHxUbVPCBC4IneKmCDv8F4u6oV6X0TjvfQf0cU"
+      }
+    ],
+    "created_at": "2026-11-20 14:02:14",
+    "updated_at": "2026-11-20 14:02:14",
+    "id": "38",
+    "client_sig": "eaddcde759b1a71993e90720e9ed3956cb1e1a1d"
+  },
+  "50": {
+    "service_id": "srv_50",
+    "game_id": "50",
+    "title": "Rise of Castles: Ice and Fire",
+    "package": "com.im30.ROE.gp",
+    "client_sig": "1f3603691327f50b184baea092c6c3e608d99a0d",
+    "developer": "Long Tech Network Limited",
+    "category": "Popular Games",
+    "icon": "https://play-lh.googleusercontent.com/VnuNntrmS7rBVEP2DrwSQAO9BFlaYZf9MwJ72p2jX5la8esW7IHoVuoVH9Qg5kzwLOCsKkg71GIzh7iQgG7hXQ=s0-br30",
+    "section": "quest_unlocker",
+    "enabled": true,
+    "total_quests_count": 26,
+    "selected_quests_count": 2,
+    "selected_quest_ids": [
+      "CgkI_c_FyZ8bEAIQFw",
+      "CgkI_c_FyZ8bEAIQGQ"
+    ],
+    "selected_quests": [
+      {
+        "id": "CgkI_c_FyZ8bEAIQFw",
+        "name": "Join the Group",
+        "description": "Join an Alliance for the first time",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/UgDJ2av2l6L5oAcZSSO1ZWw0trCb4nGRNCUGoXllz_dh8jmERtrJ-0pklBw3RYBHK5M"
+      },
+      {
+        "id": "CgkI_c_FyZ8bEAIQGQ",
+        "name": "Enlist Begins",
+        "description": "Recruit any soldier for the first time",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/7hr7jd5ugDyE844rCFsN3FoF-R2rNCRblBgrzgKpUrWwlh7ByUHwaisndEmnlkXfNoSl"
+      }
+    ],
+    "all_quests": [
+      {
+        "id": "CgkI_c_FyZ8bEAIQFw",
+        "name": "Join the Group",
+        "description": "Join an Alliance for the first time",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/UgDJ2av2l6L5oAcZSSO1ZWw0trCb4nGRNCUGoXllz_dh8jmERtrJ-0pklBw3RYBHK5M"
+      },
+      {
+        "id": "CgkI_c_FyZ8bEAIQGQ",
+        "name": "Enlist Begins",
+        "description": "Recruit any soldier for the first time",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/7hr7jd5ugDyE844rCFsN3FoF-R2rNCRblBgrzgKpUrWwlh7ByUHwaisndEmnlkXfNoSl"
+      },
+      {
+        "id": "CgkI_c_FyZ8bEAIQFg",
+        "name": "First Steps",
+        "description": "Log in for 3 days in total",
+        "experiencePoints": 500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/bvKdhckYZJl8jja7dfYJEyM9cNdwWxfNEn9w1tPckaMLQwKgzCINmf_t1YPUJ-jLjbjj"
+      },
+      {
+        "id": "CgkI_c_FyZ8bEAIQAw",
+        "name": "Progressing Daily",
+        "description": "Log in for 7 days in total",
+        "experiencePoints": 500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/nQH-kYnDgaRtV_KvZmbv-3exOPOm3_S646q8nyfus4KxlWda95oSnuzgWTqPgryvdNo"
+      },
+      {
+        "id": "CgkI_c_FyZ8bEAIQBA",
+        "name": "Perseverance",
+        "description": "Log in for 14 days in total",
+        "experiencePoints": 500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/up0sVBzy9prdoazsXHIAVyJEC-5sKitplsBEKFDWQSRDNt4kKblvOuUbcw2mEd4SzA"
+      },
+      {
+        "id": "CgkI_c_FyZ8bEAIQBQ",
+        "name": "Loyal Companion",
+        "description": "Log in for 30 days in total",
+        "experiencePoints": 500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/CMzrPtHRznOst_Y70Y9wbyEzyqWGjYundafbd14-Yb3mFqADY8SVnb-yIL42pbrIKQo"
+      }
+    ],
+    "created_at": "2026-11-21 09:15:22",
+    "updated_at": "2026-11-21 09:15:22",
+    "id": "50"
+  },
+  "49": {
+    "service_id": "srv_49",
+    "game_id": "49",
+    "title": "Whiteout Survival",
+    "package": "com.gof.global",
+    "client_sig": "972e399936f3a8da300da162aa70709a467c0e0e",
+    "developer": "Century Games PTE. LTD.",
+    "category": "Popular Games",
+    "icon": "https://play-lh.googleusercontent.com/tNMaMiJ4wTQy_TeZSWHdSlP5qH0PGig9g9sDJu2QFvCHdnrbo2u17pX55W4i6KITo56v_ZyICkqLgA2svH9ycQ=s0-br30",
+    "section": "quest_unlocker",
+    "enabled": true,
+    "total_quests_count": 15,
+    "selected_quests_count": 2,
+    "selected_quest_ids": [
+      "CgkIsP-nyJkEEAIQDQ",
+      "CgkIsP-nyJkEEAIQDg"
+    ],
+    "selected_quests": [
+      {
+        "id": "CgkIsP-nyJkEEAIQDQ",
+        "name": "Cleared Exploration",
+        "description": "Complete 1 Exploration Stages",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/M5aNwWFIS8_ooLWghsfXE9XMsA0GgAqxac40Gdk4v7aSwtooEP9Wh6uyZgfmYZ7wQF5B"
+      },
+      {
+        "id": "CgkIsP-nyJkEEAIQDg",
+        "name": "Issue Chief Order",
+        "description": "Issue any Chief Order 1 times",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/A5ySQUAnd7RhEri4RBq4g6mpm_Ef0LtjadvCLWSs5lxd4r_ebsTvL3LI0uusIQIUzBQ"
+      }
+    ],
+    "all_quests": [
+      {
+        "id": "CgkIsP-nyJkEEAIQDQ",
+        "name": "Cleared Exploration",
+        "description": "Complete 1 Exploration Stages",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/M5aNwWFIS8_ooLWghsfXE9XMsA0GgAqxac40Gdk4v7aSwtooEP9Wh6uyZgfmYZ7wQF5B"
+      },
+      {
+        "id": "CgkIsP-nyJkEEAIQDg",
+        "name": "Issue Chief Order",
+        "description": "Issue any Chief Order 1 times",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/A5ySQUAnd7RhEri4RBq4g6mpm_Ef0LtjadvCLWSs5lxd4r_ebsTvL3LI0uusIQIUzBQ"
+      },
+      {
+        "id": "CgkIsP-nyJkEEAIQAw",
+        "name": "Furnace Upgrade",
+        "description": "Furnace Level reaches Lv. 30",
+        "experiencePoints": 2500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/KsS0HLVyOpMYriiCHt_QjuxA4oVF7UCk5_MiwINYTD_1KtcSE7mNL3UG21srMI0zhA"
+      },
+      {
+        "id": "CgkIsP-nyJkEEAIQBA",
+        "name": "Consecutive Login",
+        "description": "Log in for 30 days",
+        "experiencePoints": 2500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/FARteI3A3D6lIA5VfOev4mPkZ7EEhnw39G8Bq4LWeE6ytgcLJB57MDF9zQB8ZQqUivg"
+      },
+      {
+        "id": "CgkIsP-nyJkEEAIQBQ",
+        "name": "Rally Polar Terror",
+        "description": "Initiate a rally to kill 200 Polar Terrors.",
+        "experiencePoints": 2500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/RW0PB1zKMUB7gd_LiDgFyMpR1nrywgZnH4i-9JC4fvsasRUbT9nCkKRqUusYw1-I3w"
+      },
+      {
+        "id": "CgkIsP-nyJkEEAIQBg",
+        "name": "Gather Resources",
+        "description": "Gather any resources to reach a total of 50,000,000",
+        "experiencePoints": 2500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/fbmwTnv2d2b3aVCmAEwz9UReVQOZglwKGK6mde37is0jY5aibstnHhxGyLr9QuvsG4Q"
+      }
+    ],
+    "created_at": "2026-11-22 15:54:39",
+    "updated_at": "2026-11-22 15:54:39"
+  },
+  "55": {
+    "service_id": "srv_55",
+    "game_id": "55",
+    "title": "EA SPORTS FC Soccer Mobile 27",
+    "package": "com.ea.gp.fifamobile",
+    "developer": "Electronic Arts",
+    "category": "Sports",
+    "icon": "https://play-lh.googleusercontent.com/uT1JkXWK9pv1DWWOuVebnsbATHMZmhG4LUDkvoXne9H2MDF1im00_-U4taZPifIBpJ47sA0i8IoCh5aEVuUG5JI=s0-br30",
+    "section": "quest_unlocker",
+    "enabled": true,
+    "total_quests_count": 24,
+    "selected_quests_count": 2,
+    "selected_quest_ids": [
+      "CgkI3sqzqYMOEAIQAQ",
+      "CgkI3sqzqYMOEAIQAg"
+    ],
+    "selected_quests": [
+      {
+        "id": "CgkI3sqzqYMOEAIQAQ",
+        "name": "FC Rookie",
+        "description": "Complete 1 match",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://play-lh.googleusercontent.com/uT1JkXWK9pv1DWWOuVebnsbATHMZmhG4LUDkvoXne9H2MDF1im00_-U4taZPifIBpJ47sA0i8IoCh5aEVuUG5JI=s0-br30"
+      },
+      {
+        "id": "CgkI3sqzqYMOEAIQAg",
+        "name": "Emerging Talent",
+        "description": "Complete 2 Division Rivals matches",
+        "experiencePoints": 500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 2,
+        "unlockedIconUrl": "https://play-lh.googleusercontent.com/uT1JkXWK9pv1DWWOuVebnsbATHMZmhG4LUDkvoXne9H2MDF1im00_-U4taZPifIBpJ47sA0i8IoCh5aEVuUG5JI=s0-br30"
+      }
+    ],
+    "all_quests": [
+      {
+        "id": "CgkI3sqzqYMOEAIQAQ",
+        "name": "FC Rookie",
+        "description": "Complete 1 match",
+        "experiencePoints": 500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://play-lh.googleusercontent.com/uT1JkXWK9pv1DWWOuVebnsbATHMZmhG4LUDkvoXne9H2MDF1im00_-U4taZPifIBpJ47sA0i8IoCh5aEVuUG5JI=s0-br30"
+      },
+      {
+        "id": "CgkI3sqzqYMOEAIQAg",
+        "name": "Emerging Talent",
+        "description": "Complete 2 Division Rivals matches",
+        "experiencePoints": 500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 2,
+        "unlockedIconUrl": "https://play-lh.googleusercontent.com/uT1JkXWK9pv1DWWOuVebnsbATHMZmhG4LUDkvoXne9H2MDF1im00_-U4taZPifIBpJ47sA0i8IoCh5aEVuUG5JI=s0-br30"
+      },
+      {
+        "id": "CgkI3sqzqYMOEAIQAw",
+        "name": "Elite Contender",
+        "description": "Complete 50 Division Rivals matches",
+        "experiencePoints": 2000,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 50,
+        "unlockedIconUrl": "https://play-lh.googleusercontent.com/uT1JkXWK9pv1DWWOuVebnsbATHMZmhG4LUDkvoXne9H2MDF1im00_-U4taZPifIBpJ47sA0i8IoCh5aEVuUG5JI=s0-br30"
+      },
+      {
+        "id": "CgkI3sqzqYMOEAIQBA",
+        "name": "Matchday Warrior",
+        "description": "Complete 100 Division Rivals matches",
+        "experiencePoints": 4000,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 100,
+        "unlockedIconUrl": "https://play-lh.googleusercontent.com/uT1JkXWK9pv1DWWOuVebnsbATHMZmhG4LUDkvoXne9H2MDF1im00_-U4taZPifIBpJ47sA0i8IoCh5aEVuUG5JI=s0-br30"
+      },
+      {
+        "id": "CgkI3sqzqYMOEAIQBQ",
+        "name": "Budding Star",
+        "description": "Score 10 goals",
+        "experiencePoints": 1000,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 10,
+        "unlockedIconUrl": "https://play-lh.googleusercontent.com/uT1JkXWK9pv1DWWOuVebnsbATHMZmhG4LUDkvoXne9H2MDF1im00_-U4taZPifIBpJ47sA0i8IoCh5aEVuUG5JI=s0-br30"
+      },
+      {
+        "id": "CgkI3sqzqYMOEAIQBg",
+        "name": "Seasoned Striker",
+        "description": "Score 50 goals",
+        "experiencePoints": 2000,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 50,
+        "unlockedIconUrl": "https://play-lh.googleusercontent.com/uT1JkXWK9pv1DWWOuVebnsbATHMZmhG4LUDkvoXne9H2MDF1im00_-U4taZPifIBpJ47sA0i8IoCh5aEVuUG5JI=s0-br30"
+      }
+    ],
+    "created_at": "2026-11-23 17:46:43",
+    "updated_at": "2026-11-23 17:46:43",
+    "id": "55",
+    "client_sig": "be1a4d32734d28639e47119565724c4dce8ce2d8"
+  },
+  "56": {
+    "service_id": "srv_56",
+    "game_id": "56",
+    "title": "Gardenscapes",
+    "package": "com.playrix.gardenscapes",
+    "developer": "Playrix",
+    "category": "Play Points Quest & Casual",
+    "icon": "https://play-lh.googleusercontent.com/C5Yp55qwwU8zJAkfO9DQTtHauJcmQgMM59HH8odxPM6KlHiqO6WY9jZsWnIN1k3pfgwo2o3e3ygiizwHSIPbY-w=s0-br30",
+    "section": "quest_unlocker",
+    "enabled": true,
+    "total_quests_count": 114,
+    "selected_quests_count": 3,
+    "selected_quest_ids": [
+      "CgkIzvLA59wVEAIQWg",
+      "CgkIzvLA59wVEAIQcQ",
+      "CgkIzvLA59wVEAIQTQ"
+    ],
+    "selected_quests": [
+      {
+        "id": "CgkIzvLA59wVEAIQWg",
+        "name": "Match 99 Apple Pieces",
+        "description": "Clear 99 red Apple pieces across match-3 levels in Gardenscapes (0/99 apples)",
+        "experiencePoints": 1000,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 100,
+        "unlockedIconUrl": "https://play-lh.googleusercontent.com/C5Yp55qwwU8zJAkfO9DQTtHauJcmQgMM59HH8odxPM6KlHiqO6WY9jZsWnIN1k3pfgwo2o3e3ygiizwHSIPbY-w=s0-br30"
+      },
+      {
+        "id": "CgkIzvLA59wVEAIQcQ",
+        "name": "Collect 40 bombs",
+        "description": "Collect 40 bombs across levels in Gardenscapes (0/40 bombs)",
+        "experiencePoints": 1000,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 100,
+        "unlockedIconUrl": "https://play-lh.googleusercontent.com/C5Yp55qwwU8zJAkfO9DQTtHauJcmQgMM59HH8odxPM6KlHiqO6WY9jZsWnIN1k3pfgwo2o3e3ygiizwHSIPbY-w=s0-br30"
+      },
+      {
+        "id": "CgkIzvLA59wVEAIQTQ",
+        "name": "Save 140 Moves Remaining",
+        "description": "Beat match-3 levels with 140 cumulative moves remaining in Gardenscapes (0/140 moves)",
+        "experiencePoints": 1500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://play-lh.googleusercontent.com/C5Yp55qwwU8zJAkfO9DQTtHauJcmQgMM59HH8odxPM6KlHiqO6WY9jZsWnIN1k3pfgwo2o3e3ygiizwHSIPbY-w=s0-br30"
+      }
+    ],
+    "all_quests": [
+      {
+        "id": "CgkIzvLA59wVEAIQWg",
+        "name": "Match 99 Apple Pieces",
+        "description": "Clear 99 red Apple pieces across match-3 levels in Gardenscapes (0/99 apples)",
+        "experiencePoints": 1000,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 100,
+        "unlockedIconUrl": "https://play-lh.googleusercontent.com/C5Yp55qwwU8zJAkfO9DQTtHauJcmQgMM59HH8odxPM6KlHiqO6WY9jZsWnIN1k3pfgwo2o3e3ygiizwHSIPbY-w=s0-br30"
+      },
+      {
+        "id": "CgkIzvLA59wVEAIQcQ",
+        "name": "Collect 40 bombs",
+        "description": "Collect 40 bombs across levels in Gardenscapes (0/40 bombs)",
+        "experiencePoints": 1000,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 100,
+        "unlockedIconUrl": "https://play-lh.googleusercontent.com/C5Yp55qwwU8zJAkfO9DQTtHauJcmQgMM59HH8odxPM6KlHiqO6WY9jZsWnIN1k3pfgwo2o3e3ygiizwHSIPbY-w=s0-br30"
+      },
+      {
+        "id": "CgkIzvLA59wVEAIQTQ",
+        "name": "Save 140 Moves Remaining",
+        "description": "Beat match-3 levels with 140 cumulative moves remaining in Gardenscapes (0/140 moves)",
+        "experiencePoints": 1500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://play-lh.googleusercontent.com/C5Yp55qwwU8zJAkfO9DQTtHauJcmQgMM59HH8odxPM6KlHiqO6WY9jZsWnIN1k3pfgwo2o3e3ygiizwHSIPbY-w=s0-br30"
+      }
+    ],
+    "created_at": "2026-11-24 17:19:13",
+    "updated_at": "2026-11-24 17:19:13",
+    "id": "56",
+    "client_sig": "b0cb218c78f839529f5721e1b0757a91d1bc1e2e"
+  },
+  "57": {
+    "service_id": "srv_57",
+    "game_id": "57",
+    "title": "Asphalt Legends",
+    "package": "com.gameloft.android.ANMP.GloftA9HM",
+    "developer": "Gameloft SE",
+    "category": "Racing & Action",
+    "icon": "https://play-lh.googleusercontent.com/53ngsanoIl6vcppIwZD2LGMcjT9j5beVN_GakLncwrIr7WjTXYs6lnaSef-zlKmWr2NaaoSmMs1qQjtyXgLnSiw=s0-br30",
+    "section": "quest_unlocker",
+    "enabled": true,
+    "no_data": false,
+    "total_quests_count": 33,
+    "selected_quests_count": 4,
+    "selected_quest_ids": [
+      "CgkIuJS5gpAdEAIQBA",
+      "CgkIuJS5gpAdEAIQCQ",
+      "CgkIuJS5gpAdEAIQCg",
+      "CgkIuJS5gpAdEAIQCw"
+    ],
+    "selected_quests": [
+      {
+        "id": "CgkIuJS5gpAdEAIQBA",
+        "name": "Moving Forward (Basic)",
+        "description": "Win the 1st race",
+        "experiencePoints": 1500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/k4lznrZ3EWZeI_p0QpxuSE2_pUUEDeNT7tZe5AEV15laGLuyXQKGhr8T6IBdY-kc0T0"
+      },
+      {
+        "id": "CgkIuJS5gpAdEAIQCQ",
+        "name": "Moving Forward (Bronze)",
+        "description": "Win 10 races",
+        "experiencePoints": 1500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 10,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/KndDZRCfj-h-tiCKSmS84PuPpAwmlfdVc8hHOSSqPn8rBd0DOU4CFldBuEUZltQTDn0"
+      },
+      {
+        "id": "CgkIuJS5gpAdEAIQCg",
+        "name": "Moving Forward (Silver)",
+        "description": "Win 50 races",
+        "experiencePoints": 1500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 50,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/94aUsLl1SFlC2N0sGcE4tESsU1aUyzH0oXRALbNKS2R4o4H6lYxoJcUyiPzBb1uB2A"
+      },
+      {
+        "id": "CgkIuJS5gpAdEAIQCw",
+        "name": "Moving Forward (Gold)",
+        "description": "Win 100 races",
+        "experiencePoints": 1500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 100,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/Pvg8IFR8XaNmwWBy2Hi8D_7jvJnjNk4f9mAf5mjZjKSawXSGnRUqcKChUyhVCeqDP28"
+      }
+    ],
+    "all_quests": [
+      {
+        "id": "CgkIuJS5gpAdEAIQBA",
+        "name": "Moving Forward (Basic)",
+        "description": "Win the 1st race",
+        "experiencePoints": 1500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/k4lznrZ3EWZeI_p0QpxuSE2_pUUEDeNT7tZe5AEV15laGLuyXQKGhr8T6IBdY-kc0T0"
+      },
+      {
+        "id": "CgkIuJS5gpAdEAIQCQ",
+        "name": "Moving Forward (Bronze)",
+        "description": "Win 10 races",
+        "experiencePoints": 1500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 10,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/KndDZRCfj-h-tiCKSmS84PuPpAwmlfdVc8hHOSSqPn8rBd0DOU4CFldBuEUZltQTDn0"
+      },
+      {
+        "id": "CgkIuJS5gpAdEAIQCg",
+        "name": "Moving Forward (Silver)",
+        "description": "Win 50 races",
+        "experiencePoints": 1500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 50,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/94aUsLl1SFlC2N0sGcE4tESsU1aUyzH0oXRALbNKS2R4o4H6lYxoJcUyiPzBb1uB2A"
+      },
+      {
+        "id": "CgkIuJS5gpAdEAIQCw",
+        "name": "Moving Forward (Gold)",
+        "description": "Win 100 races",
+        "experiencePoints": 1500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 100,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/Pvg8IFR8XaNmwWBy2Hi8D_7jvJnjNk4f9mAf5mjZjKSawXSGnRUqcKChUyhVCeqDP28"
+      },
+      {
+        "id": "CgkIuJS5gpAdEAIQBQ",
+        "name": "Make It Different (Basic)",
+        "description": "Perform 10 Barrel Rolls",
+        "experiencePoints": 500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 10,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/t1dmb3RZEAcxFGdbNIX6g_4kcQ2ydrWUJNXelcB5-54koHJfl-C7uUod-u6kmZy4blQ"
+      },
+      {
+        "id": "CgkIuJS5gpAdEAIQBg",
+        "name": "Make It Different (Bronze)",
+        "description": "Perform 50 Barrel Rolls",
+        "experiencePoints": 500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 50,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/T9RzMT3P2soHY9-QbsGHeuSo3KRHjpXogJO23VPQGYz-Qa4mcXDM2ddsjOeUbbC9J8E"
+      },
+      {
+        "id": "CgkIuJS5gpAdEAIQBw",
+        "name": "Make It Different (Silver)",
+        "description": "Perform 100 Barrel Rolls",
+        "experiencePoints": 500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 100,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/lDw2flcSCwCPBEe2BF-tzEvS7Zcv8OspuXZnVe7yGlF4n46MJiTxyY69x3e-F0rNqQKw"
+      },
+      {
+        "id": "CgkIuJS5gpAdEAIQCA",
+        "name": "Make It Different (Gold)",
+        "description": "Perform 200 Barrel Rolls",
+        "experiencePoints": 500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 200,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/Zwkf5q_qL6t7gQ03WTtrtaPvp5dmPi5XQ9AJXuBBvDQBjAoVBasjymemMGhgr6IIhA"
+      },
+      {
+        "id": "CgkIuJS5gpAdEAIQDA",
+        "name": "Wreck-It (Basic)",
+        "description": "Knock down 10 cars",
+        "experiencePoints": 1500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 10,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/Q9_2vVUUQU5irij9mekc9ewCRI8xahO9uzCGNQC9bROxxvSVhs2-GM5f7U2OfhS1Bg0"
+      },
+      {
+        "id": "CgkIuJS5gpAdEAIQDQ",
+        "name": "Wreck-It (Bronze)",
+        "description": "Knock down 25 cars",
+        "experiencePoints": 1500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 25,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/XVa0ZkKCT1rh_M5pke5YQtvIu2V1F1z8ZQsG_HA8XMVxbqtRmwBylUO45KVB0Okbr0ds"
+      },
+      {
+        "id": "CgkIuJS5gpAdEAIQDg",
+        "name": "Wreck-It (Silver)",
+        "description": "Knock down 50 cars",
+        "experiencePoints": 1500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 50,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/sKeTBRiXDwz3MfmqiBvjIm1KQJ7HOBKXer4K8uvglKbXAi8k7YP4fOpzE7XIqUf5qg"
+      },
+      {
+        "id": "CgkIuJS5gpAdEAIQDw",
+        "name": "Wreck-It (Gold)",
+        "description": "Knock down 100 cars",
+        "experiencePoints": 1500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 100,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/uhDof14AUTs10W7AM8vzdIbEiHDS9yQ8M8N9xHgW-Jby5l3uIZTGC6XTjK2jiqo58w"
+      },
+      {
+        "id": "CgkIuJS5gpAdEAIQEA",
+        "name": "Owned! (Basic)",
+        "description": "Unlock 5 cars",
+        "experiencePoints": 2500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 5,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/6NdVi5Z9zNRxfuZ6G-qCh38q4i6AwGFjkkvLSLuDDknX3Yz9knTDZj62VvLXh-m2Y3g"
+      },
+      {
+        "id": "CgkIuJS5gpAdEAIQEQ",
+        "name": "Owned! (Bronze)",
+        "description": "Unlock 10 cars",
+        "experiencePoints": 2500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 10,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/-M7Z07dxVS61pHIQenVB1pyjrtP02QGOA0vkvKu44tOJdhthKuGnQ4hKIAkwKFDTCQ"
+      },
+      {
+        "id": "CgkIuJS5gpAdEAIQEg",
+        "name": "Owned! (Silver)",
+        "description": "Unlock 25 cars",
+        "experiencePoints": 2500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 25,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/TiPORmduTNPflmmtm7Z-Q1Ka20qSKjFauyttgEI8jU5QbyFOxVRAsAnnRNVWcOQe3P3M"
+      },
+      {
+        "id": "CgkIuJS5gpAdEAIQEw",
+        "name": "Owned! (Gold)",
+        "description": "Unlock 48 cars",
+        "experiencePoints": 2500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 50,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/GR7mZexUOoNCWY-6jePKDdwV0EbBMzxvh6jqwRlDAorM363bv3WhkzHCkFRA9yWqsQ"
+      },
+      {
+        "id": "CgkIuJS5gpAdEAIQFA",
+        "name": "Wonderful (Basic)",
+        "description": "Complete the 1st Season in Career Mode",
+        "experiencePoints": 2500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/qugZwcpSR-K1Rj6uSau8V0vlxZXw9s-izTIq_wN4zkrqqIMAb2nYPU3_4HUc9xyz0RY"
+      },
+      {
+        "id": "CgkIuJS5gpAdEAIQFQ",
+        "name": "Wonderful (Bronze)",
+        "description": "Complete 10 Seasons in Career Mode",
+        "experiencePoints": 2500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 10,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/k6B0yyglxXTFocNBBJjFCkLCuwxRzdQNwK2_wqgRiaGGyubUCdqLrV4b2EsDrGnZzMA_"
+      },
+      {
+        "id": "CgkIuJS5gpAdEAIQFg",
+        "name": "Wonderful (Silver)",
+        "description": "Complete 40 Seasons in Career Mode",
+        "experiencePoints": 2500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 40,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/Q_XaqN3HOY34I27PfxAOe4krY0ALrvO242aVEOS0Pn5-6NvirZUaB5xkUk2K76XuEQ"
+      },
+      {
+        "id": "CgkIuJS5gpAdEAIQFw",
+        "name": "Booster",
+        "description": "Perform 15 Nitro Shockwaves",
+        "experiencePoints": 1500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 15,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/L4S51wuzmp0TSmZFYgQVH5NGmgkGsh6gw8JwFi6FmhKQ4DfRV_0fL8zKJ5pvG96XWMI"
+      },
+      {
+        "id": "CgkIuJS5gpAdEAIQGA",
+        "name": "So Easy",
+        "description": "Perform 15 Perfect Nitros",
+        "experiencePoints": 1500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 15,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/E6HkxUe2MdbDFZsvqWHwSquhw97TUK1rCN6upy1rzL93mdpDwUK7T7-973weCWd8VTg"
+      },
+      {
+        "id": "CgkIuJS5gpAdEAIQGQ",
+        "name": "Sway Me Now",
+        "description": "Perform 25 360s",
+        "experiencePoints": 1500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 25,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/cgW_YgjixkRa7j-gd4n33aPFDgpjbeHFEf5SvoichAvXcXvTOw7Cwtu1Pa3k1eVNI-DI"
+      },
+      {
+        "id": "CgkIuJS5gpAdEAIQGg",
+        "name": "On the Road",
+        "description": "Perform 5 Perfect Runs",
+        "experiencePoints": 1500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 5,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/QfB2bQXOGbiBs-nhJu8wkYskLyxwTwZJG1TY0Qr39gYHUrDJwDTc_gOa6ENU5L142R4"
+      },
+      {
+        "id": "CgkIuJS5gpAdEAIQGw",
+        "name": "Keep Trying",
+        "description": "Win 25 races in Career Mode",
+        "experiencePoints": 3500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 25,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/Ucvzf9M_E-mdNj5aYNsojLj4A3Jph3d4EWvunywinP3EWOMUPrUEMJqLAS391af04Mk"
+      },
+      {
+        "id": "CgkIuJS5gpAdEAIQHA",
+        "name": "Destructible",
+        "description": "Destroy 600 race objects",
+        "experiencePoints": 1500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 600,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/ITq9AY07hEF34osCbkVrrVxAy9St2un7vJe7n-oUglsb2FQmxDW7uivLPylbKxfOCmAC"
+      },
+      {
+        "id": "CgkIuJS5gpAdEAIQHQ",
+        "name": "Fly Away",
+        "description": "Spend 240 seconds in the air",
+        "experiencePoints": 3500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 240,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/tvAizyjoTnpvMHuR6MIri9PvmwQzkjDhWPlLN1Zz9PAZeT4ELawHL5E2UHDYPU14BLE"
+      },
+      {
+        "id": "CgkIuJS5gpAdEAIQHg",
+        "name": "Crushed",
+        "description": "Knock down 50 traffic cars",
+        "experiencePoints": 1500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/iL8HGUxEfm8zt8mhw-fgYrQUUvHb8tHhlQVgf6I94Z_jTsi51Njuuq237_QqQFX6ew"
+      },
+      {
+        "id": "CgkIuJS5gpAdEAIQHw",
+        "name": "Burnt Rubber",
+        "description": "Drift 75,000 meters",
+        "experiencePoints": 3500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/IVGN1vdaFkVWIn7VRXBMfZ04ifl8eFMlPNdGMuk5hK60xcuY41caLcreG8mMMFncYaY"
+      },
+      {
+        "id": "CgkIuJS5gpAdEAIQIA",
+        "name": "Level Up",
+        "description": "Reach Reputation Level 10",
+        "experiencePoints": 3500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/4mbqnVfHI5Y8_2UmaEhHCpGqtZJTN-Sk0FrFqA9zasx-S2nmmyXq5C3Dos85gYZxqw"
+      },
+      {
+        "id": "CgkIuJS5gpAdEAIQIQ",
+        "name": "Coming Through",
+        "description": "Obtain 800 Career Flags",
+        "experiencePoints": 7500,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 800,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/OigJqo1XkXjG_ehfGwF99R_ylaCn9kamd-t1udfAky21-WT4IQxRAmd78ZsN7hMX24c"
+      },
+      {
+        "id": "CgkIuJS5gpAdEAIQIg",
+        "name": "Up and Up",
+        "description": "Upgrade Garage to Level 5",
+        "experiencePoints": 3500,
+        "achievementType": "STANDARD",
+        "totalSteps": null,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/DgjIKq2bCxnvB3v_3hDDUBZtsAeTw87oRldBTOfAaHT7nlGYWA3TD_vC1SNqeyOfyEY"
+      },
+      {
+        "id": "CgkIuJS5gpAdEAIQIw",
+        "name": "Show Off",
+        "description": "Star up 30 cars",
+        "experiencePoints": 8000,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 30,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/WyaHCfXrQIrw78i3j81-5dMxemGPxBYbEPZ9plXVQ25j-jBj9zB3MrRrd_c3c5JhRCI"
+      },
+      {
+        "id": "CgkIuJS5gpAdEAIQJA",
+        "name": "Levels Upgraded",
+        "description": "Upgrade 100 stages",
+        "experiencePoints": 10000,
+        "achievementType": "INCREMENTAL",
+        "totalSteps": 100,
+        "unlockedIconUrl": "https://lh3.googleusercontent.com/MlOcxFEXTrbbZ4UKImJpdLEy6JlmDTWhn6xi6z-2TL6LzagbgYrQDsdMlsJ7P8ws_Rlf"
+      }
+    ],
+    "created_at": "2026-11-24 22:55:51",
+    "updated_at": "2026-11-24 22:55:51",
+    "id": "57",
+    "client_sig": "ebb8a6588f7289488f8d30d11dc020bc8d4cfb0c"
+  }
+}

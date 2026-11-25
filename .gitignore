@@ -1,0 +1,13 @@
+node_modules/
+.wrangler/
+.venv/
+__pycache__/
+*.pyc
+bin/
+out_classes/
+build/
+.gradle/
+*.bak
+*.bak2
+.DS_Store
+Thumbs.db

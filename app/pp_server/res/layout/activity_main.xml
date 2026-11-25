@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f8fafc">
+
+    <!-- 1. The Main Hybrid WebApp UI (Always fills full screen) -->
+    <WebView
+        android:id="@+id/mainAppWebView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- 2. Google Login Overlay Container (Shown ONLY during Google auth) -->
+    <RelativeLayout
+        android:id="@+id/googleLoginContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff"
+        android:visibility="gone">
+
+        <!-- Top Bar for Google Sign-In (Clean Light Theme) -->
+        <RelativeLayout
+            android:id="@+id/googleTopBar"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="#ffffff"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp">
+
+            <TextView
+                android:id="@+id/btnNavBack"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:text="✕"
+                android:textColor="#0f172a"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:background="#00000000"
+                android:clickable="true"
+                android:focusable="true"
+                android:contentDescription="Close" />
+
+            <TextView
+                android:id="@+id/txtLoginHeaderTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/btnNavBack"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="8dp"
+                android:text="Add Google Account"
+                android:textColor="#0f172a"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/btnNavReload"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:text="↻"
+                android:textColor="#0f172a"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:background="#00000000"
+                android:clickable="true"
+                android:focusable="true"
+                android:contentDescription="Reload" />
+        </RelativeLayout>
+
+        <!-- Top Bar Divider -->
+        <View
+            android:id="@+id/topBarDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/googleTopBar"
+            android:background="#e2e8f0" />
+
+        <!-- Horizontal Progress Bar -->
+        <ProgressBar
+            android:id="@+id/webProgressBar"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_below="@id/topBarDivider"
+            android:indeterminate="false"
+            android:max="100" />
+
+        <!-- Status subtitle under top bar (Hidden by default, only shows when connecting) -->
+        <TextView
+            android:id="@+id/txtLoginStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/webProgressBar"
+            android:background="#f8fafc"
+            android:padding="8dp"
+            android:textColor="#2563eb"
+            android:textSize="12sp"
+            android:gravity="center"
+            android:visibility="gone"
+            android:text="Connecting to server, please wait..." />
+
+        <!-- Google Auth WebView -->
+        <WebView
+            android:id="@+id/webView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/txtLoginStatus" />
+    </RelativeLayout>
+</FrameLayout>

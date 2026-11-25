@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <radialGradient id="bg3" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#083344"/><stop offset="100%" stop-color="#02141e"/>
+    </radialGradient>
+    <linearGradient id="cyanbolt" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#67e8f9"/><stop offset="40%" stop-color="#06b6d4"/><stop offset="100%" stop-color="#0891b2"/>
+    </linearGradient>
+    <linearGradient id="boltGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a"/><stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+    <filter id="glowCyan"><feGaussianBlur stdDeviation="4" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <circle cx="64" cy="64" r="60" fill="url(#bg3)" stroke="url(#cyanbolt)" stroke-width="3"/>
+  <!-- Speed Wings -->
+  <path d="M22 62 C 34 50, 48 56, 56 66 C 44 68, 32 74, 22 62 Z" fill="#0e7490" opacity="0.8"/>
+  <path d="M106 62 C 94 50, 80 56, 72 66 C 84 68, 96 74, 106 62 Z" fill="#0e7490" opacity="0.8"/>
+  <!-- Dynamic Lightning Bolt -->
+  <polygon points="72,16 36,66 60,66 52,112 92,54 68,54" fill="url(#boltGold)" filter="url(#glowCyan)"/>
+  <polygon points="70,22 42,64 62,64 56,102 86,56 68,56" fill="#ffffff" opacity="0.7"/>
+</svg>

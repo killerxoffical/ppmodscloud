@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logging in... • PlayQuest</title>
+</head>
+<body style="font-family:'Plus Jakarta Sans','Hind Siliguri',sans-serif; text-align:center; padding-top:80px; background:#f8fafc; color:#0f172a;">
+    <div style="font-size:48px; margin-bottom:16px;">🎉</div>
+    <h2 style="font-size:22px; font-weight:800; margin-bottom:8px;">গুগল সাইন-ইন সফল হয়েছে!</h2>
+    <p style="color:#64748b; font-size:14px;">আপনার প্রোফাইল ও ড্যাশবোর্ড প্রস্তুত হচ্ছে...</p>
+    <div style="margin-top:24px;">
+        <div style="display:inline-block; width:28px; height:28px; border:3px solid #e2e8f0; border-top-color:#00A854; border-radius:50%; animation:spin 0.8s linear infinite;"></div>
+    </div>
+    <style>
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+    <script>
+        const sessionData = {{ session_json | tojson }};
+        localStorage.setItem("pq_active_session", JSON.stringify(sessionData));
+        let saved = JSON.parse(localStorage.getItem("pq_saved_accounts") || "[]");
+        saved = saved.filter(a => a.email !== sessionData.email);
+        saved.unshift(sessionData);
+        localStorage.setItem("pq_saved_accounts", JSON.stringify(saved));
+        setTimeout(() => {
+            window.location.href = "/";
+        }, 800);
+    </script>
+</body>
+</html>
