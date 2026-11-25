@@ -1768,15 +1768,15 @@
                     class="w-4 h-4"></i>Users</button>
 
             <p class="sgroup">Content</p>
-            <button data-nav="scrOf" onclick="showAdminScreen('scrOf')" class="snav"><i data-lucide="gamepad-2"
+            <button data-nav="scrOf" style="display:none !important;" onclick="showAdminScreen('scrOf')" class="snav"><i data-lucide="gamepad-2"
                     class="w-4 h-4"></i>Offers</button>
             <button data-nav="scrEarn" onclick="showAdminScreen('scrEarn')" class="snav"><i data-lucide="zap"
                     class="w-4 h-4 text-amber-500"></i>Earn Tasks <span
                     class="nbadge ml-auto bg-amber-100 text-amber-800" id="earnTasksCount"
                     style="display:none">0</span></button>
-            <button data-nav="scrStore" onclick="showAdminScreen('scrStore')" class="snav"><i data-lucide="shopping-bag"
+            <button data-nav="scrStore" style="display:none !important;" onclick="showAdminScreen('scrStore')" class="snav"><i data-lucide="shopping-bag"
                     class="w-4 h-4"></i>Store Items</button>
-            <button data-nav="scrP2P" onclick="showAdminScreen('scrP2P')" class="snav"><i data-lucide="arrow-left-right"
+            <button data-nav="scrP2P" style="display:none !important;" onclick="showAdminScreen('scrP2P')" class="snav"><i data-lucide="arrow-left-right"
                     class="w-4 h-4"></i>P2P Deals <span id="p2pDisputeBadge" class="nbadge ml-auto"
                     style="display:none">0</span></button>
             <button data-nav="scrCode" onclick="showAdminScreen('scrCode')" class="snav"><i data-lucide="ticket"
@@ -1937,9 +1937,9 @@
                         class="nbadge ordCount" style="display:none">0</span></button>
                 <button data-nav="scrTx" onclick="showAdminScreen('scrTx')" class="tnav">Transactions</button>
                 <button data-nav="scrUsr" onclick="showAdminScreen('scrUsr')" class="tnav">Users</button>
-                <button data-nav="scrOf" onclick="showAdminScreen('scrOf')" class="tnav">Offers</button>
+                <button data-nav="scrOf" style="display:none !important;" onclick="showAdminScreen('scrOf')" class="tnav">Offers</button>
                 <!-- scrStore removed -->
-                <button data-nav="scrP2P" onclick="showAdminScreen('scrP2P')" class="tnav">P2P Deals</button>
+                <button data-nav="scrP2P" style="display:none !important;" onclick="showAdminScreen('scrP2P')" class="tnav">P2P Deals</button>
                 <button data-nav="scrCode" onclick="showAdminScreen('scrCode')" class="tnav">Codes</button>
                 <button data-nav="scrExt" onclick="showAdminScreen('scrExt')" class="tnav">Extension</button>
                 <button data-nav="scrBc" onclick="showAdminScreen('scrBc')" class="tnav">Broadcast</button>
@@ -4423,7 +4423,7 @@
                 class="nbadge depCount" style="display:none">0</span></button>
         <button data-nav="scrOrd" onclick="showAdminScreen('scrOrd')"><i data-lucide="package-check"></i>Orders<span
                 class="nbadge ordCount" style="display:none">0</span></button>
-        <button data-nav="scrOf" onclick="showAdminScreen('scrOf')"><i data-lucide="gamepad-2"></i>Offers</button>
+        <button data-nav="scrOf" style="display:none !important;" onclick="showAdminScreen('scrOf')"><i data-lucide="gamepad-2"></i>Offers</button>
         <button data-nav="scrUsr" onclick="showAdminScreen('scrUsr')"><i data-lucide="users"></i>Users</button>
     </nav>
 
@@ -5909,8 +5909,13 @@
             const currentDepIn = (Array.isArray(S.deposits) ? S.deposits : []).filter(x => x.status === 'approved' && msOf(x) > resetAt).reduce((a, b) => a + (Number(b.amount) || 0), 0);
             const totalDepIn = (cf.totalApprovedDeposit !== undefined) ? Number(cf.totalApprovedDeposit) : ((Array.isArray(S.deposits) ? S.deposits : []).filter(x => x.status === 'approved').reduce((a, b) => a + (Number(b.amount) || 0), 0) + (Number(S.cfg && S.cfg.allTimeDepositArchived) || 0));
             const rev = (cf.totalRevenue !== undefined) ? Number(cf.totalRevenue) : (Array.isArray(S.orders) ? S.orders : []).filter(x => x.status === 'completed').reduce((a, b) => a + (Number(b.amount) || 0), 0);
-            const totalUsersCount = (cf.totalUsers !== undefined) ? Number(cf.totalUsers) : (Array.isArray(S.users) ? S.users.length : 0);
-            const cleanTotalBal = (cf.totalUserBalance !== undefined) ? cf.totalUserBalance : 0;
+            const uInDb = (typeof _usrTotalInDb !== 'undefined' && _usrTotalInDb > 0) ? _usrTotalInDb : (Array.isArray(S.users) ? S.users.length : 0);
+            const totalUsersCount = (cf.totalUsers !== undefined && cf.totalUsers > 0) ? Number(cf.totalUsers) : uInDb;
+            let computedBal = 0;
+            if (Array.isArray(S.users)) {
+                computedBal = S.users.reduce((a, b) => a + (Number(b.coins || b.balance) || 0), 0);
+            }
+            const cleanTotalBal = (cf.totalUserBalance !== undefined && cf.totalUserBalance > 0) ? cf.totalUserBalance : (Math.round((computedBal + Number.EPSILON) * 100) / 100);
             const liveOffers = (Array.isArray(S.offers) && S.offers.length) ? S.offers.filter(o => o.active !== false).length : 35;
 
             set('statDep', pDep);

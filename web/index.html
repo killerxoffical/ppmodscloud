@@ -7180,6 +7180,36 @@
         /* ===== Email login / register / forgot UI ===== */
         const EM_TAB_ON = 'py-2 rounded-xl text-xs font-extrabold bg-white text-slate-900 shadow-sm border border-slate-200 cursor-pointer transition-all';
         const EM_TAB_OFF = 'py-2 rounded-xl text-xs font-bold text-slate-400 cursor-pointer transition-all';
+        function emMsg(msg, isSuccess) {
+            const el = document.getElementById('emMsg');
+            if (!el) {
+                if (msg) alert(msg);
+                return;
+            }
+            el.textContent = msg;
+            el.className = isSuccess
+                ? 'block text-[11px] font-bold rounded-xl px-3 py-2 bg-emerald-50 text-emerald-700 border border-emerald-200'
+                : 'block text-[11px] font-bold rounded-xl px-3 py-2 bg-rose-50 text-rose-700 border border-rose-200';
+            el.classList.remove('hidden');
+        }
+        window.emMsg = emMsg;
+
+        function emBusy(btnId, isBusy, origHtml = '') {
+            const btn = document.getElementById(btnId);
+            if (!btn) return origHtml;
+            if (isBusy) {
+                const cur = btn.innerHTML;
+                btn.disabled = true;
+                btn.innerHTML = '<span class="inline-block animate-spin mr-1.5">⏳</span> Processing...';
+                return cur;
+            } else {
+                btn.disabled = false;
+                if (origHtml) btn.innerHTML = origHtml;
+                return '';
+            }
+        }
+        window.emBusy = emBusy;
+
         function emHideMsg() { const m = document.getElementById('emMsg'); if (m) m.classList.add('hidden'); }
         function emailTab(t) {
             const isLogin = t !== 'reg';
@@ -11781,13 +11811,31 @@
     }
     window.setBalanceUI = setBalanceUI;
 
+        const AVATAR_PRESETS = [
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzn6uplqxLbkia4Sy_PoGkzeqrCFqHgEJaGjCBG1nSkg&s=10',
+        'https://i.pinimg.com/736x/c1/a8/79/c1a879739da4e3f95e30f69db944c737.jpg',
+        'https://i.pinimg.com/474x/28/2d/f2/282df29c592fc83f709894d7d196cb46.jpg?nii=t',
+        'https://img.magnific.com/premium-vector/proanto-design_863867-2048.jpg?semt=ais_hybrid&w=740&q=80',
+        'https://i.pinimg.com/736x/8f/e0/77/8fe0770f3100072c2498b29e83125bac.jpg',
+        'https://i.pinimg.com/474x/16/22/ec/1622ec20148ae8fd1085d2dda1606227.jpg',
+        'https://i.pinimg.com/474x/90/97/31/90973171a4c8bd2aa954a467dd0a237b.jpg',
+        'https://i.pinimg.com/474x/a7/0b/b3/a70bb3a3b2734ae168dd1fa2535b1103.jpg',
+        'https://i.pinimg.com/474x/2b/da/b3/2bdab370fcda0c4b39a900af7718eb88.jpg',
+        'https://i.pinimg.com/474x/30/96/1d/30961dfef844ab4bde18f62c338ba01b.jpg',
+        'https://i.pinimg.com/474x/a5/b8/3b/a5b83bd1af5e44300b9d36d39d439978.jpg',
+        'https://i.pinimg.com/474x/b6/33/49/b63349870c0e2781089cd79cc0497c70.jpg',
+        'https://i.pinimg.com/474x/e9/b8/42/e9b842f910a968a7deef0e1c7f7a74d1.jpg'
+    ];
+    window.AVATAR_PRESETS = AVATAR_PRESETS;
+    window.AVATAR_FALLBACK = AVATAR_PRESETS[0];
+
     function applyUserToUI(u) {
         if (!u) return;
         window.ppfb.user = {
             uid: u.pp_id,
             displayName: u.name,
             email: u.email,
-            photoURL: u.avatar_url || `https://api.dicebear.com/7.x/bottts/svg?seed=${u.pp_id}`,
+            photoURL: u.avatar_url || (window.AVATAR_PRESETS && window.AVATAR_PRESETS[0]) || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzn6uplqxLbkia4Sy_PoGkzeqrCFqHgEJaGjCBG1nSkg&s=10',
             pp_id: u.pp_id,
             coins: Number(u.coins) || 0
         };
@@ -11870,7 +11918,11 @@
     window.ppfb.registerEmail = window.emailRegGo;
 
     window.closeSharpPopupAndEnter = function() {
-        document.getElementById('authSharpPopup').classList.add('hidden');
+        const pop = document.getElementById('authSharpPopup');
+        if (pop) {
+            pop.style.display = 'none';
+            pop.classList.add('hidden');
+        }
         if (window.showScreen) showScreen('screenGameSelect');
     };
 

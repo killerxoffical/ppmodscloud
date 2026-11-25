@@ -20,14 +20,19 @@ const CORS_HEADERS = {
 };
 
 const DEFAULT_AVATARS = [
-  "https://api.dicebear.com/7.x/bottts/svg?seed=Felix",
-  "https://api.dicebear.com/7.x/bottts/svg?seed=Shadow",
-  "https://api.dicebear.com/7.x/bottts/svg?seed=Viper",
-  "https://api.dicebear.com/7.x/bottts/svg?seed=Cyber",
-  "https://api.dicebear.com/7.x/bottts/svg?seed=Blaze",
-  "https://api.dicebear.com/7.x/bottts/svg?seed=Nova",
-  "https://api.dicebear.com/7.x/bottts/svg?seed=Titan",
-  "https://api.dicebear.com/7.x/bottts/svg?seed=Ghost"
+  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzn6uplqxLbkia4Sy_PoGkzeqrCFqHgEJaGjCBG1nSkg&s=10",
+  "https://i.pinimg.com/736x/c1/a8/79/c1a879739da4e3f95e30f69db944c737.jpg",
+  "https://i.pinimg.com/474x/28/2d/f2/282df29c592fc83f709894d7d196cb46.jpg?nii=t",
+  "https://img.magnific.com/premium-vector/proanto-design_863867-2048.jpg?semt=ais_hybrid&w=740&q=80",
+  "https://i.pinimg.com/736x/8f/e0/77/8fe0770f3100072c2498b29e83125bac.jpg",
+  "https://i.pinimg.com/474x/16/22/ec/1622ec20148ae8fd1085d2dda1606227.jpg",
+  "https://i.pinimg.com/474x/90/97/31/90973171a4c8bd2aa954a467dd0a237b.jpg",
+  "https://i.pinimg.com/474x/a7/0b/b3/a70bb3a3b2734ae168dd1fa2535b1103.jpg",
+  "https://i.pinimg.com/474x/2b/da/b3/2bdab370fcda0c4b39a900af7718eb88.jpg",
+  "https://i.pinimg.com/474x/30/96/1d/30961dfef844ab4bde18f62c338ba01b.jpg",
+  "https://i.pinimg.com/474x/a5/b8/3b/a5b83bd1af5e44300b9d36d39d439978.jpg",
+  "https://i.pinimg.com/474x/b6/33/49/b63349870c0e2781089cd79cc0497c70.jpg",
+  "https://i.pinimg.com/474x/e9/b8/42/e9b842f910a968a7deef0e1c7f7a74d1.jpg"
 ];
 
 const TG_BOT_TOKEN = "8906230491:AAGdST6cFQmE71kUkGX6NVnwImzUwA27wh4";
